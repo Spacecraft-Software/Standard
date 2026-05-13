@@ -375,7 +375,7 @@ Each Steelbore project has a dedicated subdomain following the pattern `https://
 | Flux             | <https://Flux.Steelbore.com/>          |
 | Anvil            | <https://Anvil.Steelbore.com/>         |
 | Construct        | <https://Construct.Steelbore.com/>     |
-| Ferrite_OS       | <https://Ferrite-OS.Steelbore.com/>    |
+| Ferrite_OS       | <https://Ferrite.Steelbore.com/>       |
 | Forge            | <https://Forge.Steelbore.com/>         |
 | Ginx             | <https://Ginx.Steelbore.com/>          |
 | Loran            | <https://Loran.Steelbore.com/>         |
