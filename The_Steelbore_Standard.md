@@ -1,8 +1,8 @@
 ---
 title: The Steelbore Standard
 author: Mohamed Hammad <Mohamed.Hammad@Steelbore.com>
-date: 2026-05-12
-version: 1.3
+date: 2026-05-13
+version: 1.4
 source-format: odt
 ---
 
@@ -15,7 +15,7 @@ source-format: odt
 
 **Engineering specification for the Steelbore project umbrella**
 
-**Version:** 1.3 | **Date:** 2026-05-12 | **Author:** Mohamed Hammad
+**Version:** 1.4 | **Date:** 2026-05-13 | **Author:** Mohamed Hammad
 **Maintainer:** Mohamed Hammad | **Contact:** [Mohamed.Hammad@Steelbore.com](mailto:Mohamed.Hammad@Steelbore.com)
 **Copyright:** (c) 2026 Mohamed Hammad | **License:** GPL-3.0-or-later
 **Website:** <https://Steelbore.com/>
@@ -30,6 +30,7 @@ The Steelbore Standard defines the engineering principles, compliance requiremen
 
 ### Changelog
 
+- **v1.4 (2026-05-13):** Synced §2.1 Legacy Metallurgical Registry with PROJECTS.md — added five previously unregistered pre-v1.2 codenames: `Anvil`, `Flux`, `Pearlite`, `Ferrite_OS`, and `Forge`. Expanded §13.1 subdomain table to include all first-party projects with GitHub repositories that were missing: Anvil, Construct, Ferrite_OS, Forge, Ginx, Loran, Pearlite.
 - **v1.3 (2026-05-12):** Added §6.3 (Signed & Verified Commits — mandatory Ed25519 SSH commit signing with hosting-platform "Verified" status; the rule extends to programmatic, CI, and assistant-driven commits and requires rewrites to preserve signatures). Added §13.3 (Third-Party Attribution — `CREDITS.md` at project/skill root when external work is substantially built upon, distinct from mechanical SPDX license metadata). Two new compliance-checklist bullets cover both additions.
 - **v1.2 (2026-05-11):** Replaced §2 metallurgical naming convention with Aerospace, Sci-Fi & AI naming (aerospace/astronomy terminology + franchise references from *2001: A Space Odyssey*, *The Matrix*, *Terminator*). Preserved pre-v1.2 metallurgical-era names under §2's Legacy Registry. Added explicit statement that the standard's name — "The Steelbore Standard" — is decoupled from project naming and survives any project or umbrella rename. Renamed `Lattice` to `Bravais` (collision with Lattice OS) in registry and §13.1 subdomain table. Flagged `Mawaqit` as pending rename under the v1.2 convention.
 - **v1.1 (2026-05-06):** Added §5 Project Posture (personal-hobby default, general-use carve-out, required posture files). Renumbered prior §5–§13 to §6–§14. Added posture bullet to compliance checklist.
@@ -68,6 +69,11 @@ Projects named before the v1.2 convention drew from metallurgy, materials scienc
 | `Ironway`   | Active                | Rust OpenTTD rewrite                                           |
 | `Caliper`   | Active                | Rust raster-to-vector tracing engine (CLI+TUI)                 |
 | `Mawaqit`   | **Pending rename**    | Islamic prayer times app (Flutter + Rust CLI + libmawaqit). To be renamed under the v1.2 aerospace/sci-fi/AI convention. |
+| `Anvil`     | Active                | Rust workspace; benches and CHANGELOG; legacy forging-tool name.                |
+| `Flux`      | Active                | Rust workspace; CHANGELOG and deny.toml; legacy metallurgical-flux name.        |
+| `Pearlite`  | Active                | Rust workspace; audit.toml, clippy.toml, CHANGELOG; steel microstructure name.  |
+| `Ferrite_OS`| Active                | Custom OS / DOS-emulation experiments; ferrite (iron-based material) name.      |
+| `Forge`     | Active                | Production flavor tooling (forge-cli, forge-build, forge-activate); forging-tool name. |
 
 Existing legacy-named projects MAY be renamed under the v1.2 convention at the maintainer's discretion — renames are optional. When a rename happens, update this table and §13.1's subdomain table in the same commit.
 
@@ -365,6 +371,13 @@ Each Steelbore project has a dedicated subdomain following the pattern `https://
 | Bravais          | <https://Bravais.Steelbore.com/>       |
 | Mawaqit          | <https://Mawaqit.Steelbore.com/>       |
 | Flux             | <https://Flux.Steelbore.com/>          |
+| Anvil            | <https://Anvil.Steelbore.com/>         |
+| Construct        | <https://Construct.Steelbore.com/>     |
+| Ferrite_OS       | <https://Ferrite-OS.Steelbore.com/>    |
+| Forge            | <https://Forge.Steelbore.com/>         |
+| Ginx             | <https://Ginx.Steelbore.com/>          |
+| Loran            | <https://Loran.Steelbore.com/>         |
+| Pearlite         | <https://Pearlite.Steelbore.com/>      |
 
 When a new project is created, add its subdomain to this table immediately.
 
