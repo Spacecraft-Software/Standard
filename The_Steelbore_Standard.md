@@ -2,7 +2,7 @@
 title: The Steelbore Standard
 author: Mohamed Hammad <Mohamed.Hammad@Steelbore.com>
 date: 2026-05-13
-version: 1.5
+version: 1.6
 source-format: odt
 ---
 
@@ -15,7 +15,7 @@ source-format: odt
 
 **Engineering specification for the Steelbore project umbrella**
 
-**Version:** 1.5 | **Date:** 2026-05-13 | **Author:** Mohamed Hammad
+**Version:** 1.6 | **Date:** 2026-05-13 | **Author:** Mohamed Hammad
 **Maintainer:** Mohamed Hammad | **Contact:** [Mohamed.Hammad@Steelbore.com](mailto:Mohamed.Hammad@Steelbore.com)
 **Copyright:** (c) 2026 Mohamed Hammad | **License:** GPL-3.0-or-later
 **Website:** <https://Steelbore.com/>
@@ -30,6 +30,7 @@ The Steelbore Standard defines the engineering principles, compliance requiremen
 
 ### Changelog
 
+- **v1.6 (2026-05-13):** Synced §2.1 development statuses with PROJECTS.md — `Bravais` and `Anvil` and `Flux` promoted to Completed; `Ferrocast` corrected to Planning; `Mawaqit` updated to Planning (Pending rename).
 - **v1.5 (2026-05-13):** Corrected `Craton` status in §2.1 from `Active` to `Reserved` — codename is registered but no development has started yet.
 - **v1.4 (2026-05-13):** Synced §2.1 Legacy Metallurgical Registry with PROJECTS.md — added five previously unregistered pre-v1.2 codenames: `Anvil`, `Flux`, `Pearlite`, `Ferrite_OS`, and `Forge`. Expanded §13.1 subdomain table to include all first-party projects with GitHub repositories that were missing: Anvil, Construct, Ferrite_OS, Forge, Ginx, Loran, Pearlite.
 - **v1.3 (2026-05-12):** Added §6.3 (Signed & Verified Commits — mandatory Ed25519 SSH commit signing with hosting-platform "Verified" status; the rule extends to programmatic, CI, and assistant-driven commits and requires rewrites to preserve signatures). Added §13.3 (Third-Party Attribution — `CREDITS.md` at project/skill root when external work is substantially built upon, distinct from mechanical SPDX license metadata). Two new compliance-checklist bullets cover both additions.
@@ -64,14 +65,14 @@ Projects named before the v1.2 convention drew from metallurgy, materials scienc
 |-------------|-----------------------|----------------------------------------------------------------|
 | `Steelbore` | Active (umbrella)     | Umbrella organization and standard name                        |
 | `Zamak`     | Active                | Rust bootloader (Limine rewrite)                               |
-| `Bravais`   | Active (renamed)      | NixOS flake configuration. Renamed from `Lattice` due to collision with Lattice OS. `Bravais` is still a metallurgical-era name (Bravais lattice) and predates the v1.2 convention. |
-| `Ferrocast` | Active                | Rust PowerShell rewrite (16-crate workspace)                   |
+| `Bravais`   | Completed (renamed)   | NixOS flake configuration. Renamed from `Lattice` due to collision with Lattice OS. `Bravais` is still a metallurgical-era name (Bravais lattice) and predates the v1.2 convention. |
+| `Ferrocast` | Planning              | Rust PowerShell rewrite (16-crate workspace)                   |
 | `Craton`    | Reserved              | Rust universal package manager — codename registered; no work started yet. |
 | `Ironway`   | Active                | Rust OpenTTD rewrite                                           |
 | `Caliper`   | Active                | Rust raster-to-vector tracing engine (CLI+TUI)                 |
-| `Mawaqit`   | **Pending rename**    | Islamic prayer times app (Flutter + Rust CLI + libmawaqit). To be renamed under the v1.2 aerospace/sci-fi/AI convention. |
-| `Anvil`     | Active                | Rust workspace; benches and CHANGELOG; legacy forging-tool name.                |
-| `Flux`      | Active                | Rust workspace; CHANGELOG and deny.toml; legacy metallurgical-flux name.        |
+| `Mawaqit`   | Planning (**Pending rename**) | Islamic prayer times app (Flutter + Rust CLI + libmawaqit). To be renamed under the v1.2 aerospace/sci-fi/AI convention. |
+| `Anvil`     | Completed             | Rust workspace; benches and CHANGELOG; legacy forging-tool name.                |
+| `Flux`      | Completed             | Rust workspace; CHANGELOG and deny.toml; legacy metallurgical-flux name.        |
 | `Pearlite`  | Active                | Rust workspace; audit.toml, clippy.toml, CHANGELOG; steel microstructure name.  |
 | `Ferrite_OS`| Active                | Custom OS / DOS-emulation experiments; ferrite (iron-based material) name.      |
 | `Forge`     | Active                | Production flavor tooling (forge-cli, forge-build, forge-activate); forging-tool name. |
