@@ -1,5 +1,16 @@
-Chat.txt
-CLAUDE.md
-AGENTS.md
+# Derived deliverables — uploaded as release assets, not version-controlled
 The_Spacecraft_Software_Standard.odt
 The_Spacecraft_Software_Standard.docx
+
+# Agent-local guidance and exports (not for publication)
+CLAUDE.md
+AGENTS.md
+GEMINI.md
+CODEX.md
+.claude/
+.codex/
+.cursor/
+.cursorrules
+.aider*
+Chat.txt
+*.chat.txt
