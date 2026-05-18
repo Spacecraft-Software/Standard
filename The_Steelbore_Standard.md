@@ -1,21 +1,21 @@
 ---
-title: The Spacecraft Software Standard
+title: The Steelbore Standard
 author: Mohamed Hammad <Mohamed.Hammad@SpacecraftSoftware.org>
-date: 2026-05-15
-version: 1.7
+date: 2026-05-18
+version: 1.8
 source-format: odt
 ---
 
-<!-- Spacecraft Software document — companion to The_Spacecraft_Software_Standard.odt and The_Spacecraft_Software_Standard.docx
+<!-- Spacecraft Software document — companion to The_Steelbore_Standard.odt and The_Steelbore_Standard.docx
      Palette: Standard §9 (Void Navy background, Molten Amber body)
      Typography: Share Tech Mono headings, Inconsolata body
      Format: GitHub-Flavored Markdown (GFM) -->
 
-# The Spacecraft Software Standard
+# The Steelbore Standard
 
-**Engineering specification for Spacecraft Software**
+**Engineering specification for Steelbore OS and the Spacecraft Software ecosystem**
 
-**Version:** 1.7 | **Date:** 2026-05-15 | **Author:** Mohamed Hammad
+**Version:** 1.8 | **Date:** 2026-05-18 | **Author:** Mohamed Hammad
 **Maintainer:** Mohamed Hammad | **Contact:** [Mohamed.Hammad@SpacecraftSoftware.org](mailto:Mohamed.Hammad@SpacecraftSoftware.org)
 **Copyright:** (c) 2026 Mohamed Hammad | **License:** GPL-3.0-or-later
 **Website:** <https://SpacecraftSoftware.org/>
@@ -24,12 +24,13 @@ source-format: odt
 
 ## §1 — Preamble
 
-The Spacecraft Software Standard defines the engineering principles, compliance requirements, and design conventions that govern all software produced under Spacecraft Software. Every Spacecraft Software artifact — from bootloaders to desktop environments — must satisfy the requirements set forth in this document. Where a project-specific specification conflicts with this standard, the stricter of the two requirements shall prevail.
+The Steelbore Standard defines the engineering principles, compliance requirements, and design conventions that govern all software produced under the Steelbore OS line and, by extension, all projects under the Spacecraft Software umbrella. Every Spacecraft Software artifact — from bootloaders to desktop environments — must satisfy the requirements set forth in this document unless a project-specific specification explicitly carves out an exception. Where a project-specific specification conflicts with this standard, the stricter of the two requirements shall prevail.
 
-**Standard name vs. project naming.** "The Spacecraft Software Standard" is the canonical, stable name of *this standard* as of v1.7. It is independent of the projects it currently governs. If individual projects are renamed in the future, the standard retains its current name. Versioning of project codenames (see §2) and versioning of the standard are separate concerns. The v1.7 umbrella rename (Steelbore → Spacecraft Software) is recorded in the changelog and registered in §2.1 as a historical entry.
+**Standard name vs. project naming.** "The Steelbore Standard" is the canonical, stable name of *this standard*. It is independent of the projects it governs and of the umbrella organization name — the standard retains this name regardless of any future renames. The v1.7 umbrella rename (Steelbore → Spacecraft Software) and the v1.8 reinstatement of this standard's name are recorded in the changelog. Versioning of project codenames (see §2) and versioning of the standard are separate concerns.
 
 ### Changelog
 
+- **v1.8 (2026-05-18):** Standard name reinstated as "The Steelbore Standard". Primary mandate reaffirmed as the Steelbore OS line; scope explicitly extended by default to all Spacecraft Software projects (unless a project's own spec explicitly carves out an exception). Subtitle updated to reflect dual scope. Source file renamed `The_Spacecraft_Software_Standard.md` → `The_Steelbore_Standard.md`. §13.1: added Standard subdomain entry (`Standard.SpacecraftSoftware.org`). Umbrella org name and domain (Spacecraft Software / SpacecraftSoftware.org) unchanged.
 - **v1.7 (2026-05-15):** Umbrella renamed from `Steelbore` to `Spacecraft Software` per the brand consolidation. Standard's name updated to "The Spacecraft Software Standard"; domain to `SpacecraftSoftware.org`; contact email to `Mohamed.Hammad@SpacecraftSoftware.org`; §13.1 subdomain pattern to `<ProjectName>.SpacecraftSoftware.org`. Skill ID prefix renamed (`steelbore-*` → `spacecraft-*`). Subproject codenames unchanged. The OS line (`Steelbore OS`, `Steelbore OS Bravais`, `Steelbore OS Lattice`) retains the Steelbore name and is unaffected by this rename.
 - **v1.6 (2026-05-13):** Synced §2.1 development statuses with PROJECTS.md — `Bravais` and `Anvil` and `Flux` promoted to Completed; `Ferrocast` corrected to Planning; `Mawaqit` updated to Planning (Pending rename).
 - **v1.5 (2026-05-13):** Corrected `Craton` status in §2.1 from `Active` to `Reserved` — codename is registered but no development has started yet.
@@ -365,6 +366,7 @@ Each Spacecraft Software project has a dedicated subdomain following the pattern
 | Project                    | URL                                              |
 |----------------------------|--------------------------------------------------|
 | Spacecraft Software (main) | <https://SpacecraftSoftware.org/>                |
+| The Steelbore Standard     | <https://Standard.SpacecraftSoftware.org/>       |
 | Gitway                     | <https://Gitway.SpacecraftSoftware.org/>         |
 | Ferrocast                  | <https://Ferrocast.SpacecraftSoftware.org/>      |
 | Caliper                    | <https://Caliper.SpacecraftSoftware.org/>        |
