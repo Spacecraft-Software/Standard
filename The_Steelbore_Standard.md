@@ -1,8 +1,8 @@
 ---
 title: The Steelbore Standard
 author: Mohamed Hammad <Mohamed.Hammad@SpacecraftSoftware.org>
-date: 2026-05-18
-version: 1.9
+date: 2026-05-20
+version: 1.10
 source-format: odt
 ---
 
@@ -15,9 +15,9 @@ source-format: odt
 
 **Engineering specification for Steelbore OS and the Spacecraft Software ecosystem**
 
-**Version:** 1.9 | **Date:** 2026-05-18 | **Author:** Mohamed Hammad
+**Version:** 1.10 | **Date:** 2026-05-20 | **Author:** Mohamed Hammad
 **Maintainer:** Mohamed Hammad | **Contact:** [Mohamed.Hammad@SpacecraftSoftware.org](mailto:Mohamed.Hammad@SpacecraftSoftware.org)
-**Copyright:** (c) 2026 Mohamed Hammad | **License:** GPL-3.0-or-later
+**Copyright:** Copyright (C) 2026 Mohamed Hammad | **License:** GPL-3.0-or-later
 **Website:** <https://SpacecraftSoftware.org/>
 
 ---
@@ -30,6 +30,7 @@ The Steelbore Standard defines the engineering principles, compliance requiremen
 
 ### Changelog
 
+- **v1.10 (2026-05-20):** Standardized copyright notice to `Copyright (C) 2026 Mohamed Hammad` in all three locations (YAML frontmatter masthead, §13 attribution block, and `--version` / About template in §6).
 - **v1.9 (2026-05-18):** Clarified organizational model in §1: "Steelbore" now specifically refers to Steelbore OS and OS-specific artifacts (configurations, themes, tooling); "Spacecraft Software" is the broader umbrella. Independent projects (Zamak, Ironway, Ferrocast, Caliper, etc.) are peer citizens of the umbrella — designed to work with Steelbore OS but OS-agnostic and usable on any compliant platform. Both categories governed by this standard in full.
 - **v1.8 (2026-05-18):** Standard name reinstated as "The Steelbore Standard". Primary mandate reaffirmed as the Steelbore OS line; scope explicitly extended by default to all Spacecraft Software projects (unless a project's own spec explicitly carves out an exception). Subtitle updated to reflect dual scope. Source file renamed `The_Spacecraft_Software_Standard.md` → `The_Steelbore_Standard.md`. §13.1: added Standard subdomain entry (`Standard.SpacecraftSoftware.org`). Umbrella org name and domain (Spacecraft Software / SpacecraftSoftware.org) unchanged.
 - **v1.7 (2026-05-15):** Umbrella renamed from `Steelbore` to `Spacecraft Software` per the brand consolidation. Standard's name updated to "The Spacecraft Software Standard"; domain to `SpacecraftSoftware.org`; contact email to `Mohamed.Hammad@SpacecraftSoftware.org`; §13.1 subdomain pattern to `<ProjectName>.SpacecraftSoftware.org`. Skill ID prefix renamed (`steelbore-*` → `spacecraft-*`). Subproject codenames unchanged. The OS line (`Steelbore OS`, `Steelbore OS Bravais`, `Steelbore OS Lattice`) retains the Steelbore name and is unaffected by this rename.
@@ -67,6 +68,7 @@ Projects named before the v1.2 convention drew from metallurgy, materials scienc
 | Codename    | Status                | Description                                                    |
 |-------------|-----------------------|----------------------------------------------------------------|
 | `Steelbore` | Renamed to Spacecraft Software (umbrella, v1.7) | Former umbrella organization name. Renamed 2026-05-15 under the v1.7 brand consolidation. The OS line (`Steelbore OS`, `Steelbore OS Bravais`, `Steelbore OS Lattice`) retains the Steelbore name. |
+| `Aetheric`  | Active                | Next-generation extensible text editor (Pulsar + Quasar + Nebula IPC). |
 | `Zamak`     | Active                | Rust bootloader (Limine rewrite)                               |
 | `Bravais`   | Completed (renamed)   | NixOS flake configuration. Renamed from `Lattice` due to collision with Lattice OS. `Bravais` is still a metallurgical-era name (Bravais lattice) and predates the v1.2 convention. |
 | `Ferrocast` | Planning              | Rust PowerShell rewrite (16-crate workspace)                   |
@@ -357,7 +359,7 @@ When writing Rust code that handles time:
 
 **Maintainer:** Mohamed Hammad
 **Contact:** [Mohamed.Hammad@SpacecraftSoftware.org](mailto:Mohamed.Hammad@SpacecraftSoftware.org)
-**Copyright:** (c) 2026 Mohamed Hammad | **License:** GPL-3.0-or-later
+**Copyright:** Copyright (C) 2026 Mohamed Hammad | **License:** GPL-3.0-or-later
 **Website:** <https://SpacecraftSoftware.org/>
 
 ### §13.1 — Project Pages
@@ -368,6 +370,7 @@ Each Spacecraft Software project has a dedicated subdomain following the pattern
 |----------------------------|--------------------------------------------------|
 | Spacecraft Software (main) | <https://SpacecraftSoftware.org/>                |
 | The Steelbore Standard     | <https://Standard.SpacecraftSoftware.org/>       |
+| Aetheric                   | <https://Aetheric.SpacecraftSoftware.org/>       |
 | Gitway                     | <https://Gitway.SpacecraftSoftware.org/>         |
 | Ferrocast                  | <https://Ferrocast.SpacecraftSoftware.org/>      |
 | Caliper                    | <https://Caliper.SpacecraftSoftware.org/>        |
@@ -395,7 +398,7 @@ Every Spacecraft Software product **must** surface the following attribution in 
 
 ```
 Maintained by Mohamed Hammad <Mohamed.Hammad@SpacecraftSoftware.org>
-Copyright (c) 2026 Mohamed Hammad  |  License: GPL-3.0-or-later
+Copyright (C) 2026 Mohamed Hammad  |  License: GPL-3.0-or-later
 https://<ProjectName>.SpacecraftSoftware.org/
 ```
 
