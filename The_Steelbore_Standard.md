@@ -1,8 +1,8 @@
 ---
 title: The Steelbore Standard
 author: Mohamed Hammad <Mohamed.Hammad@SpacecraftSoftware.org>
-date: 2026-05-20
-version: 1.10
+date: 2026-05-24
+version: 1.11
 source-format: odt
 ---
 
@@ -15,9 +15,9 @@ source-format: odt
 
 **Engineering specification for Steelbore OS and the Spacecraft Software ecosystem**
 
-**Version:** 1.10 | **Date:** 2026-05-20 | **Author:** Mohamed Hammad
+**Version:** 1.11 | **Date:** 2026-05-24 | **Author:** Mohamed Hammad
 **Maintainer:** Mohamed Hammad | **Contact:** [Mohamed.Hammad@SpacecraftSoftware.org](mailto:Mohamed.Hammad@SpacecraftSoftware.org)
-**Copyright:** Copyright (C) 2026 Mohamed Hammad | **License:** GPL-3.0-or-later
+**Copyright:** Copyright (C) 2026 Mohamed Hammad & Spacecraft Software | **License:** GPL-3.0-or-later
 **Website:** <https://SpacecraftSoftware.org/>
 
 ---
@@ -30,6 +30,7 @@ The Steelbore Standard defines the engineering principles, compliance requiremen
 
 ### Changelog
 
+- **v1.11 (2026-05-24):** Three normative updates: (1) Copyright notices updated to `Copyright (C) 2026 Mohamed Hammad & Spacecraft Software` in all locations. (2) §9.1 added: new apps must expose palette colors through a named `Steelbore` theme rather than hard-coded hex literals, enabling clean theme substitution. (3) §12 revised: UTC Z remains the canonical/mandatory primary format; local time expressed as a UTC offset may now optionally accompany UTC Z values in display, API responses, and stored records.
 - **v1.10 (2026-05-20):** Standardized copyright notice to `Copyright (C) 2026 Mohamed Hammad` in all three locations (YAML frontmatter masthead, §13 attribution block, and `--version` / About template in §6).
 - **v1.9 (2026-05-18):** Clarified organizational model in §1: "Steelbore" now specifically refers to Steelbore OS and OS-specific artifacts (configurations, themes, tooling); "Spacecraft Software" is the broader umbrella. Independent projects (Zamak, Ironway, Ferrocast, Caliper, etc.) are peer citizens of the umbrella — designed to work with Steelbore OS but OS-agnostic and usable on any compliant platform. Both categories governed by this standard in full.
 - **v1.8 (2026-05-18):** Standard name reinstated as "The Steelbore Standard". Primary mandate reaffirmed as the Steelbore OS line; scope explicitly extended by default to all Spacecraft Software projects (unless a project's own spec explicitly carves out an exception). Subtitle updated to reflect dual scope. Source file renamed `The_Spacecraft_Software_Standard.md` → `The_Steelbore_Standard.md`. §13.1: added Standard subdomain entry (`Standard.SpacecraftSoftware.org`). Umbrella org name and domain (Spacecraft Software / SpacecraftSoftware.org) unchanged.
@@ -261,6 +262,27 @@ The **only** permitted colors for Spacecraft Software interfaces and documents:
 
 For document/file generation → load the `spacecraft-document-format` skill. For IDE/terminal themes → load the `spacecraft-theme-factory` skill.
 
+### §9.1 — Steelbore Theme (Application Theming Standard)
+
+When building a new Spacecraft Software application (GUI, TUI, or web), all palette
+references **must** be accessed through a named theme called **`Steelbore`** rather than
+referenced as bare hex literals. The `Steelbore` theme is the canonical color contract:
+
+| Theme token  | Maps to palette token | Hex       |
+|--------------|-----------------------|-----------|
+| `background` | Void Navy             | `#000027` |
+| `foreground` | Molten Amber          | `#D98E32` |
+| `accent`     | Steel Blue            | `#4B7EB0` |
+| `success`    | Radium Green          | `#50FA7B` |
+| `error`      | Red Oxide             | `#FF5C5C` |
+| `info`       | Liquid Coolant        | `#8BE9FD` |
+
+**Rationale:** isolating palette references behind the `Steelbore` theme name makes it trivial for end users to substitute a custom theme without touching application logic — swap the theme, not every hex literal.
+
+- The theme file/module **must** be named `steelbore` (snake_case) in the project's theme registry, configuration layer, or equivalent (e.g., `themes/steelbore.json`, `steelbore.toml`, a Rust `Theme::Steelbore` variant).
+- Hard-coding palette hex values directly in UI logic is **forbidden** for new apps. Use theme tokens exclusively.
+- Existing apps are encouraged but not required to migrate; new apps are required.
+
 ---
 
 ## §10 — Typography (FOSS-Licensed Fonts Only)
@@ -294,30 +316,30 @@ Never use proprietary fonts. When suggesting or using fonts in any Spacecraft So
 | Date format  | ISO 8601 only: `YYYY-MM-DD`                                      | `2026-03-08`                 |
 | Time format  | 24-hour only: `HH:MM:SS` — AM/PM is **never** permitted          | `14:30:00`                   |
 | Timestamp    | Combined ISO 8601 UTC: `YYYY-MM-DDTHH:MM:SSZ`                    | `2026-03-08T14:30:00Z`       |
-| Timezone     | **UTC always.** The `Z` suffix is mandatory — see §12.2          | `Z` not `+00:00`             |
+| Timezone     | **UTC Z is the canonical default** (mandatory). Local time expressed as a UTC offset may optionally accompany it — see §12.2 | `Z` not `+00:00`             |
 | Duration     | ISO 8601 duration format only                                    | `PT1H30M` not "1h 30m"       |
 | Units        | Metric (SI) primary; imperial in parentheses only if locale requires | `100 km (62 mi)`         |
 
 Apply these conventions to all generated code, documentation, comments, and any user-facing strings. Never output AM/PM time, non-ISO dates, or imperial-primary units.
 
-### §12.2 — UTC-Only Timezone Policy (Non-Negotiable)
+### §12.2 — UTC Z Timezone Policy
 
-**UTC is the one and only timezone for all stored, transmitted, logged, and committed timestamps across every Spacecraft Software project.** This is a non-negotiable rule with no exceptions for core data paths.
+**UTC Z is the canonical timezone for all stored, transmitted, logged, and committed timestamps across every Spacecraft Software project.** The `Z` suffix is mandatory on all primary timestamps. Local time expressed as a UTC offset (e.g., `2026-05-24T13:34:55+03:00`) may optionally accompany a UTC Z value as a secondary, human-convenience field — but UTC Z is always the authoritative record.
 
 **Mandatory rules — violation blocks shipping:**
 
 | Rule | Detail |
 |------|--------|
-| `Z` suffix required | Every stored/transmitted timestamp MUST end with `Z`. `2026-03-08T14:30:00Z` ✓ |
-| No offset notation in data | `+03:00`, `-05:00`, `+00:00` etc. are **forbidden** in stored or API timestamps. `Z` is the only permitted UTC marker. |
-| No local time in data | Local-time timestamps (without timezone info, or with a local offset) are **forbidden** in files, databases, logs, API responses, and commits. |
+| `Z` suffix required | Every **primary** stored/transmitted timestamp MUST end with `Z`. `2026-03-08T14:30:00Z` ✓. A companion local-time field with UTC offset is permitted alongside it. |
+| No offset notation as replacement | Offset notation (`+03:00`, `-05:00`, etc.) is **forbidden as a replacement** for UTC Z. It is permitted only as an optional companion field alongside a `Z`-suffixed primary. |
+| No bare local time in data | Local-time timestamps **without** timezone info are **forbidden** in files, databases, logs, API responses, and commits. |
 | Log entries use UTC + `Z` | Every log line timestamp must be `YYYY-MM-DDTHH:MM:SS.sssZ` (millisecond precision encouraged). |
 | Commit timestamps use UTC | `GIT_COMMITTER_DATE` and `GIT_AUTHOR_DATE` must be UTC when set programmatically. |
 | File metadata written by Spacecraft Software tools | mtime/ctime written by Spacecraft Software tools must be UTC-sourced. |
 
-### §12.3 — Display-Only Local Time (Render Layer Only)
+### §12.3 — Local Time as Optional Companion
 
-Local time is permitted **only** as an ephemeral render layer in human-facing terminal output. It is **never** stored, serialized, transmitted, or logged.
+Local time expressed as a UTC offset is permitted as an **optional companion** to a UTC Z primary value — in human-facing display, in API responses (as an additional field, never replacing the UTC Z field), and in stored records where timezone context aids human readers. The UTC Z value is always present and always authoritative; the local-time companion is supplemental only.
 
 - The `--absolute-time` flag (defined in `spacecraft-cli-standard` §3) disables relative-time rendering but always renders as UTC, not local time.
 - If a future CLI wants to show local time in human mode, it MUST:
@@ -359,7 +381,7 @@ When writing Rust code that handles time:
 
 **Maintainer:** Mohamed Hammad
 **Contact:** [Mohamed.Hammad@SpacecraftSoftware.org](mailto:Mohamed.Hammad@SpacecraftSoftware.org)
-**Copyright:** Copyright (C) 2026 Mohamed Hammad | **License:** GPL-3.0-or-later
+**Copyright:** Copyright (C) 2026 Mohamed Hammad & Spacecraft Software | **License:** GPL-3.0-or-later
 **Website:** <https://SpacecraftSoftware.org/>
 
 ### §13.1 — Project Pages
@@ -398,7 +420,7 @@ Every Spacecraft Software product **must** surface the following attribution in 
 
 ```
 Maintained by Mohamed Hammad <Mohamed.Hammad@SpacecraftSoftware.org>
-Copyright (C) 2026 Mohamed Hammad  |  License: GPL-3.0-or-later
+Copyright (C) 2026 Mohamed Hammad & Spacecraft Software  |  License: GPL-3.0-or-later
 https://<ProjectName>.SpacecraftSoftware.org/
 ```
 
@@ -478,10 +500,10 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
 - [ ] **§6.1** POSIX-compliant CLI/system tools
 - [ ] **§7** PFA: no tracking, minimal permissions, local storage default
 - [ ] **§8** CUA + Vim-like key bindings planned/implemented
-- [ ] **§9** Spacecraft Software color palette used; Void Navy background mandatory
+- [ ] **§9** Spacecraft Software color palette used; Void Navy background mandatory; new apps expose colors via a named `Steelbore` theme (§9.1) — no bare hex literals in UI logic
 - [ ] **§10** FOSS-licensed fonts only (Share Tech Mono / Inconsolata)
 - [ ] **§11** Material Design UI/UX; WCAG 2.1 AA verified
-- [ ] **§12** ISO 8601 dates; 24h time; UTC-only timestamps with mandatory `Z` suffix; no local-time in stored/transmitted data; ISO 8601 durations; metric units
+- [ ] **§12** ISO 8601 dates; 24h time; UTC Z mandatory on all primary timestamps; local time with UTC offset permitted as optional companion only (never as a replacement); ISO 8601 durations; metric units
 - [ ] **§13** Attribution present: maintainer name (`Mohamed Hammad`), contact (`Mohamed.Hammad@SpacecraftSoftware.org`), and project URL in `--version` / README / About
 - [ ] **§13.3** Third-party work credited in `CREDITS.md` at project/skill root when triggers apply; deeper `references/ATTRIBUTION.md` present where reference content is adapted from external sources
 - [ ] **§6.3** All commits to Spacecraft Software Git remotes cryptographically signed and showing "Verified" on the hosting platform; rewrites preserve signatures; programmatic and assistant-driven commits signed too
