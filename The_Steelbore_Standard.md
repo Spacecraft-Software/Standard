@@ -1,8 +1,8 @@
 ---
 title: The Steelbore Standard
 author: Mohamed Hammad <Mohamed.Hammad@SpacecraftSoftware.org>
-date: 2026-06-03
-version: 1.14
+date: 2026-06-08
+version: 1.15
 source-format: odt
 ---
 
@@ -15,7 +15,7 @@ source-format: odt
 
 **Engineering specification for Steelbore OS and the Spacecraft Software ecosystem**
 
-**Version:** 1.14 | **Date:** 2026-06-03 | **Author:** Mohamed Hammad
+**Version:** 1.15 | **Date:** 2026-06-08 | **Author:** Mohamed Hammad
 **Maintainer:** Mohamed Hammad | **Contact:** [Mohamed.Hammad@SpacecraftSoftware.org](mailto:Mohamed.Hammad@SpacecraftSoftware.org)
 **Copyright:** Copyright (C) 2026 Mohamed Hammad & Spacecraft Software | **License:** GPL-3.0-or-later
 **Website:** <https://SpacecraftSoftware.org/>
@@ -30,6 +30,7 @@ The Steelbore Standard defines the engineering principles, compliance requiremen
 
 ### Changelog
 
+- **v1.15 (2026-06-08):** §2 naming convention expanded — added explicitly endorsed canonical sources: *The Hitchhiker's Guide to the Galaxy*, *Hackers* (1995), Spielberg films, *Ghost in the Shell*, *Æon Flux*, *Super 8*, *LOST*, the *Cloverfield* franchise, and robot/android names from any sci-fi film or franchise. §2 now explicitly frames naming as a fun, playful exercise alongside the existing space-machine-AI fitness test.
 - **v1.14 (2026-06-03):** §3.2 reframed — Performance is the foremost priority after Stability, and its default means of achievement is **multi-core, multi-thread concurrency** (parallelism as the baseline, designed in from the start), *unless* concurrency would materially degrade performance (overhead, contention, or inherently serial workloads), in which case a documented serial/simpler approach is chosen. §3.2 compliance-checklist bullet revised.
 - **v1.13 (2026-06-03):** §3.1 reframed — Priority 1 is now **Stability**, not Memory Safety. Memory safety remains the single most important contributor and primary lever, but Priority 1 now also mandates robust error handling, fault tolerance / graceful degradation, and test-verified stability. Cardinal Rule updated to reference stability (including memory safety); §3.1 compliance-checklist bullet revised.
 - **v1.12 (2026-05-25):** §6.3 extended: added explicit authorized signing identity rule — all commits from v1.12 onwards must be signed with the `Mohamed.Hammad@SpacecraftSoftware.org` Ed25519 SSH key; committer email and signing key identity must both resolve to that address. Commits predating this version are exempt.
@@ -53,7 +54,19 @@ The Steelbore Standard defines the engineering principles, compliance requiremen
 All **new** project codenames, module identifiers, and public-facing component names **must** draw from one of the following domains:
 
 - **Real aerospace and astronomy** — orbital mechanics terms, propulsion concepts, named missions/programs, stellar objects and phenomena, observatories.
-- **Science-fiction franchises with space / AI / cybernetic themes** — *2001: A Space Odyssey*, *The Matrix*, and *Terminator* are the explicitly endorsed canonical sources. Other franchises (e.g., *Alien*, *Blade Runner*, *Ex Machina*) are acceptable if they fit the space-machine-AI register.
+- **Science-fiction franchises with space / AI / cybernetic themes** — naming is meant to be enjoyable as well as fitting. The following are explicitly endorsed canonical sources:
+    - *2001: A Space Odyssey*, *The Matrix*, *Terminator* — the original canonical trio
+    - *The Hitchhiker's Guide to the Galaxy* — also a rich vein for in-jokes (Vogon, Marvin, 42, Babel fish, Heart of Gold)
+    - *Hackers* (1995)
+    - Spielberg films (*Close Encounters of the Third Kind*, *E.T. the Extra-Terrestrial*, *A.I. Artificial Intelligence*, *Minority Report*, *Ready Player One*, etc.)
+    - *Ghost in the Shell*
+    - *Æon Flux*
+    - *Super 8*
+    - *LOST* (TV series)
+    - *Cloverfield* films
+    - Robot / android names from any sci-fi film or franchise (e.g., HAL, Data, Bishop, T-800, GERTY, TARS, Marvin)
+
+  Other franchises (e.g., *Alien*, *Blade Runner*, *Ex Machina*) remain acceptable if they fit the space-machine-AI register.
 - **Generic sci-fi / AI vocabulary** — hyperspace, neural, cybernetic, synthetic, sentinel, oracle, daemon, vector, lattice (the lowercase common noun), etc.
 
 | Category  | Examples                            | Domain                          |
