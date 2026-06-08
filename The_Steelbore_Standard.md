@@ -2,7 +2,7 @@
 title: The Steelbore Standard
 author: Mohamed Hammad <Mohamed.Hammad@SpacecraftSoftware.org>
 date: 2026-06-08
-version: 1.17
+version: 1.18
 source-format: odt
 ---
 
@@ -15,7 +15,7 @@ source-format: odt
 
 **Engineering specification for Steelbore OS and the Spacecraft Software ecosystem**
 
-**Version:** 1.17 | **Date:** 2026-06-08 | **Author:** Mohamed Hammad
+**Version:** 1.18 | **Date:** 2026-06-08 | **Author:** Mohamed Hammad
 **Maintainer:** Mohamed Hammad | **Contact:** [Mohamed.Hammad@SpacecraftSoftware.org](mailto:Mohamed.Hammad@SpacecraftSoftware.org)
 **Copyright:** Copyright (C) 2026 Mohamed Hammad & Spacecraft Software | **License:** CC-BY-SA-4.0
 **Website:** <https://SpacecraftSoftware.org/>
@@ -30,6 +30,7 @@ The Steelbore Standard defines the engineering principles, compliance requiremen
 
 ### Changelog
 
+- **v1.18 (2026-06-08):** Licensing classification follow-through. (1) **§4.1.1 added:** license-by-artifact-class table — **software** (incl. skills) is `GPL-3.0-or-later`/`AGPL-3.0-or-later`; **documents** (specs, guides, document deliverables, the published Standard) default to `CC-BY-SA-4.0` (`CC-BY-4.0` for max-reuse cases); **third-party-derived** artifacts preserve their upstream license per §4.2. (2) **Skill-license correction:** clarified that skills are software-class — the published Standard document is `CC-BY-SA-4.0` but the `spacecraft-standard` skill encoding is `GPL-3.0-or-later` (the v1.17 skill metadata is corrected back to GPL accordingly). (3) **§4.1 migration policy (replaces v1.17's "no forced re-license"):** existing projects are to be reviewed and relicensed to the best-suited GPL/AGPL, per project, on signed commits. The Standard and Construct repos are now REUSE-compliant (`reuse lint`-clean) with `LICENSES/` directories and `REUSE.toml`. (4) **§2:** added *Equilibrium* and *Dune* to the endorsed sci-fi naming sources.
 - **v1.17 (2026-06-08):** Licensing & build overhaul. (1) **Standard relicensed** from `GPL-3.0-or-later` to **`CC-BY-SA-4.0`**, effective this version forward — GPL suits software, not a prose specification; CC BY-SA preserves the share-alike copyleft ethos and is purpose-built for documents. This affects the Standard document itself only; the projects it governs are unchanged by this point. (2) **§4.1:** project license is now `GPL-3.0-or-later` **or** `AGPL-3.0-or-later` (AGPL for network-facing software), prospective with no forced re-license. (3) **§4.2 added:** explicit upstream-license-compliance clause — preserve third-party copyright notices, license texts, and `NOTICE`/`AUTHORS` verbatim; ship upstream licenses in `LICENSES/`. (4) **§4.3:** SPDX/REUSE compliance per <https://reuse.software> — two-tag headers (`SPDX-FileCopyrightText` + `SPDX-License-Identifier`), a `LICENSES/` directory, `.license`/`REUSE.toml` coverage for headerless files (replacing the old "documents are exempt" rule), and `reuse lint` as the CI gate. (5) **§3.2:** explicit optimization-flag exception — flags like LTO that break/destabilize a build on a given toolchain/platform (e.g., NixOS, cross-compilation) MUST be disabled and documented, since Stability (P1) outranks Performance (P2). §5.1/§5.2/§6/§13.2 license references and the §4/§12 compliance-checklist items updated to match.
 - **v1.16 (2026-06-08):** §12 reframed — UTC Z is now explicitly the **default and preferred** timezone (not a universal mandate forced onto every domain). New §12.2.1 documents a domain exception: a project whose core domain is fundamentally local-time-bound (e.g., `Mawaqit` prayer-time calculations, sunrise/sunset, local scheduling) may declare local time as its *primary* representation for that domain's data, provided it is documented, the UTC default still governs the project's general-purpose machinery (logs, commits, APIs), and a UTC instant remains derivable via a stored IANA timezone. §12.1 timezone row and §12.3 updated to reference the new exception and avoid contradicting it.
 - **v1.15 (2026-06-08):** §2 naming convention expanded — added explicitly endorsed canonical sources: *The Hitchhiker's Guide to the Galaxy*, *Hackers* (1995), Spielberg films, *Ghost in the Shell*, *Æon Flux*, *Super 8*, *LOST*, the *Cloverfield* franchise, and robot/android names from any sci-fi film or franchise. §2 now explicitly frames naming as a fun, playful exercise alongside the existing space-machine-AI fitness test.
@@ -62,6 +63,8 @@ All **new** project codenames, module identifiers, and public-facing component n
     - *Hackers* (1995)
     - Spielberg films (*Close Encounters of the Third Kind*, *E.T. the Extra-Terrestrial*, *A.I. Artificial Intelligence*, *Minority Report*, *Ready Player One*, etc.)
     - *Ghost in the Shell*
+    - *Equilibrium*
+    - *Dune*
     - *Æon Flux*
     - *Super 8*
     - *LOST* (TV series)
@@ -160,7 +163,19 @@ Performance is the foremost priority after stability. The default means of achie
     - Use **`GPL-3.0-or-later`** for everything else (local CLIs, libraries, desktop/TUI apps, OS components, bootloaders).
     - GPLv3 and AGPLv3 are mutually compatible by design, so an umbrella mixing both is fine.
 - No proprietary, closed-source, or permissive-only license for core project code.
-- **Prospective, no forced re-license.** This dual choice applies going forward. Existing `GPL-3.0-or-later` projects are **not** required to migrate to AGPL even if network-facing; a maintainer MAY switch at their discretion. (Mirrors §2's prospective-naming stance — no forced back-rename.)
+- **Review & migrate (existing projects).** This dual choice is not merely prospective: existing projects are to be **reviewed and relicensed** to whichever of `GPL-3.0-or-later` / `AGPL-3.0-or-later` best fits them (AGPL for network-facing software). Migration is the maintainer's per-project decision, landed on that project's own signed commit; any project that deliberately retains a non-best-fit license must document why.
+
+#### §4.1.1 — Artifact license classes
+
+The GPL/AGPL choice above governs **software**. License by artifact class:
+
+| Artifact class | Default license |
+|----------------|-----------------|
+| **Software** — code, manifests, build tooling, and **skills** | `GPL-3.0-or-later` (or `AGPL-3.0-or-later` if network-facing, §4.1) |
+| **Documents** — specifications, prose guides, books, and document deliverables produced per the `spacecraft-document-format` skill, including the published Standard | `CC-BY-SA-4.0` by default (`CC-BY-4.0` permitted when a document is intended for maximal reuse) |
+| **Third-party-derived artifacts** | Preserve the **upstream** license per §4.2 (e.g., `MIT`, `GFDL-1.3-or-later`) — never relicensed to the project default |
+
+Skills are **software-class** → `GPL-3.0-or-later` (no skill is network-facing, so AGPL does not apply). Note the deliberate split for the Standard itself: the **published Standard document** is `CC-BY-SA-4.0` (it is a document), while its `spacecraft-standard` **skill** encoding is `GPL-3.0-or-later` (it is a skill).
 
 ### §4.2 — Upstream License Compliance (preserve what you build on)
 

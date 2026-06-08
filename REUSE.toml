@@ -1,0 +1,9 @@
+version = 1
+
+# override: the Standard text contains *example* SPDX headers (in §4.3) that must not be
+# parsed as real license tags — the REUSE.toml annotation is authoritative for these files.
+[[annotations]]
+path = ["The_Steelbore_Standard.md", ".gitignore", "REUSE.toml"]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Mohamed Hammad <Mohamed.Hammad@SpacecraftSoftware.org>"
+SPDX-License-Identifier = "CC-BY-SA-4.0"
