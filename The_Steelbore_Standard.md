@@ -1,8 +1,8 @@
 ---
 title: The Steelbore Standard
 author: Mohamed Hammad <Mohamed.Hammad@SpacecraftSoftware.org>
-date: 2026-06-16
-version: 1.19
+date: 2026-06-17
+version: 1.20
 source-format: odt
 ---
 
@@ -15,7 +15,7 @@ source-format: odt
 
 **Engineering specification for Steelbore OS and the Spacecraft Software ecosystem**
 
-**Version:** 1.19 | **Date:** 2026-06-16 | **Author:** Mohamed Hammad
+**Version:** 1.20 | **Date:** 2026-06-17 | **Author:** Mohamed Hammad
 **Maintainer:** Mohamed Hammad | **Contact:** [Mohamed.Hammad@SpacecraftSoftware.org](mailto:Mohamed.Hammad@SpacecraftSoftware.org)
 **Copyright:** Copyright (C) 2026 Mohamed Hammad & Spacecraft Software | **License:** CC-BY-SA-4.0
 **Website:** <https://SpacecraftSoftware.org/>
@@ -30,6 +30,7 @@ The Steelbore Standard defines the engineering principles, compliance requiremen
 
 ### Changelog
 
+- **v1.20 (2026-06-17):** **§5.5 added:** Package Distribution Requirements — every released package must ship `packaging/guix.scm` (GNU Guix Scheme definition), `packaging/default.nix` (Nix flake/derivation), and `packaging/PKGBUILD` (Arch Linux `makepkg`), all present and buildable before any release tag is pushed; each file must pin the exact release version and SHA-256 checksum in the format native to its package manager, and carry the project's SPDX two-tag header per §4.3. **§14** updated with a corresponding `§5.5` compliance-checklist bullet.
 - **v1.19 (2026-06-16):** **§13.1:** registered the **MCP Servers** project subdomain (`MCP-Servers.SpacecraftSoftware.org`), paired in the same change-set with its row and GitHub-repo link in Spacecraft-Software/Projects `PROJECTS.md`. The `mcp-servers` repo — MCP (Model Context Protocol) server configuration templates across 12 coding agents/editors — was onboarded to the umbrella with the §5.2 posture files (`NOTICE.md`, `CONTRIBUTING.md`, README posture section) and §4.3 REUSE compliance (`LICENSES/`, `REUSE.toml`, `reuse lint`-clean).
 - **v1.18 (2026-06-08):** Licensing classification follow-through. (1) **§4.1.1 added:** license-by-artifact-class table — **software** (incl. skills) is `GPL-3.0-or-later`/`AGPL-3.0-or-later`; **documents** (specs, guides, document deliverables, the published Standard) default to `CC-BY-SA-4.0` (`CC-BY-4.0` for max-reuse cases); **third-party-derived** artifacts preserve their upstream license per §4.2. (2) **Skill-license correction:** clarified that skills are software-class — the published Standard document is `CC-BY-SA-4.0` but the `spacecraft-standard` skill encoding is `GPL-3.0-or-later` (the v1.17 skill metadata is corrected back to GPL accordingly). (3) **§4.1 migration policy (replaces v1.17's "no forced re-license"):** existing projects are to be reviewed and relicensed to the best-suited GPL/AGPL, per project, on signed commits. The Standard and Construct repos are now REUSE-compliant (`reuse lint`-clean) with `LICENSES/` directories and `REUSE.toml`. (4) **§2:** added *Equilibrium* and *Dune* to the endorsed sci-fi naming sources.
 - **v1.17 (2026-06-08):** Licensing & build overhaul. (1) **Standard relicensed** from `GPL-3.0-or-later` to **`CC-BY-SA-4.0`**, effective this version forward — GPL suits software, not a prose specification; CC BY-SA preserves the share-alike copyleft ethos and is purpose-built for documents. This affects the Standard document itself only; the projects it governs are unchanged by this point. (2) **§4.1:** project license is now `GPL-3.0-or-later` **or** `AGPL-3.0-or-later` (AGPL for network-facing software), prospective with no forced re-license. (3) **§4.2 added:** explicit upstream-license-compliance clause — preserve third-party copyright notices, license texts, and `NOTICE`/`AUTHORS` verbatim; ship upstream licenses in `LICENSES/`. (4) **§4.3:** SPDX/REUSE compliance per <https://reuse.software> — two-tag headers (`SPDX-FileCopyrightText` + `SPDX-License-Identifier`), a `LICENSES/` directory, `.license`/`REUSE.toml` coverage for headerless files (replacing the old "documents are exempt" rule), and `reuse lint` as the CI gate. (5) **§3.2:** explicit optimization-flag exception — flags like LTO that break/destabilize a build on a given toolchain/platform (e.g., NixOS, cross-compilation) MUST be disabled and documented, since Stability (P1) outranks Performance (P2). §5.1/§5.2/§6/§13.2 license references and the §4/§12 compliance-checklist items updated to match.
@@ -258,6 +259,27 @@ A project may declare itself **intended for general use**. When it does:
 ### §5.4 — Maintainer Discretion
 
 PR acceptance, feature scope, naming, architecture, and roadmap are at the maintainer's sole discretion. This is stated openly so contributors can calibrate effort accordingly. Rejection reflects fit, not quality.
+
+### §5.5 — Package Distribution Requirements
+
+Every released package **must** ship first-party package definitions for the following package managers, committed alongside the release:
+
+| File                    | Package manager / format            |
+|-------------------------|-------------------------------------|
+| `packaging/guix.scm`    | GNU Guix — Scheme package definition |
+| `packaging/default.nix` | Nix — Nix flake / derivation        |
+| `packaging/PKGBUILD`    | Arch Linux — `makepkg`-compatible   |
+
+**Rules:**
+
+- All three files MUST be present and buildable before a release tag is pushed.
+- Each file must reference the exact release version and source archive SHA-256 checksum so that the package can be built reproducibly from the tagged release. Use the format native to each package manager:
+  - **Guix (`guix.scm`):** `(sha256 (base32 "<nix-base32-hash>"))` inside the `origin` stanza.
+  - **Nix (`default.nix`):** `sha256 = "<sri-or-hex-hash>";` inside the `fetchurl` or `fetchFromGitHub` call.
+  - **Arch (`PKGBUILD`):** `sha256sums=('<hex-hash>')` array variable alongside `source=()`.
+- The `packaging/` directory is tracked in the project's version-control repository alongside the source code.
+- These files are software-class artifacts and inherit the project's GPL/AGPL license (§4.1); each file must carry the standard SPDX two-tag header (§4.3).
+- If a package manager's ecosystem imposes a stricter naming scheme or directory layout, comply with that scheme while still meeting the above requirements.
 
 ---
 
@@ -585,6 +607,7 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
 - [ ] **§4.2** Upstream copyright notices, license texts, and `NOTICE`/`AUTHORS` preserved verbatim; upstream licenses shipped in `LICENSES/`
 - [ ] **§4.3** REUSE-compliant: two-tag SPDX header (`SPDX-FileCopyrightText` + `SPDX-License-Identifier`) on every file (or `.license` sidecar / `REUSE.toml` entry); `LICENSES/` directory present; `reuse lint` passes
 - [ ] **§5** Project Posture: README/NOTICE/CONTRIBUTING present; default personal-hobby stance applied; general-use carve-outs declared in project README
+- [ ] **§5.5** Package distribution: `packaging/guix.scm`, `packaging/default.nix`, and `packaging/PKGBUILD` present, buildable, and carrying correct version + SHA-256 checksum (in each package manager's native format) before any release tag is pushed
 - [ ] **§6.1** POSIX-compliant CLI/system tools
 - [ ] **§7** PFA: no tracking, minimal permissions, local storage default
 - [ ] **§8** CUA + Vim-like key bindings planned/implemented
