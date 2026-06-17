@@ -2,7 +2,7 @@
 title: The Steelbore Standard
 author: Mohamed Hammad <Mohamed.Hammad@SpacecraftSoftware.org>
 date: 2026-06-17
-version: 1.20
+version: 1.21
 source-format: odt
 ---
 
@@ -15,7 +15,7 @@ source-format: odt
 
 **Engineering specification for Steelbore OS and the Spacecraft Software ecosystem**
 
-**Version:** 1.20 | **Date:** 2026-06-17 | **Author:** Mohamed Hammad
+**Version:** 1.21 | **Date:** 2026-06-17 | **Author:** Mohamed Hammad
 **Maintainer:** Mohamed Hammad | **Contact:** [Mohamed.Hammad@SpacecraftSoftware.org](mailto:Mohamed.Hammad@SpacecraftSoftware.org)
 **Copyright:** Copyright (C) 2026 Mohamed Hammad & Spacecraft Software | **License:** CC-BY-SA-4.0
 **Website:** <https://SpacecraftSoftware.org/>
@@ -30,6 +30,7 @@ The Steelbore Standard defines the engineering principles, compliance requiremen
 
 ### Changelog
 
+- **v1.21 (2026-06-17):** **§13.1:** registered subdomains for three projects present in `PROJECTS.md` but missing from the table — **Lode** (`Lode.SpacecraftSoftware.org`), **Sonde** (`Sonde.SpacecraftSoftware.org`), and **Vault** (`Vault.SpacecraftSoftware.org`). **§3.1 and Skill Cross-References:** corrected skill reference from `rust-guidelines` to `microsoft-rust-guidelines` to match the actual skill ID in the upstream `spacecraft-standard` skill.
 - **v1.20 (2026-06-17):** **§5.5 added:** Package Distribution Requirements — every released package must ship `packaging/guix.scm` (GNU Guix Scheme definition), `packaging/default.nix` (Nix flake/derivation), and `packaging/PKGBUILD` (Arch Linux `makepkg`), all present and buildable before any release tag is pushed; each file must pin the exact release version and SHA-256 checksum in the format native to its package manager, and carry the project's SPDX two-tag header per §4.3. **§14** updated with a corresponding `§5.5` compliance-checklist bullet.
 - **v1.19 (2026-06-16):** **§13.1:** registered the **MCP Servers** project subdomain (`MCP-Servers.SpacecraftSoftware.org`), paired in the same change-set with its row and GitHub-repo link in Spacecraft-Software/Projects `PROJECTS.md`. The `mcp-servers` repo — MCP (Model Context Protocol) server configuration templates across 12 coding agents/editors — was onboarded to the umbrella with the §5.2 posture files (`NOTICE.md`, `CONTRIBUTING.md`, README posture section) and §4.3 REUSE compliance (`LICENSES/`, `REUSE.toml`, `reuse lint`-clean).
 - **v1.18 (2026-06-08):** Licensing classification follow-through. (1) **§4.1.1 added:** license-by-artifact-class table — **software** (incl. skills) is `GPL-3.0-or-later`/`AGPL-3.0-or-later`; **documents** (specs, guides, document deliverables, the published Standard) default to `CC-BY-SA-4.0` (`CC-BY-4.0` for max-reuse cases); **third-party-derived** artifacts preserve their upstream license per §4.2. (2) **Skill-license correction:** clarified that skills are software-class — the published Standard document is `CC-BY-SA-4.0` but the `spacecraft-standard` skill encoding is `GPL-3.0-or-later` (the v1.17 skill metadata is corrected back to GPL accordingly). (3) **§4.1 migration policy (replaces v1.17's "no forced re-license"):** existing projects are to be reviewed and relicensed to the best-suited GPL/AGPL, per project, on signed commits. The Standard and Construct repos are now REUSE-compliant (`reuse lint`-clean) with `LICENSES/` directories and `REUSE.toml`. (4) **§2:** added *Equilibrium* and *Dune* to the endorsed sci-fi naming sources.
@@ -124,7 +125,7 @@ Software must behave predictably and remain correct under sustained and adverse 
 
 **Memory safety (primary lever):**
 
-- **Preferred language: Rust** — governed by the Spacecraft Software Rust Guidelines. Always load the `rust-guidelines` skill before writing any Rust code.
+- **Preferred language: Rust** — governed by the Spacecraft Software Rust Guidelines. Always load the `microsoft-rust-guidelines` skill before writing any Rust code.
 - When Rust is not viable (Flutter/Dart, Zig, etc.), **mandatory mitigations**:
     - **ASLR** (Address Space Layout Randomization) on all compiled binaries
     - **CFI** (Control-Flow Integrity) wherever the toolchain supports it
@@ -515,6 +516,9 @@ Each Spacecraft Software project has a dedicated subdomain following the pattern
 | Loran                      | <https://Loran.SpacecraftSoftware.org/>          |
 | Pearlite                   | <https://Pearlite.SpacecraftSoftware.org/>       |
 | MCP Servers                | <https://MCP-Servers.SpacecraftSoftware.org/>    |
+| Lode                       | <https://Lode.SpacecraftSoftware.org/>           |
+| Sonde                      | <https://Sonde.SpacecraftSoftware.org/>          |
+| Vault                      | <https://Vault.SpacecraftSoftware.org/>          |
 
 When a new project is created, add its subdomain to this table immediately.
 
@@ -627,7 +631,7 @@ If any item is not applicable to the current artifact type (e.g., color palette 
 
 | Task                                  | Load this skill              |
 |---------------------------------------|------------------------------|
-| Writing any Rust code                 | `rust-guidelines`            |
+| Writing any Rust code                 | `microsoft-rust-guidelines`  |
 | Generating DOCX / ODT / PDF documents | `spacecraft-document-format` |
 | Creating IDE / terminal themes        | `spacecraft-theme-factory`   |
 | All other Spacecraft Software work    | `spacecraft-standard`        |
