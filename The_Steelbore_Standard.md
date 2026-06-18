@@ -2,7 +2,7 @@
 title: The Steelbore Standard
 author: Mohamed Hammad <Mohamed.Hammad@SpacecraftSoftware.org>
 date: 2026-06-19
-version: 1.23
+version: 1.24
 source-format: odt
 ---
 
@@ -15,7 +15,7 @@ source-format: odt
 
 **Engineering specification for Steelbore OS and the Spacecraft Software ecosystem**
 
-**Version:** 1.23 | **Date:** 2026-06-19 | **Author:** Mohamed Hammad
+**Version:** 1.24 | **Date:** 2026-06-19 | **Author:** Mohamed Hammad
 **Maintainer:** Mohamed Hammad | **Contact:** [Mohamed.Hammad@SpacecraftSoftware.org](mailto:Mohamed.Hammad@SpacecraftSoftware.org)
 **Copyright:** Copyright (C) 2026 Mohamed Hammad & Spacecraft Software | **License:** CC-BY-SA-4.0
 **Website:** <https://SpacecraftSoftware.org/>
@@ -30,6 +30,7 @@ The Steelbore Standard defines the engineering principles, compliance requiremen
 
 ### Changelog
 
+- **v1.24 (2026-06-19):** Add §8 Documentation (Texinfo) — Texinfo as first-class technical manual format for user-facing Spacecraft Software projects, following GNU conventions (`@dircategory`/`@direntry` for Info directory registration, `makeinfo`/`texi2pdf` build targets, CC-BY-SA-4.0 default with GFDL-1.3-or-later as a permitted alternative, packaging integration for Guix/Nix/PKGBUILD); renumber old §8–§15 → §9–§16 accordingly.
 - **v1.23 (2026-06-19):** **§14.1:** registered the **Docs** subdomain (`Docs.SpacecraftSoftware.org`), paired in the same change-set with its updated row and new GitHub-repo link in Spacecraft-Software/Projects `PROJECTS.md`. The `Docs` repo — a centralized aggregation of the umbrella's planning corpus (PRDs, plans, TODOs, research) organized by project then document type — was created private with §5.2 posture files and §4.3 REUSE compliance (CC-BY-SA-4.0 documents, `reuse lint`-clean).
 - **v1.22 (2026-06-18):** **§7 Shell Environment added** — codifies Nushell, Ion, Brush, and Bash as four equally first-class shell environments; §7.1 Script Portability Policy mandates POSIX-compatible scripts by default with Nushell/Ion native variants where needed and prohibits Bashisms in shared scripts. Current §7–§14 renumbered §8–§15 accordingly. Compliance checklist updated with §7 bullet. Skill Cross-References updated with shell-work row. **§14.2:** added email obfuscation note — `[at]` form permitted in plain-text prose; PKGBUILD `# Maintainer:` and SPDX headers must retain the full address.
 - **v1.21 (2026-06-17):** **§13.1:** registered subdomains for three projects present in `PROJECTS.md` but missing from the table — **Lode** (`Lode.SpacecraftSoftware.org`), **Sonde** (`Sonde.SpacecraftSoftware.org`), and **Vault** (`Vault.SpacecraftSoftware.org`). **§3.1 and Skill Cross-References:** corrected skill reference from `rust-guidelines` to `microsoft-rust-guidelines` to match the actual skill ID in the upstream `spacecraft-standard` skill.
@@ -109,7 +110,7 @@ Projects named before the v1.2 convention drew from metallurgy, materials scienc
 | `Ferrite_OS`| Active                | Custom OS / DOS-emulation experiments; ferrite (iron-based material) name.      |
 | `Forge`     | Active                | Production flavor tooling (forge-cli, forge-build, forge-activate); forging-tool name. |
 
-Existing legacy-named projects MAY be renamed under the v1.2 convention at the maintainer's discretion — renames are optional. When a rename happens, update this table and §14.1's subdomain table in the same commit.
+Existing legacy-named projects MAY be renamed under the v1.2 convention at the maintainer's discretion — renames are optional. When a rename happens, update this table and §15.1's subdomain table in the same commit.
 
 ### §2.2 — Skill IDs are functional, not codenamed
 
@@ -189,7 +190,7 @@ When a project incorporates, adapts, or links third-party code, it MUST satisfy 
 - **Preserve verbatim** all upstream copyright notices, license texts, `NOTICE`/`AUTHORS` files, and in-file license headers — never strip, rewrite, or relicense them.
 - **Ship** each distinct upstream license text in the project's `LICENSES/` directory (§4.3).
 - **Verify compatibility** of the upstream license with the project's GPL/AGPL license before inclusion.
-- This is the legal/mechanical obligation; §14.3's `CREDITS.md` is the human-readable narrative counterpart. When both are triggered, both apply.
+- This is the legal/mechanical obligation; §15.3's `CREDITS.md` is the human-readable narrative counterpart. When both are triggered, both apply.
 
 ### §4.3 — SPDX & REUSE Compliance
 
@@ -252,7 +253,7 @@ A project may declare itself **intended for general use**. When it does:
 - The no-warranty / no-liability stance from §5.1 still applies in full — general-use status changes audience and intent, **not** legal terms.
 - General-use projects must hold a higher release-quality bar: semantic versioning, maintained `CHANGELOG.md`, deprecation policy, and a documented support window for the current major version.
 
-**General-use registry** (keep in sync with §14.1 subdomain table):
+**General-use registry** (keep in sync with §15.1 subdomain table):
 
 | Project      | Posture       |
 |--------------|---------------|
@@ -330,7 +331,65 @@ Spacecraft Software tooling, documentation, and CI pipelines target **four first
 
 ---
 
-## §8 — Privacy-Friendly Application (PFA) Policy
+## §8 — Documentation (Texinfo)
+
+Spacecraft Software user-facing projects should ship a **Texinfo manual** as the canonical technical reference. Texinfo is the preferred format for reference documentation that accompanies distributed software, following GNU project conventions.
+
+### §8.1 — When a Texinfo Manual Is Required
+
+| Project type | Requirement |
+|---|---|
+| CLI / TUI / GUI application with substantive user-facing functionality | **MUST** ship a Texinfo manual covering invocation, options, concepts, and examples |
+| Library with a public API | **SHOULD** ship a Texinfo reference manual covering all public interfaces |
+| Simple script / internal tooling | **MAY** skip; a well-structured `README.md` suffices |
+
+### §8.2 — Source Format and File Layout
+
+- Source files use the `.texi` extension (Texinfo 7.x+).
+- Manuals live at `doc/<project>.texi` in the project root.
+- The project's top-level `Makefile` must expose three targets: `make info`, `make html`, `make pdf`.
+
+### §8.3 — Required Structural Elements
+
+Every Texinfo manual must include the following elements:
+
+| Element | Purpose |
+|---|---|
+| `@dircategory` / `@direntry` | Registers the manual in the Info directory |
+| `@copying` block | License statement and copyright notice |
+| `@titlepage` | Title, version, author, and copyright |
+| `@node Top` + `@top` | Required top-level node for Info readers |
+| `@menu` per chapter | Navigation structure |
+
+### §8.4 — Output Formats
+
+Build and ship all three output formats:
+
+| Format | Tool | Purpose |
+|---|---|---|
+| `.info` | `makeinfo` / `texi2any` | Info readers (Emacs, standalone `info`) |
+| `.html` | `makeinfo --html` | Project documentation website |
+| `.pdf` | `texi2pdf` | Printable reference |
+
+Install `.info` files using `install-info` at package install time so they appear in the system Info directory.
+
+### §8.5 — Licensing
+
+Texinfo manuals are **document-class** artifacts (§4.1.1) and default to **CC-BY-SA-4.0**. **GFDL-1.3-or-later** is a permitted alternative when the manual is distributed alongside GPL-licensed software and compatibility with GNU documentation collections is desired. Include the chosen license in `LICENSES/` per §4.3.
+
+### §8.6 — Packaging Integration
+
+Package manifests must install the `.info` file and register it with `install-info`:
+
+| Package manager | Requirements |
+|---|---|
+| **Guix** (`packaging/guix.scm`) | Add `texinfo` as a native input; run `install-info` in the install phase |
+| **Nix** (`packaging/default.nix`) | Add `texinfo` to `nativeBuildInputs`; standard Autoconf/Make `installPhase` handles `install-info` automatically |
+| **PKGBUILD** (`packaging/PKGBUILD`) | Add `texinfo` to `makedepends`; `install -Dm644` for `.info` files; call `install-info` in `post_install` |
+
+---
+
+## §9 — Privacy-Friendly Application (PFA) Policy
 
 Every Spacecraft Software application must satisfy **all three** PFA requirements:
 
@@ -344,7 +403,7 @@ When reviewing or designing any feature that touches data handling, permissions,
 
 ---
 
-## §9 — Key Bindings
+## §10 — Key Bindings
 
 All interactive applications must support **both**:
 
@@ -355,7 +414,7 @@ All interactive applications must support **both**:
 
 ---
 
-## §10 — Spacecraft Software Color Palette (WCAG-Compliant)
+## §11 — Spacecraft Software Color Palette (WCAG-Compliant)
 
 The **only** permitted colors for Spacecraft Software interfaces and documents:
 
@@ -372,7 +431,7 @@ The **only** permitted colors for Spacecraft Software interfaces and documents:
 
 For document/file generation → load the `spacecraft-document-format` skill. For IDE/terminal themes → load the `spacecraft-theme-factory` skill.
 
-### §10.1 — Steelbore Theme (Application Theming Standard)
+### §11.1 — Steelbore Theme (Application Theming Standard)
 
 When building a new Spacecraft Software application (GUI, TUI, or web), all palette
 references **must** be accessed through a named theme called **`Steelbore`** rather than
@@ -395,7 +454,7 @@ referenced as bare hex literals. The `Steelbore` theme is the canonical color co
 
 ---
 
-## §11 — Typography (FOSS-Licensed Fonts Only)
+## §12 — Typography (FOSS-Licensed Fonts Only)
 
 Acceptable font licenses: **OFL, Apache 2.0, Ubuntu Font License, CC0-1.0**
 
@@ -409,36 +468,36 @@ Never use proprietary fonts. When suggesting or using fonts in any Spacecraft So
 
 ---
 
-## §12 — UI/UX Design System
+## §13 — UI/UX Design System
 
-- **Material Design** is the required component system for all graphical applications. Theme Material components with the §10 color palette.
+- **Material Design** is the required component system for all graphical applications. Theme Material components with the §11 color palette.
 - **WCAG 2.1 Level AA** contrast is the minimum for all color pairings. Any new color additions must be WCAG-verified before adoption.
 - **Accessibility:** screen readers, keyboard-only navigation, and system accessibility preferences (reduced motion, high contrast) must all be respected.
 
 ---
 
-## §13 — Date, Time & Units
+## §14 — Date, Time & Units
 
-### §13.1 — Date & Time Format Rules
+### §14.1 — Date & Time Format Rules
 
 | Concern      | Rule                                                             | Example                      |
 |--------------|------------------------------------------------------------------|------------------------------|
 | Date format  | ISO 8601 only: `YYYY-MM-DD`                                      | `2026-03-08`                 |
 | Time format  | 24-hour only: `HH:MM:SS` — AM/PM is **never** permitted          | `14:30:00`                   |
 | Timestamp    | Combined ISO 8601 UTC: `YYYY-MM-DDTHH:MM:SSZ`                    | `2026-03-08T14:30:00Z`       |
-| Timezone     | **UTC Z is the default and preferred primary** for general-purpose, cross-system, and machine-readable timestamps. A project whose core domain is inherently local-time-bound (e.g., solar/prayer-time calculations) may declare local time as its primary record instead — a documented exception, not a free choice. See §13.2 and §13.2.1 | `Z` not `+00:00`             |
+| Timezone     | **UTC Z is the default and preferred primary** for general-purpose, cross-system, and machine-readable timestamps. A project whose core domain is inherently local-time-bound (e.g., solar/prayer-time calculations) may declare local time as its primary record instead — a documented exception, not a free choice. See §14.2 and §14.2.1 | `Z` not `+00:00`             |
 | Duration     | ISO 8601 duration format only                                    | `PT1H30M` not "1h 30m"       |
 | Units        | Metric (SI) primary; imperial in parentheses only if locale requires | `100 km (62 mi)`         |
 
 Apply these conventions to all generated code, documentation, comments, and any user-facing strings. Never output AM/PM time, non-ISO dates, or imperial-primary units.
 
-### §13.2 — UTC Z Timezone Policy
+### §14.2 — UTC Z Timezone Policy
 
 **UTC Z is the default and preferred timezone for stored, transmitted, logged, and committed timestamps across Spacecraft Software projects.** It is the convention every project should reach for first — it keeps cross-project tooling, sorting, and interchange simple and unambiguous. Under this default, the `Z` suffix is required on primary timestamps, and local time expressed as a UTC offset (e.g., `2026-05-24T13:34:55+03:00`) may optionally accompany a UTC Z value as a secondary, human-convenience field — but UTC Z remains the authoritative record.
 
-This is a strong default, not a universal mandate forced onto every domain regardless of fit — §13.2.1 documents the exception that lets a project whose domain is genuinely local-time-bound use local time as its primary record instead.
+This is a strong default, not a universal mandate forced onto every domain regardless of fit — §14.2.1 documents the exception that lets a project whose domain is genuinely local-time-bound use local time as its primary record instead.
 
-**Rules for projects under the UTC Z default — apply unless a project has filed the §13.2.1 exception:**
+**Rules for projects under the UTC Z default — apply unless a project has filed the §14.2.1 exception:**
 
 | Rule | Detail |
 |------|--------|
@@ -449,20 +508,20 @@ This is a strong default, not a universal mandate forced onto every domain regar
 | Commit timestamps use UTC | `GIT_COMMITTER_DATE` and `GIT_AUTHOR_DATE` must be UTC when set programmatically. |
 | File metadata written by Spacecraft Software tools | mtime/ctime written by Spacecraft Software tools must be UTC-sourced. |
 
-### §13.2.1 — Domain Exception: Inherently Local-Time-Bound Projects
+### §14.2.1 — Domain Exception: Inherently Local-Time-Bound Projects
 
 A project whose core domain is fundamentally defined by **local civil or solar time** — not by a moment in absolute (UTC) time — may declare local time as the **primary** representation for that domain's data. Examples: prayer-time calculations (`Mawaqit`), sunrise/sunset tables, local event or business-hours scheduling. For data like this, the meaningful value *is* "06:14 local, at this place" — collapsing it to a UTC instant first and treating that as authoritative would misrepresent what the data actually is.
 
 **Conditions for the exception:**
 
 1. **Document it.** The project's README or spec must state explicitly which data uses local time as primary, and the *domain* reason why — not developer or user convenience.
-2. **Keep the default everywhere else.** General-purpose machinery within the same project — logs, commit timestamps, internal cross-system APIs, telemetry — still follows the §13.2 UTC Z default. The exception covers the domain data itself, not the whole project.
+2. **Keep the default everywhere else.** General-purpose machinery within the same project — logs, commit timestamps, internal cross-system APIs, telemetry — still follows the §14.2 UTC Z default. The exception covers the domain data itself, not the whole project.
 3. **Preserve UTC derivability.** Store or compute the IANA timezone (e.g., `Africa/Cairo`) alongside the local value, so a UTC instant remains derivable for interchange, comparison, and storage portability.
 4. **This is an exception, not an escape hatch.** "Local time is more convenient" or "our users are mostly in one timezone" do not qualify — the domain itself must be inherently local-time-bound.
 
-### §13.3 — Local Time as Optional Companion
+### §14.3 — Local Time as Optional Companion
 
-**For projects under the UTC Z default** (§13.2), local time expressed as a UTC offset is permitted as an **optional companion** to the UTC Z primary value — in human-facing display, in API responses (as an additional field, never replacing the UTC Z field), and in stored records where timezone context aids human readers. The UTC Z value is always present and always authoritative; the local-time companion is supplemental only. (A project operating under the §13.2.1 domain exception inverts these roles for its domain data — local time is primary there, with UTC kept derivable rather than displayed as authoritative.)
+**For projects under the UTC Z default** (§14.2), local time expressed as a UTC offset is permitted as an **optional companion** to the UTC Z primary value — in human-facing display, in API responses (as an additional field, never replacing the UTC Z field), and in stored records where timezone context aids human readers. The UTC Z value is always present and always authoritative; the local-time companion is supplemental only. (A project operating under the §14.2.1 domain exception inverts these roles for its domain data — local time is primary there, with UTC kept derivable rather than displayed as authoritative.)
 
 - The `--absolute-time` flag (defined in `spacecraft-cli-standard` §3) disables relative-time rendering but always renders as UTC, not local time.
 - If a future CLI wants to show local time in human mode, it MUST:
@@ -472,7 +531,7 @@ A project whose core domain is fundamentally defined by **local civil or solar t
     4. Never persist or transmit the local-time rendering.
 - JSON/machine output (`--format json/jsonl/yaml/csv`) MUST always use UTC + `Z`.
 
-### §13.4 — Duration Format
+### §14.4 — Duration Format
 
 Durations follow ISO 8601 duration notation:
 
@@ -484,7 +543,7 @@ Durations follow ISO 8601 duration notation:
 
 Prose forms like "1h 30m", "90 minutes", "1.5 hours" are **forbidden** in machine-readable output. They are acceptable in `--help` text only.
 
-### §13.5 — Rust Implementation Guidance
+### §14.5 — Rust Implementation Guidance
 
 When writing Rust code that handles time:
 
@@ -500,14 +559,14 @@ When writing Rust code that handles time:
 
 ---
 
-## §14 — Attribution, Maintainer & Contact
+## §15 — Attribution, Maintainer & Contact
 
 **Maintainer:** Mohamed Hammad
 **Contact:** [Mohamed.Hammad@SpacecraftSoftware.org](mailto:Mohamed.Hammad@SpacecraftSoftware.org)
 **Copyright:** Copyright (C) 2026 Mohamed Hammad & Spacecraft Software | **License:** CC-BY-SA-4.0
 **Website:** <https://SpacecraftSoftware.org/>
 
-### §14.1 — Project Pages
+### §15.1 — Project Pages
 
 Each Spacecraft Software project has a dedicated subdomain following the pattern `https://<ProjectName>.SpacecraftSoftware.org/`. Use the project-specific URL in all project-level outputs; use `https://SpacecraftSoftware.org/` only for umbrella references.
 
@@ -540,7 +599,7 @@ Each Spacecraft Software project has a dedicated subdomain following the pattern
 
 When a new project is created, add its subdomain to this table immediately.
 
-### §14.2 — Mandatory Attribution in Project Outputs
+### §15.2 — Mandatory Attribution in Project Outputs
 
 Every Spacecraft Software product **must** surface the following attribution in at least one of: `--help` output, `--version` output, README, or About/Info screen.
 
@@ -585,11 +644,11 @@ https://<ProjectName>.SpacecraftSoftware.org/
 
 - **Email obfuscation in plain-text prose.** In plain-text prose contexts (README body, CONTRIBUTING.md, human-readable documentation) where the address is not a clickable link, `Mohamed.Hammad [at] SpacecraftSoftware.org` is permitted as a scraper-resistant form. `# Maintainer:` lines in PKGBUILDs and `SPDX-FileCopyrightText` headers **must** always use the full address — those formats are parsed by `makepkg`/`pkgcheck` and `reuse lint` respectively, and obfuscation breaks them.
 
-### §14.3 — Third-Party Attribution
+### §15.3 — Third-Party Attribution
 
 Spacecraft Software artifacts must give credit where credit is due. When a project or skill **substantially builds on third-party work**, that credit appears in a `CREDITS.md` at the artifact's root — `<project-root>/CREDITS.md` for projects, `<skill-name>/CREDITS.md` for skills.
 
-`CREDITS.md` is the inbound counterpart to §14.2's outbound attribution: §14.2 tells consumers who maintains Spacecraft Software; §14.3 tells consumers whose work Spacecraft Software stands on.
+`CREDITS.md` is the inbound counterpart to §15.2's outbound attribution: §15.2 tells consumers who maintains Spacecraft Software; §15.3 tells consumers whose work Spacecraft Software stands on.
 
 **Triggers** (any one obligates a `CREDITS.md`):
 
@@ -619,7 +678,7 @@ SPDX headers (§4) cover license compliance mechanically; `CREDITS.md` is the hu
 
 ---
 
-## §15 — Compliance Checklist (Audit Gate)
+## §16 — Compliance Checklist (Audit Gate)
 
 Before finalising **any** Spacecraft Software artifact, mentally verify:
 
@@ -634,14 +693,15 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
 - [ ] **§5.5** Package distribution: `packaging/guix.scm`, `packaging/default.nix`, and `packaging/PKGBUILD` present, buildable, and carrying correct version + SHA-256 checksum (in each package manager's native format) before any release tag is pushed
 - [ ] **§6.1** POSIX-compliant CLI/system tools
 - [ ] **§7** Shell scripts are POSIX-compatible; Nushell/Ion native variants provided where shell-native idioms are required; no Bashisms in shared scripts
-- [ ] **§8** PFA: no tracking, minimal permissions, local storage default
-- [ ] **§9** CUA + Vim-like key bindings planned/implemented
-- [ ] **§10** Spacecraft Software color palette used; Void Navy background mandatory; new apps expose colors via a named `Steelbore` theme (§10.1) — no bare hex literals in UI logic
-- [ ] **§11** FOSS-licensed fonts only (Share Tech Mono / Inconsolata)
-- [ ] **§12** Material Design UI/UX; WCAG 2.1 AA verified
-- [ ] **§13** ISO 8601 dates; 24h time; UTC Z is the default primary timestamp (companion local time with UTC offset permitted, never a replacement) — unless the project filed the §13.2.1 domain exception for inherently local-time-bound data; ISO 8601 durations; metric units
-- [ ] **§14** Attribution present: maintainer name (`Mohamed Hammad`), contact (`Mohamed.Hammad@SpacecraftSoftware.org`), and project URL in `--version` / README / About
-- [ ] **§14.3** Third-party work credited in `CREDITS.md` at project/skill root when triggers apply; deeper `references/ATTRIBUTION.md` present where reference content is adapted from external sources
+- [ ] **§8** Texinfo manual present for user-facing programs (`doc/<project>.texi`); builds to `.info`, `.html`, and `.pdf`; `install-info` hook present in all three package manifests (§5.5) — N/A for scripts and internal tooling
+- [ ] **§9** PFA: no tracking, minimal permissions, local storage default
+- [ ] **§10** CUA + Vim-like key bindings planned/implemented
+- [ ] **§11** Spacecraft Software color palette used; Void Navy background mandatory; new apps expose colors via a named `Steelbore` theme (§11.1) — no bare hex literals in UI logic
+- [ ] **§12** FOSS-licensed fonts only (Share Tech Mono / Inconsolata)
+- [ ] **§13** Material Design UI/UX; WCAG 2.1 AA verified
+- [ ] **§14** ISO 8601 dates; 24h time; UTC Z is the default primary timestamp (companion local time with UTC offset permitted, never a replacement) — unless the project filed the §14.2.1 domain exception for inherently local-time-bound data; ISO 8601 durations; metric units
+- [ ] **§15** Attribution present: maintainer name (`Mohamed Hammad`), contact (`Mohamed.Hammad@SpacecraftSoftware.org`), and project URL in `--version` / README / About
+- [ ] **§15.3** Third-party work credited in `CREDITS.md` at project/skill root when triggers apply; deeper `references/ATTRIBUTION.md` present where reference content is adapted from external sources
 - [ ] **§6.3** All commits to Spacecraft Software Git remotes cryptographically signed with the `Mohamed.Hammad@SpacecraftSoftware.org` key and showing "Verified" on the hosting platform; rewrites preserve signatures; programmatic and assistant-driven commits signed too
 
 If any item is not applicable to the current artifact type (e.g., color palette for a pure Rust library), note it as N/A rather than silently skipping it.
@@ -655,6 +715,7 @@ If any item is not applicable to the current artifact type (e.g., color palette 
 | Writing any Rust code                 | `microsoft-rust-guidelines`                        |
 | Writing or reviewing shell scripts    | `spacecraft-cli-shell` + `spacecraft-cli-preference` |
 | Generating DOCX / ODT / PDF documents | `spacecraft-document-format`                       |
+| Authoring a Texinfo manual            | `spacecraft-standard` (§8)                         |
 | Creating IDE / terminal themes        | `spacecraft-theme-factory`                         |
 | All other Spacecraft Software work    | `spacecraft-standard`                              |
 
