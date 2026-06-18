@@ -470,7 +470,7 @@ Never use proprietary fonts. When suggesting or using fonts in any Spacecraft So
 
 ## §13 — UI/UX Design System
 
-- **Material Design** is the required component system for all graphical applications. Theme Material components with the §10 color palette.
+- **Material Design** is the required component system for all graphical applications. Theme Material components with the §11 color palette.
 - **WCAG 2.1 Level AA** contrast is the minimum for all color pairings. Any new color additions must be WCAG-verified before adoption.
 - **Accessibility:** screen readers, keyboard-only navigation, and system accessibility preferences (reduced motion, high contrast) must all be respected.
 
