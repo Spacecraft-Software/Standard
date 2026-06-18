@@ -1,8 +1,8 @@
 ---
 title: The Steelbore Standard
 author: Mohamed Hammad <Mohamed.Hammad@SpacecraftSoftware.org>
-date: 2026-06-18
-version: 1.22
+date: 2026-06-19
+version: 1.23
 source-format: odt
 ---
 
@@ -15,7 +15,7 @@ source-format: odt
 
 **Engineering specification for Steelbore OS and the Spacecraft Software ecosystem**
 
-**Version:** 1.22 | **Date:** 2026-06-18 | **Author:** Mohamed Hammad
+**Version:** 1.23 | **Date:** 2026-06-19 | **Author:** Mohamed Hammad
 **Maintainer:** Mohamed Hammad | **Contact:** [Mohamed.Hammad@SpacecraftSoftware.org](mailto:Mohamed.Hammad@SpacecraftSoftware.org)
 **Copyright:** Copyright (C) 2026 Mohamed Hammad & Spacecraft Software | **License:** CC-BY-SA-4.0
 **Website:** <https://SpacecraftSoftware.org/>
@@ -30,6 +30,7 @@ The Steelbore Standard defines the engineering principles, compliance requiremen
 
 ### Changelog
 
+- **v1.23 (2026-06-19):** **§14.1:** registered the **Docs** subdomain (`Docs.SpacecraftSoftware.org`), paired in the same change-set with its updated row and new GitHub-repo link in Spacecraft-Software/Projects `PROJECTS.md`. The `Docs` repo — a centralized aggregation of the umbrella's planning corpus (PRDs, plans, TODOs, research) organized by project then document type — was created private with §5.2 posture files and §4.3 REUSE compliance (CC-BY-SA-4.0 documents, `reuse lint`-clean).
 - **v1.22 (2026-06-18):** **§7 Shell Environment added** — codifies Nushell, Ion, Brush, and Bash as four equally first-class shell environments; §7.1 Script Portability Policy mandates POSIX-compatible scripts by default with Nushell/Ion native variants where needed and prohibits Bashisms in shared scripts. Current §7–§14 renumbered §8–§15 accordingly. Compliance checklist updated with §7 bullet. Skill Cross-References updated with shell-work row. **§14.2:** added email obfuscation note — `[at]` form permitted in plain-text prose; PKGBUILD `# Maintainer:` and SPDX headers must retain the full address.
 - **v1.21 (2026-06-17):** **§13.1:** registered subdomains for three projects present in `PROJECTS.md` but missing from the table — **Lode** (`Lode.SpacecraftSoftware.org`), **Sonde** (`Sonde.SpacecraftSoftware.org`), and **Vault** (`Vault.SpacecraftSoftware.org`). **§3.1 and Skill Cross-References:** corrected skill reference from `rust-guidelines` to `microsoft-rust-guidelines` to match the actual skill ID in the upstream `spacecraft-standard` skill.
 - **v1.20 (2026-06-17):** **§5.5 added:** Package Distribution Requirements — every released package must ship `packaging/guix.scm` (GNU Guix Scheme definition), `packaging/default.nix` (Nix flake/derivation), and `packaging/PKGBUILD` (Arch Linux `makepkg`), all present and buildable before any release tag is pushed; each file must pin the exact release version and SHA-256 checksum in the format native to its package manager, and carry the project's SPDX two-tag header per §4.3. **§15** updated with a corresponding `§5.5` compliance-checklist bullet.
@@ -535,6 +536,7 @@ Each Spacecraft Software project has a dedicated subdomain following the pattern
 | Lode                       | <https://Lode.SpacecraftSoftware.org/>           |
 | Sonde                      | <https://Sonde.SpacecraftSoftware.org/>          |
 | Vault                      | <https://Vault.SpacecraftSoftware.org/>          |
+| Docs                       | <https://Docs.SpacecraftSoftware.org/>           |
 
 When a new project is created, add its subdomain to this table immediately.
 
