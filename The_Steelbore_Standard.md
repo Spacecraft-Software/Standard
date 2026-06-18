@@ -30,7 +30,7 @@ The Steelbore Standard defines the engineering principles, compliance requiremen
 
 ### Changelog
 
-- **v1.22 (2026-06-18):** **§7 Shell Environment added** — codifies Nushell, Ion, Brush, and Bash as four equally first-class shell environments; §7.1 Script Portability Policy mandates POSIX-compatible scripts by default with Nushell/Ion native variants where needed and prohibits Bashisms in shared scripts. Current §7–§14 renumbered §8–§15 accordingly. Compliance checklist updated with §7 bullet. Skill Cross-References updated with shell-work row.
+- **v1.22 (2026-06-18):** **§7 Shell Environment added** — codifies Nushell, Ion, Brush, and Bash as four equally first-class shell environments; §7.1 Script Portability Policy mandates POSIX-compatible scripts by default with Nushell/Ion native variants where needed and prohibits Bashisms in shared scripts. Current §7–§14 renumbered §8–§15 accordingly. Compliance checklist updated with §7 bullet. Skill Cross-References updated with shell-work row. **§14.2:** added email obfuscation note — `[at]` form permitted in plain-text prose; PKGBUILD `# Maintainer:` and SPDX headers must retain the full address.
 - **v1.21 (2026-06-17):** **§13.1:** registered subdomains for three projects present in `PROJECTS.md` but missing from the table — **Lode** (`Lode.SpacecraftSoftware.org`), **Sonde** (`Sonde.SpacecraftSoftware.org`), and **Vault** (`Vault.SpacecraftSoftware.org`). **§3.1 and Skill Cross-References:** corrected skill reference from `rust-guidelines` to `microsoft-rust-guidelines` to match the actual skill ID in the upstream `spacecraft-standard` skill.
 - **v1.20 (2026-06-17):** **§5.5 added:** Package Distribution Requirements — every released package must ship `packaging/guix.scm` (GNU Guix Scheme definition), `packaging/default.nix` (Nix flake/derivation), and `packaging/PKGBUILD` (Arch Linux `makepkg`), all present and buildable before any release tag is pushed; each file must pin the exact release version and SHA-256 checksum in the format native to its package manager, and carry the project's SPDX two-tag header per §4.3. **§15** updated with a corresponding `§5.5` compliance-checklist bullet.
 - **v1.19 (2026-06-16):** **§13.1:** registered the **MCP Servers** project subdomain (`MCP-Servers.SpacecraftSoftware.org`), paired in the same change-set with its row and GitHub-repo link in Spacecraft-Software/Projects `PROJECTS.md`. The `mcp-servers` repo — MCP (Model Context Protocol) server configuration templates across 12 coding agents/editors — was onboarded to the umbrella with the §5.2 posture files (`NOTICE.md`, `CONTRIBUTING.md`, README posture section) and §4.3 REUSE compliance (`LICENSES/`, `REUSE.toml`, `reuse lint`-clean).
@@ -580,6 +580,8 @@ https://<ProjectName>.SpacecraftSoftware.org/
     "maintainer": "Mohamed Hammad <Mohamed.Hammad@SpacecraftSoftware.org>",
     "website": "https://<ProjectName>.SpacecraftSoftware.org/"
     ```
+
+- **Email obfuscation in plain-text prose.** In plain-text prose contexts (README body, CONTRIBUTING.md, human-readable documentation) where the address is not a clickable link, `Mohamed.Hammad [at] SpacecraftSoftware.org` is permitted as a scraper-resistant form. `# Maintainer:` lines in PKGBUILDs and `SPDX-FileCopyrightText` headers **must** always use the full address — those formats are parsed by `makepkg`/`pkgcheck` and `reuse lint` respectively, and obfuscation breaks them.
 
 ### §14.3 — Third-Party Attribution
 
