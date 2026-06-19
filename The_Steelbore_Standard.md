@@ -1,8 +1,8 @@
 ---
 title: The Steelbore Standard
 author: Mohamed Hammad <Mohamed.Hammad@SpacecraftSoftware.org>
-date: 2026-06-19
-version: 1.24
+date: 2026-06-20
+version: 1.25
 source-format: odt
 ---
 
@@ -15,7 +15,7 @@ source-format: odt
 
 **Engineering specification for Steelbore OS and the Spacecraft Software ecosystem**
 
-**Version:** 1.24 | **Date:** 2026-06-19 | **Author:** Mohamed Hammad
+**Version:** 1.25 | **Date:** 2026-06-20 | **Author:** Mohamed Hammad
 **Maintainer:** Mohamed Hammad | **Contact:** [Mohamed.Hammad@SpacecraftSoftware.org](mailto:Mohamed.Hammad@SpacecraftSoftware.org)
 **Copyright:** Copyright (C) 2026 Mohamed Hammad & Spacecraft Software | **License:** CC-BY-SA-4.0
 **Website:** <https://SpacecraftSoftware.org/>
@@ -30,6 +30,7 @@ The Steelbore Standard defines the engineering principles, compliance requiremen
 
 ### Changelog
 
+- **v1.25 (2026-06-20):** Rename §3.3 Priority 3 from "Hardened Security" to "Secure / Security By Design" — aligns the priority name with the Security By Design principle (security built in from the start).
 - **v1.24 (2026-06-19):** Add §8 Documentation (Texinfo) — Texinfo as first-class technical manual format for user-facing Spacecraft Software projects, following GNU conventions (`@dircategory`/`@direntry` for Info directory registration, `makeinfo`/`texi2pdf` build targets, CC-BY-SA-4.0 default with GFDL-1.3-or-later as a permitted alternative, packaging integration for Guix/Nix/PKGBUILD); renumber old §8–§15 → §9–§16 accordingly.
 - **v1.23 (2026-06-19):** **§14.1:** registered the **Docs** subdomain (`Docs.SpacecraftSoftware.org`), paired in the same change-set with its updated row and new GitHub-repo link in Spacecraft-Software/Projects `PROJECTS.md`. The `Docs` repo — a centralized aggregation of the umbrella's planning corpus (PRDs, plans, TODOs, research) organized by project then document type — was created private with §5.2 posture files and §4.3 REUSE compliance (CC-BY-SA-4.0 documents, `reuse lint`-clean).
 - **v1.22 (2026-06-18):** **§7 Shell Environment added** — codifies Nushell, Ion, Brush, and Bash as four equally first-class shell environments; §7.1 Script Portability Policy mandates POSIX-compatible scripts by default with Nushell/Ion native variants where needed and prohibits Bashisms in shared scripts. Current §7–§14 renumbered §8–§15 accordingly. Compliance checklist updated with §7 bullet. Skill Cross-References updated with shell-work row. **§14.2:** added email obfuscation note — `[at]` form permitted in plain-text prose; PKGBUILD `# Maintainer:` and SPDX headers must retain the full address.
@@ -148,7 +149,7 @@ Performance is the foremost priority after stability. The default means of achie
 - Release builds should use CPU-optimized flags — `-march=native`, LTO, PGO — **where the toolchain and target support them reliably.** Any such flag known to break or destabilize builds on a given platform, toolchain, or linker configuration (e.g., LTO under certain NixOS, cross-compilation, or static-linking setups) MUST be disabled and the reason documented. Stability (Priority 1) outranks Performance (Priority 2), so a build-breaking or instability-inducing optimization always yields — never ship a broken build for the sake of a flag.
 - Benchmarking is **mandatory** before and after any optimization work; regressions must be documented and justified — and it is the evidence by which the concurrency-vs-serial trade-off above is decided.
 
-### §3.3 — Priority 3: Hardened Security
+### §3.3 — Priority 3: Secure / Security By Design
 
 - Kernel hardening (XanMod, grsecurity profiles) where applicable.
 - Sandboxing and privilege separation for all network-facing components.
