@@ -1,8 +1,8 @@
 ---
 title: The Steelbore Standard
 author: Mohamed Hammad <Mohamed.Hammad@SpacecraftSoftware.org>
-date: 2026-06-20
-version: 1.25
+date: 2026-06-21
+version: 1.26
 source-format: odt
 ---
 
@@ -15,7 +15,7 @@ source-format: odt
 
 **Engineering specification for Steelbore OS and the Spacecraft Software ecosystem**
 
-**Version:** 1.25 | **Date:** 2026-06-20 | **Author:** Mohamed Hammad
+**Version:** 1.26 | **Date:** 2026-06-21 | **Author:** Mohamed Hammad
 **Maintainer:** Mohamed Hammad | **Contact:** [Mohamed.Hammad@SpacecraftSoftware.org](mailto:Mohamed.Hammad@SpacecraftSoftware.org)
 **Copyright:** Copyright (C) 2026 Mohamed Hammad & Spacecraft Software | **License:** CC-BY-SA-4.0
 **Website:** <https://SpacecraftSoftware.org/>
@@ -30,6 +30,7 @@ The Steelbore Standard defines the engineering principles, compliance requiremen
 
 ### Changelog
 
+- **v1.26 (2026-06-21):** **§15.1:** registered the **Vacuum** subdomain (`Vacuum.SpacecraftSoftware.org`), paired in the same change-set with its new row and GitHub-repo/subdomain reference links in Spacecraft-Software/Projects `PROJECTS.md`. The `Vacuum` repo — a Rust multi-crate disk-space recovery TUI/CLI (parallel scan + a cleaner catalog: build artifacts, package-manager GC, app caches, large files; dry-run-first, trash-by-default) — was created private with §5.2 posture files, an §8 Texinfo manual, the §5.5 packaging trio, and §4.3 REUSE compliance (`reuse lint`-clean).
 - **v1.25 (2026-06-20):** Rename §3.3 Priority 3 from "Hardened Security" to "Security by Design" — aligns the priority name with the Security By Design principle (security built in from the start).
 - **v1.24 (2026-06-19):** Add §8 Documentation (Texinfo) — Texinfo as first-class technical manual format for user-facing Spacecraft Software projects, following GNU conventions (`@dircategory`/`@direntry` for Info directory registration, `makeinfo`/`texi2pdf` build targets, CC-BY-SA-4.0 default with GFDL-1.3-or-later as a permitted alternative, packaging integration for Guix/Nix/PKGBUILD); renumber old §8–§15 → §9–§16 accordingly.
 - **v1.23 (2026-06-19):** **§14.1:** registered the **Docs** subdomain (`Docs.SpacecraftSoftware.org`), paired in the same change-set with its updated row and new GitHub-repo link in Spacecraft-Software/Projects `PROJECTS.md`. The `Docs` repo — a centralized aggregation of the umbrella's planning corpus (PRDs, plans, TODOs, research) organized by project then document type — was created private with §5.2 posture files and §4.3 REUSE compliance (CC-BY-SA-4.0 documents, `reuse lint`-clean).
@@ -595,6 +596,7 @@ Each Spacecraft Software project has a dedicated subdomain following the pattern
 | MCP Servers                | <https://MCP-Servers.SpacecraftSoftware.org/>    |
 | Lode                       | <https://Lode.SpacecraftSoftware.org/>           |
 | Sonde                      | <https://Sonde.SpacecraftSoftware.org/>          |
+| Vacuum                     | <https://Vacuum.SpacecraftSoftware.org/>         |
 | Vault                      | <https://Vault.SpacecraftSoftware.org/>          |
 | Docs                       | <https://Docs.SpacecraftSoftware.org/>           |
 
