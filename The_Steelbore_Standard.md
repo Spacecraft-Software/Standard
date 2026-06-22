@@ -1,8 +1,8 @@
 ---
 title: The Steelbore Standard
 author: Mohamed Hammad <Mohamed.Hammad@SpacecraftSoftware.org>
-date: 2026-06-21
-version: 1.26
+date: 2026-06-22
+version: 1.27
 source-format: odt
 ---
 
@@ -15,7 +15,7 @@ source-format: odt
 
 **Engineering specification for Steelbore OS and the Spacecraft Software ecosystem**
 
-**Version:** 1.26 | **Date:** 2026-06-21 | **Author:** Mohamed Hammad
+**Version:** 1.27 | **Date:** 2026-06-22 | **Author:** Mohamed Hammad
 **Maintainer:** Mohamed Hammad | **Contact:** [Mohamed.Hammad@SpacecraftSoftware.org](mailto:Mohamed.Hammad@SpacecraftSoftware.org)
 **Copyright:** Copyright (C) 2026 Mohamed Hammad & Spacecraft Software | **License:** CC-BY-SA-4.0
 **Website:** <https://SpacecraftSoftware.org/>
@@ -30,6 +30,7 @@ The Steelbore Standard defines the engineering principles, compliance requiremen
 
 ### Changelog
 
+- **v1.27 (2026-06-22):** **§15.1:** registered the **Loran Pages** subdomain (`Loran-Pages.SpacecraftSoftware.org`), paired in the same change-set with its new row and GitHub-repo/subdomain reference links in Spacecraft-Software/Projects `PROJECTS.md`. The `loran-pages` repo — the community catalog of curated Loran help pages (tldr-pages-style: flat `pages/<category>/<tool>.md`, a `loran validate` CI gate, and a deterministic minisign-signed `publish.yml` producer feeding `loran update`) — was created private with §5.2 posture files and §4.3 REUSE compliance (pages CC-BY-SA-4.0, tooling GPL-3.0-or-later, `reuse lint`-clean).
 - **v1.26 (2026-06-21):** **§15.1:** registered the **Vacuum** subdomain (`Vacuum.SpacecraftSoftware.org`), paired in the same change-set with its new row and GitHub-repo/subdomain reference links in Spacecraft-Software/Projects `PROJECTS.md`. The `Vacuum` repo — a Rust multi-crate disk-space recovery TUI/CLI (parallel scan + a cleaner catalog: build artifacts, package-manager GC, app caches, large files; dry-run-first, trash-by-default) — was created private with §5.2 posture files, an §8 Texinfo manual, the §5.5 packaging trio, and §4.3 REUSE compliance (`reuse lint`-clean).
 - **v1.25 (2026-06-20):** Rename §3.3 Priority 3 from "Hardened Security" to "Security by Design" — aligns the priority name with the Security By Design principle (security built in from the start).
 - **v1.24 (2026-06-19):** Add §8 Documentation (Texinfo) — Texinfo as first-class technical manual format for user-facing Spacecraft Software projects, following GNU conventions (`@dircategory`/`@direntry` for Info directory registration, `makeinfo`/`texi2pdf` build targets, CC-BY-SA-4.0 default with GFDL-1.3-or-later as a permitted alternative, packaging integration for Guix/Nix/PKGBUILD); renumber old §8–§15 → §9–§16 accordingly.
@@ -599,6 +600,7 @@ Each Spacecraft Software project has a dedicated subdomain following the pattern
 | Vacuum                     | <https://Vacuum.SpacecraftSoftware.org/>         |
 | Vault                      | <https://Vault.SpacecraftSoftware.org/>          |
 | Docs                       | <https://Docs.SpacecraftSoftware.org/>           |
+| Loran Pages                | <https://Loran-Pages.SpacecraftSoftware.org/>    |
 
 When a new project is created, add its subdomain to this table immediately.
 
