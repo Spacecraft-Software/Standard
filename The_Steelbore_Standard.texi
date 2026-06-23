@@ -1,0 +1,2218 @@
+\input texinfo   @c -*- texinfo -*-
+@c SPDX-FileCopyrightText: 2026 Mohamed Hammad <Mohamed.Hammad@SpacecraftSoftware.org>
+@c SPDX-License-Identifier: CC-BY-SA-4.0
+@c %**start of header
+@setfilename The_Steelbore_Standard.info
+@documentencoding UTF-8
+@documentlanguage en
+@settitle The Steelbore Standard 1.29
+@c %**end of header
+
+@set VERSION 1.29
+@set UPDATED 2026-06-23
+@set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
+
+@copying
+This manual is The Steelbore Standard (version @value{VERSION}, updated @value{UPDATED}).
+
+Copyright @copyright{} 2026 Mohamed Hammad & Spacecraft Software.
+
+@quotation
+This document is licensed under the Creative Commons Attribution-ShareAlike
+4.0 International License (CC-BY-SA-4.0).  To view a copy of this licence,
+visit @url{https://creativecommons.org/licenses/by-sa/4.0/}.
+@end quotation
+@end copying
+
+@dircategory Spacecraft Software
+@direntry
+* The Steelbore Standard: (The_Steelbore_Standard). Engineering specification for Spacecraft Software.
+@end direntry
+
+@titlepage
+@title The Steelbore Standard
+@subtitle Engineering specification for Steelbore OS and the Spacecraft Software ecosystem
+@subtitle For version @value{VERSION} (@value{UPDATED})
+@author Mohamed Hammad
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+
+Maintained by Mohamed Hammad
+@email{Mohamed.Hammad@@SpacecraftSoftware.org}.
+@*
+@uref{@value{SUBDOMAIN}}
+@end titlepage
+
+@contents
+
+@ifnottex
+@node Top
+@top The Steelbore Standard
+
+@insertcopying
+@end ifnottex
+
+@menu
+* Preamble::                    §1 — Preamble and changelog.
+* Naming Convention::           §2 — Aerospace, Sci-Fi & AI naming.
+* Priority Hierarchy::          §3 — Non-negotiable priority order.
+* Licensing::                   §4 — Licensing & compliance.
+* Project Posture::             §5 — Posture, required files, packaging.
+* Platform Requirements::       §6 — Build, release & signed commits.
+* Shell Environment::           §7 — First-class shell environments.
+* Documentation::               §8 — Texinfo documentation standard.
+* PFA Policy::                  §9 — Privacy-friendly application policy.
+* Key Bindings::                §10 — CUA + Vim key binding requirements.
+* Color Palette::               §11 — WCAG-compliant color palette.
+* Typography::                  §12 — FOSS-licensed font requirements.
+* UI/UX Design System::         §13 — Material Design & accessibility.
+* Date Time Units::             §14 — ISO 8601, UTC Z, metric units.
+* Attribution::                 §15 — Maintainer, project pages, credits.
+* Compliance Checklist::        §16 — Audit gate checklist.
+* Skill Cross-References::      Skill cross-reference table.
+* Concept Index::               Alphabetical concept index.
+@end menu
+
+@node Preamble
+@chapter §1 — Preamble
+The Steelbore Standard defines the engineering principles, compliance
+requirements, and design conventions that govern all software produced
+under Spacecraft Software. The umbrella encompasses two categories of
+work: @strong{Steelbore OS} --- the operating system and all OS-specific
+artifacts (configurations, themes, OS tooling) --- and
+@strong{independent Spacecraft Software projects} such as Zamak,
+Ironway, Ferrocast, and Caliper, which are designed to work with
+Steelbore OS but are not OS-specific and may run on any compliant
+platform. Both categories are full citizens of Spacecraft Software and
+subject to this standard in full. Where a project-specific specification
+conflicts with this standard, the stricter of the two requirements shall
+prevail.
+
+@strong{Standard name vs. project naming.} "The Steelbore Standard" is
+the canonical, stable name of @emph{this standard}. It is independent of
+the projects it governs and of the umbrella organization name --- the
+standard retains this name regardless of any future renames. The v1.7
+umbrella rename (Steelbore → Spacecraft Software) and the v1.8
+reinstatement of this standard's name are recorded in the changelog.
+Versioning of project codenames (see §2) and versioning of the standard
+are separate concerns.
+
+@menu
+* Changelog::
+@end menu
+
+@node Changelog
+@section Changelog
+@itemize
+@item
+@strong{v1.29 (2026-06-23):} Switch source of truth from GFM Markdown to
+Texinfo: @file{The_Steelbore_Standard.texi} is now the canonical source;
+@file{The_Steelbore_Standard.md} and @file{The_Steelbore_Standard.html} are
+generated outputs.  @file{.docx}/@file{.odt} produced on request only.
+@code{source-format} updated from @code{odt} to @code{texi}.  A
+@file{Makefile} with @code{info}, @code{html}, @code{md}, and @code{pdf}
+targets drives all derivation.
+@item
+@strong{v1.28 (2026-06-23):} @strong{§2.1:} synced development statuses
+with Spacecraft-Software/Projects @code{PROJECTS.md} --- @code{Aetheric}
+(was Active) and @code{Ferrocast} (was Planning) corrected to
+@strong{Deprecated}, matching their @code{Deprecated} status in the
+tracker. Per @code{PROJECTS.md}'s closed status vocabulary,
+@code{Deprecated} means "Superseded by another project; do not extend."
+@item
+@strong{v1.27 (2026-06-22):} @strong{§15.1:} registered the
+@strong{Loran Pages} subdomain
+(@code{Loran-Pages.SpacecraftSoftware.org}), paired in the same
+change-set with its new row and GitHub-repo/subdomain reference links in
+Spacecraft-Software/Projects @code{PROJECTS.md}. The @code{loran-pages}
+repo --- the community catalog of curated Loran help pages
+(tldr-pages-style: flat @code{pages/<category>/<tool>.md}, a
+@code{loran validate} CI gate, and a deterministic minisign-signed
+@code{publish.yml} producer feeding @code{loran update}) --- was created
+private with §5.2 posture files and §4.3 REUSE compliance (pages
+CC-BY-SA-4.0, tooling GPL-3.0-or-later, @code{reuse lint}-clean).
+@item
+@strong{v1.26 (2026-06-21):} @strong{§15.1:} registered the
+@strong{Vacuum} subdomain (@code{Vacuum.SpacecraftSoftware.org}), paired
+in the same change-set with its new row and GitHub-repo/subdomain
+reference links in Spacecraft-Software/Projects @code{PROJECTS.md}. The
+@code{Vacuum} repo --- a Rust multi-crate disk-space recovery TUI/CLI
+(parallel scan + a cleaner catalog: build artifacts, package-manager GC,
+app caches, large files; dry-run-first, trash-by-default) --- was
+created private with §5.2 posture files, an §8 Texinfo manual, the §5.5
+packaging trio, and §4.3 REUSE compliance (@code{reuse lint}-clean).
+@item
+@strong{v1.25 (2026-06-20):} Rename §3.3 Priority 3 from "Hardened
+Security" to "Security by Design" --- aligns the priority name with the
+Security By Design principle (security built in from the start).
+@item
+@strong{v1.24 (2026-06-19):} Add §8 Documentation (Texinfo) --- Texinfo
+as first-class technical manual format for user-facing Spacecraft
+Software projects, following GNU conventions
+(@code{@@dircategory}/@code{@@direntry} for Info directory registration,
+@code{makeinfo}/@code{texi2pdf} build targets, CC-BY-SA-4.0 default with
+GFDL-1.3-or-later as a permitted alternative, packaging integration for
+Guix/Nix/PKGBUILD); renumber old §8--§15 → §9--§16 accordingly.
+@item
+@strong{v1.23 (2026-06-19):} @strong{§14.1:} registered the
+@strong{Docs} subdomain (@code{Docs.SpacecraftSoftware.org}), paired in
+the same change-set with its updated row and new GitHub-repo link in
+Spacecraft-Software/Projects @code{PROJECTS.md}. The @code{Docs} repo
+--- a centralized aggregation of the umbrella's planning corpus (PRDs,
+plans, TODOs, research) organized by project then document type --- was
+created private with §5.2 posture files and §4.3 REUSE compliance
+(CC-BY-SA-4.0 documents, @code{reuse lint}-clean).
+@item
+@strong{v1.22 (2026-06-18):} @strong{§7 Shell Environment added} ---
+codifies Nushell, Ion, Brush, and Bash as four equally first-class shell
+environments; §7.1 Script Portability Policy mandates POSIX-compatible
+scripts by default with Nushell/Ion native variants where needed and
+prohibits Bashisms in shared scripts. Current §7--§14 renumbered §8--§15
+accordingly. Compliance checklist updated with §7 bullet. Skill
+Cross-References updated with shell-work row. @strong{§14.2:} added
+email obfuscation note --- @code{[at]} form permitted in plain-text
+prose; PKGBUILD @code{# Maintainer:} and SPDX headers must retain the
+full address.
+@item
+@strong{v1.21 (2026-06-17):} @strong{§13.1:} registered subdomains for
+three projects present in @code{PROJECTS.md} but missing from the table
+--- @strong{Lode} (@code{Lode.SpacecraftSoftware.org}), @strong{Sonde}
+(@code{Sonde.SpacecraftSoftware.org}), and @strong{Vault}
+(@code{Vault.SpacecraftSoftware.org}). @strong{§3.1 and Skill
+Cross-References:} corrected skill reference from @code{rust-guidelines}
+to @code{microsoft-rust-guidelines} to match the actual skill ID in the
+upstream @code{spacecraft-standard} skill.
+@item
+@strong{v1.20 (2026-06-17):} @strong{§5.5 added:} Package Distribution
+Requirements --- every released package must ship
+@code{packaging/guix.scm} (GNU Guix Scheme definition),
+@code{packaging/default.nix} (Nix flake/derivation), and
+@code{packaging/PKGBUILD} (Arch Linux @code{makepkg}), all present and
+buildable before any release tag is pushed; each file must pin the exact
+release version and SHA-256 checksum in the format native to its package
+manager, and carry the project's SPDX two-tag header per §4.3.
+@strong{§15} updated with a corresponding @code{§5.5}
+compliance-checklist bullet.
+@item
+@strong{v1.19 (2026-06-16):} @strong{§13.1:} registered the @strong{MCP
+Servers} project subdomain (@code{MCP-Servers.SpacecraftSoftware.org}),
+paired in the same change-set with its row and GitHub-repo link in
+Spacecraft-Software/Projects @code{PROJECTS.md}. The @code{mcp-servers}
+repo --- MCP (Model Context Protocol) server configuration templates
+across 12 coding agents/editors --- was onboarded to the umbrella with
+the §5.2 posture files (@code{NOTICE.md}, @code{CONTRIBUTING.md}, README
+posture section) and §4.3 REUSE compliance (@code{LICENSES/},
+@code{REUSE.toml}, @code{reuse lint}-clean).
+@item
+@strong{v1.18 (2026-06-08):} Licensing classification follow-through.
+(1) @strong{§4.1.1 added:} license-by-artifact-class table ---
+@strong{software} (incl. skills) is
+@code{GPL-3.0-or-later}/@code{AGPL-3.0-or-later}; @strong{documents}
+(specs, guides, document deliverables, the published Standard) default
+to @code{CC-BY-SA-4.0} (@code{CC-BY-4.0} for max-reuse cases);
+@strong{third-party-derived} artifacts preserve their upstream license
+per §4.2. (2) @strong{Skill-license correction:} clarified that skills
+are software-class --- the published Standard document is
+@code{CC-BY-SA-4.0} but the @code{spacecraft-standard} skill encoding is
+@code{GPL-3.0-or-later} (the v1.17 skill metadata is corrected back to
+GPL accordingly). (3) @strong{§4.1 migration policy (replaces v1.17's
+"no forced re-license"):} existing projects are to be reviewed and
+relicensed to the best-suited GPL/AGPL, per project, on signed commits.
+The Standard and Construct repos are now REUSE-compliant
+(@code{reuse lint}-clean) with @code{LICENSES/} directories and
+@code{REUSE.toml}. (4) @strong{§2:} added @emph{Equilibrium} and
+@emph{Dune} to the endorsed sci-fi naming sources.
+@item
+@strong{v1.17 (2026-06-08):} Licensing & build overhaul. (1)
+@strong{Standard relicensed} from @code{GPL-3.0-or-later} to
+@strong{@code{CC-BY-SA-4.0}}, effective this version forward --- GPL
+suits software, not a prose specification; CC BY-SA preserves the
+share-alike copyleft ethos and is purpose-built for documents. This
+affects the Standard document itself only; the projects it governs are
+unchanged by this point. (2) @strong{§4.1:} project license is now
+@code{GPL-3.0-or-later} @strong{or} @code{AGPL-3.0-or-later} (AGPL for
+network-facing software), prospective with no forced re-license. (3)
+@strong{§4.2 added:} explicit upstream-license-compliance clause ---
+preserve third-party copyright notices, license texts, and
+@code{NOTICE}/@code{AUTHORS} verbatim; ship upstream licenses in
+@code{LICENSES/}. (4) @strong{§4.3:} SPDX/REUSE compliance per
+@url{https://reuse.software} --- two-tag headers
+(@code{SPDX-FileCopyrightText} + @code{SPDX-License-Identifier}), a
+@code{LICENSES/} directory, @code{.license}/@code{REUSE.toml} coverage
+for headerless files (replacing the old "documents are exempt" rule),
+and @code{reuse lint} as the CI gate. (5) @strong{§3.2:} explicit
+optimization-flag exception --- flags like LTO that break/destabilize a
+build on a given toolchain/platform (e.g., NixOS, cross-compilation)
+MUST be disabled and documented, since Stability (P1) outranks
+Performance (P2). §5.1/§5.2/§6/§13.2 license references and the §4/§12
+compliance-checklist items updated to match.
+@item
+@strong{v1.16 (2026-06-08):} §12 reframed --- UTC Z is now explicitly
+the @strong{default and preferred} timezone (not a universal mandate
+forced onto every domain). New §12.2.1 documents a domain exception: a
+project whose core domain is fundamentally local-time-bound (e.g.,
+@code{Mawaqit} prayer-time calculations, sunrise/sunset, local
+scheduling) may declare local time as its @emph{primary} representation
+for that domain's data, provided it is documented, the UTC default still
+governs the project's general-purpose machinery (logs, commits, APIs),
+and a UTC instant remains derivable via a stored IANA timezone. §12.1
+timezone row and §12.3 updated to reference the new exception and avoid
+contradicting it.
+@item
+@strong{v1.15 (2026-06-08):} §2 naming convention expanded --- added
+explicitly endorsed canonical sources: @emph{The Hitchhiker's Guide to
+the Galaxy}, @emph{Hackers} (1995), Spielberg films, @emph{Ghost in the
+Shell}, @emph{Æon Flux}, @emph{Super 8}, @emph{LOST}, the
+@emph{Cloverfield} franchise, and robot/android names from any sci-fi
+film or franchise. §2 now explicitly frames naming as a fun, playful
+exercise alongside the existing space-machine-AI fitness test.
+@item
+@strong{v1.14 (2026-06-03):} §3.2 reframed --- Performance is the
+foremost priority after Stability, and its default means of achievement
+is @strong{multi-core, multi-thread concurrency} (parallelism as the
+baseline, designed in from the start), @emph{unless} concurrency would
+materially degrade performance (overhead, contention, or inherently
+serial workloads), in which case a documented serial/simpler approach is
+chosen. §3.2 compliance-checklist bullet revised.
+@item
+@strong{v1.13 (2026-06-03):} §3.1 reframed --- Priority 1 is now
+@strong{Stability}, not Memory Safety. Memory safety remains the single
+most important contributor and primary lever, but Priority 1 now also
+mandates robust error handling, fault tolerance / graceful degradation,
+and test-verified stability. Cardinal Rule updated to reference
+stability (including memory safety); §3.1 compliance-checklist bullet
+revised.
+@item
+@strong{v1.12 (2026-05-25):} §6.3 extended: added explicit authorized
+signing identity rule --- all commits from v1.12 onwards must be signed
+with the @code{Mohamed.Hammad@@SpacecraftSoftware.org} Ed25519 SSH key;
+committer email and signing key identity must both resolve to that
+address. Commits predating this version are exempt.
+@item
+@strong{v1.11 (2026-05-24):} Three normative updates: (1) Copyright
+notices updated to
+@code{Copyright (C) 2026 Mohamed Hammad & Spacecraft Software} in all
+locations. (2) §9.1 added: new apps must expose palette colors through a
+named @code{Steelbore} theme rather than hard-coded hex literals,
+enabling clean theme substitution. (3) §12 revised: UTC Z remains the
+canonical/mandatory primary format; local time expressed as a UTC offset
+may now optionally accompany UTC Z values in display, API responses, and
+stored records.
+@item
+@strong{v1.10 (2026-05-20):} Standardized copyright notice to
+@code{Copyright (C) 2026 Mohamed Hammad} in all three locations (YAML
+frontmatter masthead, §13 attribution block, and @code{--version} /
+About template in §6).
+@item
+@strong{v1.9 (2026-05-18):} Clarified organizational model in §1:
+"Steelbore" now specifically refers to Steelbore OS and OS-specific
+artifacts (configurations, themes, tooling); "Spacecraft Software" is
+the broader umbrella. Independent projects (Zamak, Ironway, Ferrocast,
+Caliper, etc.) are peer citizens of the umbrella --- designed to work
+with Steelbore OS but OS-agnostic and usable on any compliant platform.
+Both categories governed by this standard in full.
+@item
+@strong{v1.8 (2026-05-18):} Standard name reinstated as "The Steelbore
+Standard". Primary mandate reaffirmed as the Steelbore OS line; scope
+explicitly extended by default to all Spacecraft Software projects
+(unless a project's own spec explicitly carves out an exception).
+Subtitle updated to reflect dual scope. Source file renamed
+@code{The_Spacecraft_Software_Standard.md} →
+@code{The_Steelbore_Standard.md}. §13.1: added Standard subdomain entry
+(@code{Standard.SpacecraftSoftware.org}). Umbrella org name and domain
+(Spacecraft Software / SpacecraftSoftware.org) unchanged.
+@item
+@strong{v1.7 (2026-05-15):} Umbrella renamed from @code{Steelbore} to
+@code{Spacecraft Software} per the brand consolidation. Standard's name
+updated to "The Spacecraft Software Standard"; domain to
+@code{SpacecraftSoftware.org}; contact email to
+@code{Mohamed.Hammad@@SpacecraftSoftware.org}; §13.1 subdomain pattern
+to @code{<ProjectName>.SpacecraftSoftware.org}. Skill ID prefix renamed
+(@code{steelbore-*} → @code{spacecraft-*}). Subproject codenames
+unchanged. The OS line (@code{Steelbore OS},
+@code{Steelbore OS Bravais}, @code{Steelbore OS Lattice}) retains the
+Steelbore name and is unaffected by this rename.
+@item
+@strong{v1.6 (2026-05-13):} Synced §2.1 development statuses with
+PROJECTS.md --- @code{Bravais} and @code{Anvil} and @code{Flux} promoted
+to Completed; @code{Ferrocast} corrected to Planning; @code{Mawaqit}
+updated to Planning (Pending rename).
+@item
+@strong{v1.5 (2026-05-13):} Corrected @code{Craton} status in §2.1 from
+@code{Active} to @code{Reserved} --- codename is registered but no
+development has started yet.
+@item
+@strong{v1.4 (2026-05-13):} Synced §2.1 Legacy Metallurgical Registry
+with PROJECTS.md --- added five previously unregistered pre-v1.2
+codenames: @code{Anvil}, @code{Flux}, @code{Pearlite},
+@code{Ferrite_OS}, and @code{Forge}. Expanded §13.1 subdomain table to
+include all first-party projects with GitHub repositories that were
+missing: Anvil, Construct, Ferrite_OS, Forge, Ginx, Loran, Pearlite.
+@item
+@strong{v1.3 (2026-05-12):} Added §6.3 (Signed & Verified Commits ---
+mandatory Ed25519 SSH commit signing with hosting-platform "Verified"
+status; the rule extends to programmatic, CI, and assistant-driven
+commits and requires rewrites to preserve signatures). Added §13.3
+(Third-Party Attribution --- @code{CREDITS.md} at project/skill root
+when external work is substantially built upon, distinct from mechanical
+SPDX license metadata). Two new compliance-checklist bullets cover both
+additions.
+@item
+@strong{v1.2 (2026-05-11):} Replaced §2 metallurgical naming convention
+with Aerospace, Sci-Fi & AI naming (aerospace/astronomy terminology +
+franchise references from @emph{2001: A Space Odyssey}, @emph{The
+Matrix}, @emph{Terminator}). Preserved pre-v1.2 metallurgical-era names
+under §2's Legacy Registry. Added explicit statement that the standard's
+name was decoupled from project naming and would survive any project or
+umbrella rename (subsequently revisited in v1.7's umbrella rename).
+Renamed @code{Lattice} to @code{Bravais} (collision with Lattice OS) in
+registry and §13.1 subdomain table. Flagged @code{Mawaqit} as pending
+rename under the v1.2 convention.
+@item
+@strong{v1.1 (2026-05-06):} Added §5 Project Posture (personal-hobby
+default, general-use carve-out, required posture files). Renumbered
+prior §5--§13 to §6--§14. Added posture bullet to compliance checklist.
+@item
+@strong{v1.0 (2026-03-08):} Initial release.
+@end itemize
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Naming Convention
+@chapter §2 — Aerospace, Sci-Fi & AI Naming Convention
+All @strong{new} project codenames, module identifiers, and
+public-facing component names @strong{must} draw from one of the
+following domains:
+
+@itemize
+@item
+@strong{Real aerospace and astronomy} --- orbital mechanics terms,
+propulsion concepts, named missions/programs, stellar objects and
+phenomena, observatories.
+
+@item
+@strong{Science-fiction franchises with space / AI / cybernetic themes}
+--- naming is meant to be enjoyable as well as fitting. The following
+are explicitly endorsed canonical sources:
+
+@itemize
+@item
+@emph{2001: A Space Odyssey}, @emph{The Matrix}, @emph{Terminator} ---
+the original canonical trio
+@item
+@emph{The Hitchhiker's Guide to the Galaxy} --- also a rich vein for
+in-jokes (Vogon, Marvin, 42, Babel fish, Heart of Gold)
+@item
+@emph{Hackers} (1995)
+@item
+Spielberg films (@emph{Close Encounters of the Third Kind}, @emph{E.T.
+the Extra-Terrestrial}, @emph{A.I. Artificial Intelligence},
+@emph{Minority Report}, @emph{Ready Player One}, etc.)
+@item
+@emph{Ghost in the Shell}
+@item
+@emph{Equilibrium}
+@item
+@emph{Dune}
+@item
+@emph{Æon Flux}
+@item
+@emph{Super 8}
+@item
+@emph{LOST} (TV series)
+@item
+@emph{Cloverfield} films
+@item
+Robot / android names from any sci-fi film or franchise (e.g., HAL,
+Data, Bishop, T-800, GERTY, TARS, Marvin)
+@end itemize
+
+Other franchises (e.g., @emph{Alien}, @emph{Blade Runner}, @emph{Ex
+Machina}) remain acceptable if they fit the space-machine-AI register.
+
+@item
+@strong{Generic sci-fi / AI vocabulary} --- hyperspace, neural,
+cybernetic, synthetic, sentinel, oracle, daemon, vector, lattice (the
+lowercase common noun), etc.
+
+@end itemize
+
+@multitable {Utilities} {Apollo, Discovery, Skynet, Trinity} {Missions / Ships / AI Machines}
+@headitem
+Category
+ @tab Examples
+ @tab Domain
+@item
+Projects
+ @tab Apollo, Discovery, Skynet, Trinity
+ @tab Missions / Ships / AI Machines
+@item
+Modules
+ @tab Apogee, HAL, Cortex, Sentinel
+ @tab Subsystems / AI Cores
+@item
+Utilities
+ @tab Boost, Throttle, Trace, Telemetry
+ @tab Operational Verbs / Telemetry
+@item
+Releases
+ @tab Vega, Pulsar, Quasar, Nebula
+ @tab Stellar Phenomena
+@end multitable
+
+Names must be @strong{fitting for space-related and futuristic AI
+machines} --- the test is whether the name would feel at home on the
+hull of a spacecraft or in the boot banner of an AI machine. Reject
+proposed names that don't pass this test.
+
+@menu
+* Legacy Registry::
+* Skill IDs::
+@end menu
+
+@node Legacy Registry
+@section §2.1 — Legacy Metallurgical Registry (pre-v1.2)
+Projects named before the v1.2 convention drew from metallurgy,
+materials science, and industrial forging. These names are
+@strong{preserved as-is} unless explicitly renamed by the maintainer.
+The v1.2 convention applies prospectively --- no forced back-rename.
+
+@multitable {@code{Ferrite_OS}} {Renamed to Spacecraft Software (umbrella, v1.7)} {Former umbrella organization name. Renamed 2026-05-15 under the v1.7 brand consolidation. The OS line (@code{Steelbore OS}, @code{Steelbore OS Bravais}, @code{Steelbore OS Lattice}) retains the Steelbore name.}
+@headitem
+Codename
+ @tab Status
+ @tab Description
+@item
+@code{Steelbore}
+ @tab Renamed to Spacecraft Software (umbrella, v1.7)
+ @tab Former umbrella organization name. Renamed 2026-05-15 under the
+v1.7 brand consolidation. The OS line (@code{Steelbore OS},
+@code{Steelbore OS Bravais}, @code{Steelbore OS Lattice}) retains the
+Steelbore name.
+@item
+@code{Aetheric}
+ @tab Deprecated
+ @tab Next-generation extensible text editor (Pulsar + Quasar + Nebula
+IPC).
+@item
+@code{Zamak}
+ @tab Active
+ @tab Rust bootloader (Limine rewrite)
+@item
+@code{Bravais}
+ @tab Completed (renamed)
+ @tab NixOS flake configuration. Renamed from @code{Lattice} due to
+collision with Lattice OS. @code{Bravais} is still a metallurgical-era
+name (Bravais lattice) and predates the v1.2 convention.
+@item
+@code{Ferrocast}
+ @tab Deprecated
+ @tab Rust PowerShell rewrite (16-crate workspace)
+@item
+@code{Craton}
+ @tab Reserved
+ @tab Rust universal package manager --- codename registered; no work
+started yet.
+@item
+@code{Ironway}
+ @tab Active
+ @tab Rust OpenTTD rewrite
+@item
+@code{Caliper}
+ @tab Active
+ @tab Rust raster-to-vector tracing engine (CLI+TUI)
+@item
+@code{Mawaqit}
+ @tab Planning (@strong{Pending rename})
+ @tab Islamic prayer times app (Flutter + Rust CLI + libmawaqit). To be
+renamed under the v1.2 aerospace/sci-fi/AI convention.
+@item
+@code{Anvil}
+ @tab Completed
+ @tab Rust workspace; benches and CHANGELOG; legacy forging-tool name.
+@item
+@code{Flux}
+ @tab Completed
+ @tab Rust workspace; CHANGELOG and deny.toml; legacy metallurgical-flux
+name.
+@item
+@code{Pearlite}
+ @tab Active
+ @tab Rust workspace; audit.toml, clippy.toml, CHANGELOG; steel
+microstructure name.
+@item
+@code{Ferrite_OS}
+ @tab Active
+ @tab Custom OS / DOS-emulation experiments; ferrite (iron-based
+material) name.
+@item
+@code{Forge}
+ @tab Active
+ @tab Production flavor tooling (forge-cli, forge-build,
+forge-activate); forging-tool name.
+@end multitable
+
+Existing legacy-named projects MAY be renamed under the v1.2 convention
+at the maintainer's discretion --- renames are optional. When a rename
+happens, update this table and §15.1's subdomain table in the same
+commit.
+
+@node Skill IDs
+@section §2.2 — Skill IDs are functional, not codenamed
+Skill directory names and @code{SKILL.md} @code{name} fields are
+@strong{functional identifiers} (e.g., @code{spacecraft-standard},
+@code{spacecraft-document-format}) and are not subject to the §2
+codename convention. §2 reserves codenames for
+projects/modules/utilities/releases, not for skill identifiers.
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Priority Hierarchy
+@chapter §3 — Priority Hierarchy (Non-Negotiable Order)
+A higher-numbered priority @strong{may never compromise} a
+lower-numbered one.
+
+@menu
+* Priority 1::
+* Priority 2::
+* Priority 3::
+@end menu
+
+@node Priority 1
+@section §3.1 — Priority 1: Stability
+Software must behave predictably and remain correct under sustained and
+adverse conditions. Stability is the foremost priority. @strong{Memory
+safety is the single most important contributor to stability and the
+primary means of achieving it --- but it is not the whole of Priority
+1.}
+
+@strong{Memory safety (primary lever):}
+
+@itemize
+@item
+@strong{Preferred language: Rust} --- governed by the Spacecraft
+Software Rust Guidelines. Always load the
+@code{microsoft-rust-guidelines} skill before writing any Rust code.
+@item
+When Rust is not viable (Flutter/Dart, Zig, etc.), @strong{mandatory
+mitigations}:
+@itemize
+@item
+@strong{ASLR} (Address Space Layout Randomization) on all compiled
+binaries
+@item
+@strong{CFI} (Control-Flow Integrity) wherever the toolchain supports it
+@end itemize
+
+@item
+Memory-Safe Languages (MSLs) are always preferred. If an MSL alternative
+exists, it must be chosen unless a documented technical exemption is
+filed.
+@end itemize
+
+@strong{Beyond memory safety, stability also requires:}
+
+@itemize
+@item
+@strong{Robust error handling} --- failures must be surfaced and
+handled, never silently swallowed; no panics / @code{unwrap} /
+@code{expect} on untrusted or fallible input in production paths.
+@item
+@strong{Fault tolerance and graceful degradation} --- components must
+survive partial failure, degrade gracefully under load or dependency
+loss, and recover rather than crash.
+@item
+@strong{Verified by testing} --- stability properties must be backed by
+tests (unit, integration, and fuzz/property where applicable) gating CI,
+not asserted by inspection alone.
+@end itemize
+
+@node Priority 2
+@section §3.2 — Priority 2: Performance
+Performance is the foremost priority after stability. The default means
+of achieving it is @strong{multi-core, multi-thread concurrency} ---
+parallelism is the expected baseline, not an afterthought ---
+@emph{unless} concurrency would materially degrade performance
+(synchronization overhead, lock contention, or inherently serial / small
+workloads outweighing the gains), in which case a simpler or serial
+approach must be chosen and the trade-off documented.
+
+@itemize
+@item
+Concurrency must be @strong{designed-in from the start}, never bolted on
+retroactively.
+@item
+Release builds should use CPU-optimized flags --- @code{-march=native},
+LTO, PGO --- @strong{where the toolchain and target support them
+reliably.} Any such flag known to break or destabilize builds on a given
+platform, toolchain, or linker configuration (e.g., LTO under certain
+NixOS, cross-compilation, or static-linking setups) MUST be disabled and
+the reason documented. Stability (Priority 1) outranks Performance
+(Priority 2), so a build-breaking or instability-inducing optimization
+always yields --- never ship a broken build for the sake of a flag.
+@item
+Benchmarking is @strong{mandatory} before and after any optimization
+work; regressions must be documented and justified --- and it is the
+evidence by which the concurrency-vs-serial trade-off above is decided.
+@end itemize
+
+@node Priority 3
+@section §3.3 — Priority 3: Security by Design
+@itemize
+@item
+Kernel hardening (XanMod, grsecurity profiles) where applicable.
+@item
+Sandboxing and privilege separation for all network-facing components.
+@item
+@strong{Post-Quantum Cryptography (PQC) readiness:} all crypto
+subsystems must support PQC migration paths. Use hybrid schemes
+(classical + PQC candidate) where library support exists. Adopt
+NIST-finalized PQC standards within one major release cycle.
+@itemize
+@item
+Current targets: @strong{ML-KEM-768}, @strong{ML-DSA-65} (as used in
+Ferrocast)
+@end itemize
+
+@item
+Dependency auditing: @code{cargo-audit} or equivalent before any
+third-party crate inclusion.
+@end itemize
+
+@strong{Cardinal Rule:} Any optimization that weakens @strong{stability
+(including memory safety)} or security hardening @strong{must be
+rejected}, no exceptions.
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Licensing
+@chapter §4 — Licensing & Compliance
+
+@menu
+* Project License::
+* Upstream License::
+* REUSE Compliance::
+@end menu
+
+@node Project License
+@section §4.1 — Project License (GPL-3.0-or-later or AGPL-3.0-or-later)
+@itemize
+@item
+@strong{License:} strong copyleft --- each project chooses
+@strong{@code{GPL-3.0-or-later}} or @strong{@code{AGPL-3.0-or-later}},
+whichever fits the project better:
+@itemize
+@item
+Use @strong{@code{AGPL-3.0-or-later}} when the software is
+@strong{network-facing} --- anything users interact with primarily over
+a network (servers, web services, SaaS, hosted APIs, multiplayer/network
+daemons). AGPL closes the "SaaS loophole" by extending the
+source-availability obligation to users served over a network.
+@item
+Use @strong{@code{GPL-3.0-or-later}} for everything else (local CLIs,
+libraries, desktop/TUI apps, OS components, bootloaders).
+@item
+GPLv3 and AGPLv3 are mutually compatible by design, so an umbrella
+mixing both is fine.
+@end itemize
+
+@item
+No proprietary, closed-source, or permissive-only license for core
+project code.
+@item
+@strong{Review & migrate (existing projects).} This dual choice is not
+merely prospective: existing projects are to be @strong{reviewed and
+relicensed} to whichever of @code{GPL-3.0-or-later} /
+@code{AGPL-3.0-or-later} best fits them (AGPL for network-facing
+software). Migration is the maintainer's per-project decision, landed on
+that project's own signed commit; any project that deliberately retains
+a non-best-fit license must document why.
+@end itemize
+
+@menu
+* Artifact Classes::
+@end menu
+
+@node Artifact Classes
+@subsection §4.1.1 — Artifact license classes
+The GPL/AGPL choice above governs @strong{software}. License by artifact
+class:
+
+@multitable {@strong{Documents} --- specifications, prose guides, books, and document deliverables produced per the @code{spacecraft-document-format} skill, including the published Standard} {Preserve the @strong{upstream} license per §4.2 (e.g., @code{MIT}, @code{GFDL-1.3-or-later}) --- never relicensed to the project default}
+@headitem
+Artifact class
+ @tab Default license
+@item
+@strong{Software} --- code, manifests, build tooling, and
+@strong{skills}
+ @tab @code{GPL-3.0-or-later} (or @code{AGPL-3.0-or-later} if
+network-facing, §4.1)
+@item
+@strong{Documents} --- specifications, prose guides, books, and document
+deliverables produced per the @code{spacecraft-document-format} skill,
+including the published Standard
+ @tab @code{CC-BY-SA-4.0} by default (@code{CC-BY-4.0} permitted when a
+document is intended for maximal reuse)
+@item
+@strong{Third-party-derived artifacts}
+ @tab Preserve the @strong{upstream} license per §4.2 (e.g., @code{MIT},
+@code{GFDL-1.3-or-later}) --- never relicensed to the project default
+@end multitable
+
+Skills are @strong{software-class} → @code{GPL-3.0-or-later} (no skill
+is network-facing, so AGPL does not apply). Note the deliberate split
+for the Standard itself: the @strong{published Standard document} is
+@code{CC-BY-SA-4.0} (it is a document), while its
+@code{spacecraft-standard} @strong{skill} encoding is
+@code{GPL-3.0-or-later} (it is a skill).
+
+@node Upstream License
+@section §4.2 — Upstream License Compliance (preserve what you build on)
+When a project incorporates, adapts, or links third-party code, it MUST
+satisfy that upstream's license in full --- independent of the project's
+own GPL/AGPL choice:
+
+@itemize
+@item
+@strong{Preserve verbatim} all upstream copyright notices, license
+texts, @code{NOTICE}/@code{AUTHORS} files, and in-file license headers
+--- never strip, rewrite, or relicense them.
+@item
+@strong{Ship} each distinct upstream license text in the project's
+@code{LICENSES/} directory (§4.3).
+@item
+@strong{Verify compatibility} of the upstream license with the project's
+GPL/AGPL license before inclusion.
+@item
+This is the legal/mechanical obligation; §15.3's @code{CREDITS.md} is
+the human-readable narrative counterpart. When both are triggered, both
+apply.
+@end itemize
+
+@node REUSE Compliance
+@section §4.3 — SPDX & REUSE Compliance
+Spacecraft Software follows the
+@strong{@uref{https://reuse.software,REUSE specification}} for
+unambiguous, machine-readable license and copyright metadata. Every
+project MUST be @code{reuse lint}-clean.
+
+@strong{Every file carries two SPDX tags} --- copyright @emph{and}
+license:
+
+@verbatim
+// SPDX-FileCopyrightText: 2026 Mohamed Hammad <Mohamed.Hammad@SpacecraftSoftware.org>
+// SPDX-License-Identifier: GPL-3.0-or-later
+@end verbatim
+
+(Substitute the project's actual license --- @code{GPL-3.0-or-later} or
+@code{AGPL-3.0-or-later} --- and the correct comment syntax for the file
+type.)
+
+@itemize
+@item
+@strong{Software source files} (@code{.rs}, @code{.ts}, @code{.js},
+@code{.py}, @code{.sh}, @code{.ps1}, @code{.go}, etc.) and project
+manifests (@code{Cargo.toml}, @code{package.json}, @code{flake.nix},
+etc.) carry both tags as an inline header.
+@item
+@strong{Files that cannot carry an inline header} --- documents
+(@code{.odt}, @code{.ods}, @code{.odp}, @code{.docx}, @code{.xlsx},
+@code{.pptx}, @code{.pdf}, @dots{}), images, binary assets, generated
+files --- are covered by a @code{.license} sidecar file @strong{or} an
+entry in the repo-root @code{REUSE.toml}. No file is left uncovered
+(this replaces the former blanket "documents are exempt" rule).
+@item
+@strong{@code{LICENSES/} directory:} the verbatim text of every license
+used in the repo lives in @code{LICENSES/<SPDX-id>.txt} (e.g.,
+@code{LICENSES/GPL-3.0-or-later.txt},
+@code{LICENSES/AGPL-3.0-or-later.txt}, plus any upstream licenses per
+§4.2). A root @code{LICENSE} file MAY remain as a pointer for GitHub's
+license detection.
+@item
+@strong{CI gate:} @code{reuse lint} MUST pass before shipping.
+@end itemize
+
+When writing or reviewing any file, confirm REUSE coverage; when
+generating a new file, add the two-tag header (or the @code{.license}
+sidecar / @code{REUSE.toml} entry for files that can't carry one).
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Project Posture
+@chapter §5 — Project Posture
+Spacecraft Software is a personal hobby project. This posture is the
+@strong{default} for every project under the umbrella and is
+non-negotiable. Individual projects may adopt a more open posture (see
+§5.3) but never a more closed one.
+
+§4 defines the formal license; this section defines the @strong{stated
+stance} that sits alongside it. License says what the user @emph{may}
+do; posture says what they should @emph{expect} from the maintainer.
+
+@menu
+* Default Posture::
+* Required Posture Files::
+* General-Use Carve-Out::
+* Maintainer Discretion::
+* Package Distribution::
+@end menu
+
+@node Default Posture
+@section §5.1 — Default Posture (Personal / Hobby)
+@multitable {Contributions} {GPL-3.0-or-later or AGPL-3.0-or-later, per §4.1 (formal terms govern in any conflict)}
+@headitem
+Aspect
+ @tab Default
+@item
+Audience
+ @tab Maintainer's own use case
+@item
+Pace
+ @tab Hobby pace; no service-level commitments
+@item
+Warranty
+ @tab None --- provided AS IS
+@item
+Liability
+ @tab None --- see project @code{NOTICE.md}
+@item
+Contributions
+ @tab Welcome but not guaranteed to be accepted
+@item
+Forking
+ @tab Encouraged
+@item
+License
+ @tab GPL-3.0-or-later or AGPL-3.0-or-later, per §4.1 (formal terms
+govern in any conflict)
+@end multitable
+
+@node Required Posture Files
+@section §5.2 — Required Posture Files (per project)
+Every Spacecraft Software project repository @strong{must} ship the
+following files at its root, derived from the canonical Spacecraft
+Software templates:
+
+@multitable {@code{CONTRIBUTING.md}} {REUSE license directory (§4.3): verbatim text of every license used (@code{GPL-3.0-or-later} or @code{AGPL-3.0-or-later}, plus any upstream licenses per §4.2). A root @code{LICENSE} MAY remain as a GitHub-detection pointer.}
+@headitem
+File
+ @tab Purpose
+@item
+@code{README.md}
+ @tab Includes a "Project Posture" section linking to the two below
+@item
+@code{NOTICE.md}
+ @tab Full no-warranty / no-liability statement; defers to the project's
+GPL/AGPL license (§4.1) for binding terms
+@item
+@code{CONTRIBUTING.md}
+ @tab Contribution scope, PR-acceptance discretion, sign-off, security
+reporting, license-of-contributions
+@item
+@code{LICENSES/}
+ @tab REUSE license directory (§4.3): verbatim text of every license
+used (@code{GPL-3.0-or-later} or @code{AGPL-3.0-or-later}, plus any
+upstream licenses per §4.2). A root @code{LICENSE} MAY remain as a
+GitHub-detection pointer.
+@end multitable
+
+Customize only the project name, scope, and any project-specific
+carve-outs.
+
+@node General-Use Carve-Out
+@section §5.3 — General-Use Carve-Out
+A project may declare itself @strong{intended for general use}. When it
+does:
+
+@itemize
+@item
+The declaration MUST appear in that project's @code{README.md} posture
+section.
+@item
+The no-warranty / no-liability stance from §5.1 still applies in full
+--- general-use status changes audience and intent, @strong{not} legal
+terms.
+@item
+General-use projects must hold a higher release-quality bar: semantic
+versioning, maintained @code{CHANGELOG.md}, deprecation policy, and a
+documented support window for the current major version.
+@end itemize
+
+@strong{General-use registry} (keep in sync with §15.1 subdomain table):
+
+@multitable {(all others)} {General-use}
+@headitem
+Project
+ @tab Posture
+@item
+Anvil-SSH
+ @tab General-use
+@item
+(all others)
+ @tab Personal
+@end multitable
+
+@node Maintainer Discretion
+@section §5.4 — Maintainer Discretion
+PR acceptance, feature scope, naming, architecture, and roadmap are at
+the maintainer's sole discretion. This is stated openly so contributors
+can calibrate effort accordingly. Rejection reflects fit, not quality.
+
+@node Package Distribution
+@section §5.5 — Package Distribution Requirements
+Every released package @strong{must} ship first-party package
+definitions for the following package managers, committed alongside the
+release:
+
+@multitable {@code{packaging/default.nix}} {Arch Linux --- @code{makepkg}-compatible}
+@headitem
+File
+ @tab Package manager / format
+@item
+@code{packaging/guix.scm}
+ @tab GNU Guix --- Scheme package definition
+@item
+@code{packaging/default.nix}
+ @tab Nix --- Nix flake / derivation
+@item
+@code{packaging/PKGBUILD}
+ @tab Arch Linux --- @code{makepkg}-compatible
+@end multitable
+
+@strong{Rules:}
+
+@itemize
+@item
+All three files MUST be present and buildable before a release tag is
+pushed.
+@item
+Each file must reference the exact release version and source archive
+SHA-256 checksum so that the package can be built reproducibly from the
+tagged release. Use the format native to each package manager:
+@itemize
+@item
+@strong{Guix (@code{guix.scm}):}
+@code{(sha256 (base32 "<nix-base32-hash>"))} inside the @code{origin}
+stanza.
+@item
+@strong{Nix (@code{default.nix}):} @code{sha256 = "<sri-or-hex-hash>";}
+inside the @code{fetchurl} or @code{fetchFromGitHub} call.
+@item
+@strong{Arch (@code{PKGBUILD}):} @code{sha256sums=('<hex-hash>')} array
+variable alongside @code{source=()}.
+@end itemize
+
+@item
+The @code{packaging/} directory is tracked in the project's
+version-control repository alongside the source code.
+@item
+These files are software-class artifacts and inherit the project's
+GPL/AGPL license (§4.1); each file must carry the standard SPDX two-tag
+header (§4.3).
+@item
+If a package manager's ecosystem imposes a stricter naming scheme or
+directory layout, comply with that scheme while still meeting the above
+requirements.
+@end itemize
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Platform Requirements
+@chapter §6 — Platform & Systems Requirements
+
+@menu
+* POSIX Compliance::
+* Post-Quantum Cryptography::
+* Signed Commits::
+@end menu
+
+@node POSIX Compliance
+@section §6.1 — POSIX Compliance
+All CLI tools, daemons, and system utilities must be
+@strong{POSIX-compliant}. Platform-specific extensions go behind feature
+flags and must not be required for core functionality.
+
+@node Post-Quantum Cryptography
+@section §6.2 — Post-Quantum Cryptography
+Crypto subsystems must have migration paths to post-quantum algorithms.
+Current implementations should use hybrid schemes where library support
+exists.
+
+@node Signed Commits
+@section §6.3 — Signed & Verified Commits (Non-Negotiable)
+Every commit pushed to a Spacecraft Software-controlled Git remote
+@strong{must} be cryptographically signed and show "Verified" on the
+hosting platform's commit/PR view (GitHub today; Gitway or any future
+Spacecraft Software host inherits the same rule).
+
+@strong{Mandatory rules --- violation blocks shipping:}
+
+@multitable {Hosting-platform "Verified" required} {All commits from v1.12 onwards must be signed with the @code{Mohamed.Hammad@@SpacecraftSoftware.org} key. The committer email and the signing key identity must both resolve to @code{Mohamed.Hammad@@SpacecraftSoftware.org}. Commits predating v1.12 are exempt from this requirement.}
+@headitem
+Rule
+ @tab Detail
+@item
+All commits signed
+ @tab @code{commit.gpgsign=true} configured globally. SSH signing
+(@code{gpg.format=ssh}) is the current default; GPG is acceptable. The
+signing key MUST be registered as a @strong{Signing} key on the hosting
+platform --- Authentication-only keys do not validate signatures.
+@item
+Authorized signing identity
+ @tab All commits from v1.12 onwards must be signed with the
+@code{Mohamed.Hammad@@SpacecraftSoftware.org} key. The committer email
+and the signing key identity must both resolve to
+@code{Mohamed.Hammad@@SpacecraftSoftware.org}. Commits predating v1.12
+are exempt from this requirement.
+@item
+Hosting-platform "Verified" required
+ @tab Every commit on a Spacecraft Software remote must show "Verified"
+on the platform's commit/PR view. Unsigned or "Unverified" commits MUST
+be remediated (re-signed via rebase or amend by the original author)
+before merge to a default branch.
+@item
+Programmatic commits signed too
+ @tab Bots, CI pipelines, scripted commits, and assistant-driven commits
+inherit the same rule --- no @code{--no-gpg-sign}, no signing-disabled
+subshells. The signing pipeline runs unattended.
+@item
+Rewrites preserve signatures
+ @tab Rebase, amend, cherry-pick, and squash MUST re-sign each resulting
+commit. Don't push history that lost signatures through rewriting.
+@item
+Local verification is best-effort
+ @tab @code{git log --show-signature} may report "No signature" on a
+given host when @code{~/.ssh/allowed_signers} is not populated --- this
+is a local-verifier gap, not a signing failure. The hosting platform's
+"Verified" badge is authoritative.
+@end multitable
+
+@strong{Algorithm note:} Ed25519 SSH signing is the current default.
+§6.2 calls for PQC readiness across the cryptographic surface;
+commit-signing algorithm migration is gated on hosting-platform support
+for post-quantum key formats. When GitHub (or Spacecraft Software's own
+Gitway) accepts PQC signing keys, Spacecraft Software commits migrate
+accordingly.
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Shell Environment
+@chapter §7 — Shell Environment
+Spacecraft Software tooling, documentation, and CI pipelines target
+@strong{four first-class shell environments}: @strong{Nushell},
+@strong{Ion}, @strong{Brush}, and @strong{Bash}. All four are equally
+supported; none is deprecated or downgraded.
+
+@menu
+* Script Portability::
+@end menu
+
+@node Script Portability
+@section §7.1 — Script Portability Policy
+@multitable {Nushell / Ion native variants when needed} {Bash-only extensions (@code{[[ ]]}, @code{(( ))}, process substitution @code{<(...)}, @code{$@{var^^@}}, indexed arrays) are prohibited in files intended for all four shells. Bash-specific scripts are permitted only when explicitly scoped (e.g., @code{#!/usr/bin/env bash} shebang, clearly labeled).}
+@headitem
+Rule
+ @tab Detail
+@item
+Default: POSIX-compatible
+ @tab Shell scripts in source trees, CI pipelines, @code{Makefile}
+targets, and documentation examples @strong{must} be written to the
+POSIX sh subset unless a shell-native feature is required. POSIX scripts
+run correctly in Bash and Brush without modification.
+@item
+Nushell / Ion native variants when needed
+ @tab When a task cannot be expressed cleanly in POSIX sh (structured
+data pipelines, typed parameters, Nushell modules), provide a Nushell
+(@code{.nu}) and/or Ion-native variant alongside the POSIX version. Do
+not force POSIX-only idioms that degrade the Nushell or Ion experience.
+@item
+No Bashisms in shared scripts
+ @tab Bash-only extensions (@code{[[ ]]}, @code{(( ))}, process
+substitution @code{<(...)}, @code{$@{var^^@}}, indexed arrays) are
+prohibited in files intended for all four shells. Bash-specific scripts
+are permitted only when explicitly scoped (e.g.,
+@code{#!/usr/bin/env bash} shebang, clearly labeled).
+@item
+Graceful shell detection
+ @tab Tools that need runtime shell detection must inform the user or
+degrade gracefully rather than silently failing in non-Bash
+environments.
+@end multitable
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Documentation
+@chapter §8 — Documentation (Texinfo)
+Spacecraft Software user-facing projects should ship a @strong{Texinfo
+manual} as the canonical technical reference. Texinfo is the preferred
+format for reference documentation that accompanies distributed
+software, following GNU project conventions.
+
+@menu
+* When Manual Required::
+* Source Format::
+* Required Elements::
+* Output Formats::
+* Manual Licensing::
+* Packaging Integration::
+@end menu
+
+@node When Manual Required
+@section §8.1 — When a Texinfo Manual Is Required
+@multitable {CLI / TUI / GUI application with substantive user-facing functionality} {@strong{MUST} ship a Texinfo manual covering invocation, options, concepts, and examples}
+@headitem
+Project type
+ @tab Requirement
+@item
+CLI / TUI / GUI application with substantive user-facing functionality
+ @tab @strong{MUST} ship a Texinfo manual covering invocation, options,
+concepts, and examples
+@item
+Library with a public API
+ @tab @strong{SHOULD} ship a Texinfo reference manual covering all
+public interfaces
+@item
+Simple script / internal tooling
+ @tab @strong{MAY} skip; a well-structured @code{README.md} suffices
+@end multitable
+
+@node Source Format
+@section §8.2 — Source Format and File Layout
+@itemize
+@item
+Source files use the @code{.texi} extension (Texinfo 7.x+).
+@item
+Manuals live at @code{doc/<project>.texi} in the project root.
+@item
+The project's top-level @code{Makefile} must expose three targets:
+@code{make info}, @code{make html}, @code{make pdf}.
+@end itemize
+
+@node Required Elements
+@section §8.3 — Required Structural Elements
+Every Texinfo manual must include the following elements:
+
+@multitable {@code{@@dircategory} / @code{@@direntry}} {Registers the manual in the Info directory}
+@headitem
+Element
+ @tab Purpose
+@item
+@code{@@dircategory} / @code{@@direntry}
+ @tab Registers the manual in the Info directory
+@item
+@code{@@copying} block
+ @tab License statement and copyright notice
+@item
+@code{@@titlepage}
+ @tab Title, version, author, and copyright
+@item
+@code{@@node Top} + @code{@@top}
+ @tab Required top-level node for Info readers
+@item
+@code{@@menu} per chapter
+ @tab Navigation structure
+@end multitable
+
+@node Output Formats
+@section §8.4 — Output Formats
+Build and ship all three output formats:
+
+@multitable {@code{.html}} {@code{makeinfo} / @code{texi2any}} {Info readers (Emacs, standalone @code{info})}
+@headitem
+Format
+ @tab Tool
+ @tab Purpose
+@item
+@code{.info}
+ @tab @code{makeinfo} / @code{texi2any}
+ @tab Info readers (Emacs, standalone @code{info})
+@item
+@code{.html}
+ @tab @code{makeinfo --html}
+ @tab Project documentation website
+@item
+@code{.pdf}
+ @tab @code{texi2pdf}
+ @tab Printable reference
+@end multitable
+
+Install @code{.info} files using @code{install-info} at package install
+time so they appear in the system Info directory.
+
+@node Manual Licensing
+@section §8.5 — Licensing
+Texinfo manuals are @strong{document-class} artifacts (§4.1.1) and
+default to @strong{CC-BY-SA-4.0}. @strong{GFDL-1.3-or-later} is a
+permitted alternative when the manual is distributed alongside
+GPL-licensed software and compatibility with GNU documentation
+collections is desired. Include the chosen license in @code{LICENSES/}
+per §4.3.
+
+@node Packaging Integration
+@section §8.6 — Packaging Integration
+Package manifests must install the @code{.info} file and register it
+with @code{install-info}:
+
+@multitable {@strong{PKGBUILD} (@code{packaging/PKGBUILD})} {Add @code{texinfo} to @code{makedepends}; @code{install -Dm644} for @code{.info} files; call @code{install-info} in @code{post_install}}
+@headitem
+Package manager
+ @tab Requirements
+@item
+@strong{Guix} (@code{packaging/guix.scm})
+ @tab Add @code{texinfo} as a native input; run @code{install-info} in
+the install phase
+@item
+@strong{Nix} (@code{packaging/default.nix})
+ @tab Add @code{texinfo} to @code{nativeBuildInputs}; standard
+Autoconf/Make @code{installPhase} handles @code{install-info}
+automatically
+@item
+@strong{PKGBUILD} (@code{packaging/PKGBUILD})
+ @tab Add @code{texinfo} to @code{makedepends}; @code{install -Dm644}
+for @code{.info} files; call @code{install-info} in @code{post_install}
+@end multitable
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node PFA Policy
+@chapter §9 — Privacy-Friendly Application (PFA) Policy
+Every Spacecraft Software application must satisfy @strong{all three}
+PFA requirements:
+
+@multitable {Minimal Permissions} {User data stored locally by default; sync is strictly opt-in, E2E encrypted}
+@headitem
+Requirement
+ @tab Rule
+@item
+No Tracking/No Ads
+ @tab Zero advertising, tracking, analytics SDKs, or telemetry beacons
+@item
+Minimal Permissions
+ @tab Only essential permissions; requested lazily at point of use,
+never eagerly
+@item
+Local Storage
+ @tab User data stored locally by default; sync is strictly opt-in, E2E
+encrypted
+@end multitable
+
+When reviewing or designing any feature that touches data handling,
+permissions, or networking, verify all three PFA requirements are met.
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Key Bindings
+@chapter §10 — Key Bindings
+All interactive applications must support @strong{both}:
+
+@multitable {@strong{Vim}} {Modal editing layer (Normal / Insert / Visual mode) as opt-in feature. Minimum: hjkl navigation where full Vim layer is impractical}
+@headitem
+Scheme
+ @tab Requirement
+@item
+@strong{CUA}
+ @tab Standard bindings (Ctrl+C/X/V/Z/S) must work in all text input
+contexts
+@item
+@strong{Vim}
+ @tab Modal editing layer (Normal / Insert / Visual mode) as opt-in
+feature. Minimum: hjkl navigation where full Vim layer is impractical
+@end multitable
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Color Palette
+@chapter §11 — Spacecraft Software Color Palette (WCAG-Compliant)
+The @strong{only} permitted colors for Spacecraft Software interfaces
+and documents:
+
+@multitable {Liquid Coolant} {@code{#8BE9FD}} {RGB(139, 233, 253)} {Primary Text / Active Readout}
+@headitem
+Token
+ @tab Hex
+ @tab RGB
+ @tab Role
+@item
+Void Navy
+ @tab @code{#000027}
+ @tab RGB(0, 0, 39)
+ @tab @strong{Background / Canvas}
+@item
+Molten Amber
+ @tab @code{#D98E32}
+ @tab RGB(217, 142, 50)
+ @tab Primary Text / Active Readout
+@item
+Steel Blue
+ @tab @code{#4B7EB0}
+ @tab RGB(75, 126, 176)
+ @tab Primary Accent / Structural
+@item
+Radium Green
+ @tab @code{#50FA7B}
+ @tab RGB(80, 250, 123)
+ @tab Success / Safe Status
+@item
+Red Oxide
+ @tab @code{#FF5C5C}
+ @tab RGB(255, 92, 92)
+ @tab Warning / Error Status
+@item
+Liquid Coolant
+ @tab @code{#8BE9FD}
+ @tab RGB(139, 233, 253)
+ @tab Info / Links
+@end multitable
+
+@strong{@code{#000027} (Void Navy) is the mandatory background for ALL
+Spacecraft Software surfaces.} No alternative background is permitted.
+This is non-negotiable.
+
+For document/file generation → load the
+@code{spacecraft-document-format} skill. For IDE/terminal themes → load
+the @code{spacecraft-theme-factory} skill.
+
+@menu
+* Steelbore Theme::
+@end menu
+
+@node Steelbore Theme
+@section §11.1 — Steelbore Theme (Application Theming Standard)
+When building a new Spacecraft Software application (GUI, TUI, or web),
+all palette references @strong{must} be accessed through a named theme
+called @strong{@code{Steelbore}} rather than referenced as bare hex
+literals. The @code{Steelbore} theme is the canonical color contract:
+
+@multitable {@code{foreground}} {Maps to palette token} {@code{#8BE9FD}}
+@headitem
+Theme token
+ @tab Maps to palette token
+ @tab Hex
+@item
+@code{background}
+ @tab Void Navy
+ @tab @code{#000027}
+@item
+@code{foreground}
+ @tab Molten Amber
+ @tab @code{#D98E32}
+@item
+@code{accent}
+ @tab Steel Blue
+ @tab @code{#4B7EB0}
+@item
+@code{success}
+ @tab Radium Green
+ @tab @code{#50FA7B}
+@item
+@code{error}
+ @tab Red Oxide
+ @tab @code{#FF5C5C}
+@item
+@code{info}
+ @tab Liquid Coolant
+ @tab @code{#8BE9FD}
+@end multitable
+
+@strong{Rationale:} isolating palette references behind the
+@code{Steelbore} theme name makes it trivial for end users to substitute
+a custom theme without touching application logic --- swap the theme,
+not every hex literal.
+
+@itemize
+@item
+The theme file/module @strong{must} be named @code{steelbore}
+(snake_case) in the project's theme registry, configuration layer, or
+equivalent (e.g., @code{themes/steelbore.json}, @code{steelbore.toml}, a
+Rust @code{Theme::Steelbore} variant).
+@item
+Hard-coding palette hex values directly in UI logic is
+@strong{forbidden} for new apps. Use theme tokens exclusively.
+@item
+Existing apps are encouraged but not required to migrate; new apps are
+required.
+@end itemize
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Typography
+@chapter §12 — Typography (FOSS-Licensed Fonts Only)
+Acceptable font licenses: @strong{OFL, Apache 2.0, Ubuntu Font License,
+CC0-1.0}
+
+@multitable {Body / Code} {monospace (system)} {License}
+@headitem
+Context
+ @tab Font
+ @tab License
+@item
+Headings
+ @tab Share Tech Mono
+ @tab OFL
+@item
+Body / Code
+ @tab Inconsolata
+ @tab OFL
+@item
+Fallback
+ @tab monospace (system)
+ @tab N/A
+@end multitable
+
+Never use proprietary fonts. When suggesting or using fonts in any
+Spacecraft Software artifact, verify they are available on Google Fonts
+or another FOSS-licensed repository.
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node UI/UX Design System
+@chapter §13 — UI/UX Design System
+@itemize
+@item
+@strong{Material Design} is the required component system for all
+graphical applications. Theme Material components with the §11 color
+palette.
+@item
+@strong{WCAG 2.1 Level AA} contrast is the minimum for all color
+pairings. Any new color additions must be WCAG-verified before adoption.
+@item
+@strong{Accessibility:} screen readers, keyboard-only navigation, and
+system accessibility preferences (reduced motion, high contrast) must
+all be respected.
+@end itemize
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Date Time Units
+@chapter §14 — Date, Time & Units
+
+@menu
+* Date Format Rules::
+* UTC Z Policy::
+* Local Time Companion::
+* Duration Format::
+* Rust Time Guidance::
+@end menu
+
+@node Date Format Rules
+@section §14.1 — Date & Time Format Rules
+@multitable {Time format} {@strong{UTC Z is the default and preferred primary} for general-purpose, cross-system, and machine-readable timestamps. A project whose core domain is inherently local-time-bound (e.g., solar/prayer-time calculations) may declare local time as its primary record instead --- a documented exception, not a free choice. See §14.2 and §14.2.1} {@code{PT1H30M} not "1h 30m"}
+@headitem
+Concern
+ @tab Rule
+ @tab Example
+@item
+Date format
+ @tab ISO 8601 only: @code{YYYY-MM-DD}
+ @tab @code{2026-03-08}
+@item
+Time format
+ @tab 24-hour only: @code{HH:MM:SS} --- AM/PM is @strong{never}
+permitted
+ @tab @code{14:30:00}
+@item
+Timestamp
+ @tab Combined ISO 8601 UTC: @code{YYYY-MM-DDTHH:MM:SSZ}
+ @tab @code{2026-03-08T14:30:00Z}
+@item
+Timezone
+ @tab @strong{UTC Z is the default and preferred primary} for
+general-purpose, cross-system, and machine-readable timestamps. A
+project whose core domain is inherently local-time-bound (e.g.,
+solar/prayer-time calculations) may declare local time as its primary
+record instead --- a documented exception, not a free choice. See §14.2
+and §14.2.1
+ @tab @code{Z} not @code{+00:00}
+@item
+Duration
+ @tab ISO 8601 duration format only
+ @tab @code{PT1H30M} not "1h 30m"
+@item
+Units
+ @tab Metric (SI) primary; imperial in parentheses only if locale
+requires
+ @tab @code{100 km (62 mi)}
+@end multitable
+
+Apply these conventions to all generated code, documentation, comments,
+and any user-facing strings. Never output AM/PM time, non-ISO dates, or
+imperial-primary units.
+
+@node UTC Z Policy
+@section §14.2 — UTC Z Timezone Policy
+@strong{UTC Z is the default and preferred timezone for stored,
+transmitted, logged, and committed timestamps across Spacecraft Software
+projects.} It is the convention every project should reach for first ---
+it keeps cross-project tooling, sorting, and interchange simple and
+unambiguous. Under this default, the @code{Z} suffix is required on
+primary timestamps, and local time expressed as a UTC offset (e.g.,
+@code{2026-05-24T13:34:55+03:00}) may optionally accompany a UTC Z value
+as a secondary, human-convenience field --- but UTC Z remains the
+authoritative record.
+
+This is a strong default, not a universal mandate forced onto every
+domain regardless of fit --- §14.2.1 documents the exception that lets a
+project whose domain is genuinely local-time-bound use local time as its
+primary record instead.
+
+@strong{Rules for projects under the UTC Z default --- apply unless a
+project has filed the §14.2.1 exception:}
+
+@multitable {File metadata written by Spacecraft Software tools} {Offset notation (@code{+03:00}, @code{-05:00}, etc.) is @strong{forbidden as a replacement} for UTC Z. It is permitted only as an optional companion field alongside a @code{Z}-suffixed primary.}
+@headitem
+Rule
+ @tab Detail
+@item
+@code{Z} suffix required
+ @tab Every @strong{primary} stored/transmitted timestamp MUST end with
+@code{Z}. @code{2026-03-08T14:30:00Z} ✓. A companion local-time field
+with UTC offset is permitted alongside it.
+@item
+No offset notation as replacement
+ @tab Offset notation (@code{+03:00}, @code{-05:00}, etc.) is
+@strong{forbidden as a replacement} for UTC Z. It is permitted only as
+an optional companion field alongside a @code{Z}-suffixed primary.
+@item
+No bare local time in data
+ @tab Local-time timestamps @strong{without} timezone info are
+@strong{forbidden} in files, databases, logs, API responses, and
+commits.
+@item
+Log entries use UTC + @code{Z}
+ @tab Every log line timestamp must be @code{YYYY-MM-DDTHH:MM:SS.sssZ}
+(millisecond precision encouraged).
+@item
+Commit timestamps use UTC
+ @tab @code{GIT_COMMITTER_DATE} and @code{GIT_AUTHOR_DATE} must be UTC
+when set programmatically.
+@item
+File metadata written by Spacecraft Software tools
+ @tab mtime/ctime written by Spacecraft Software tools must be
+UTC-sourced.
+@end multitable
+
+@menu
+* Domain Exception::
+@end menu
+
+@node Domain Exception
+@subsection §14.2.1 — Domain Exception: Inherently Local-Time-Bound Projects
+A project whose core domain is fundamentally defined by @strong{local
+civil or solar time} --- not by a moment in absolute (UTC) time --- may
+declare local time as the @strong{primary} representation for that
+domain's data. Examples: prayer-time calculations (@code{Mawaqit}),
+sunrise/sunset tables, local event or business-hours scheduling. For
+data like this, the meaningful value @emph{is} "06:14 local, at this
+place" --- collapsing it to a UTC instant first and treating that as
+authoritative would misrepresent what the data actually is.
+
+@strong{Conditions for the exception:}
+
+@enumerate
+@item
+@strong{Document it.} The project's README or spec must state explicitly
+which data uses local time as primary, and the @emph{domain} reason why
+--- not developer or user convenience.
+@item
+@strong{Keep the default everywhere else.} General-purpose machinery
+within the same project --- logs, commit timestamps, internal
+cross-system APIs, telemetry --- still follows the §14.2 UTC Z default.
+The exception covers the domain data itself, not the whole project.
+@item
+@strong{Preserve UTC derivability.} Store or compute the IANA timezone
+(e.g., @code{Africa/Cairo}) alongside the local value, so a UTC instant
+remains derivable for interchange, comparison, and storage portability.
+@item
+@strong{This is an exception, not an escape hatch.} "Local time is more
+convenient" or "our users are mostly in one timezone" do not qualify ---
+the domain itself must be inherently local-time-bound.
+@end enumerate
+
+@node Local Time Companion
+@section §14.3 — Local Time as Optional Companion
+@strong{For projects under the UTC Z default} (§14.2), local time
+expressed as a UTC offset is permitted as an @strong{optional companion}
+to the UTC Z primary value --- in human-facing display, in API responses
+(as an additional field, never replacing the UTC Z field), and in stored
+records where timezone context aids human readers. The UTC Z value is
+always present and always authoritative; the local-time companion is
+supplemental only. (A project operating under the §14.2.1 domain
+exception inverts these roles for its domain data --- local time is
+primary there, with UTC kept derivable rather than displayed as
+authoritative.)
+
+@itemize
+@item
+The @code{--absolute-time} flag (defined in
+@code{spacecraft-cli-standard} §3) disables relative-time rendering but
+always renders as UTC, not local time.
+@item
+If a future CLI wants to show local time in human mode, it MUST:
+@enumerate
+@item
+Accept a @code{--tz <IANA-zone>} flag (e.g., @code{--tz Africa/Cairo}).
+@item
+Render local time only to stdout in human mode --- never in
+@code{--json} output.
+@item
+Always include the UTC value alongside the local rendering.
+@item
+Never persist or transmit the local-time rendering.
+@end enumerate
+
+@item
+JSON/machine output (@code{--format json/jsonl/yaml/csv}) MUST always
+use UTC + @code{Z}.
+@end itemize
+
+@node Duration Format
+@section §14.4 — Duration Format
+Durations follow ISO 8601 duration notation:
+
+@multitable {@code{PTnHnMnS}} {@code{PT1H30M}} {1 hour 30 minutes}
+@headitem
+Format
+ @tab Example
+ @tab Meaning
+@item
+@code{PTnHnMnS}
+ @tab @code{PT1H30M}
+ @tab 1 hour 30 minutes
+@item
+@code{PnD}
+ @tab @code{P7D}
+ @tab 7 days
+@item
+@code{PnYnM}
+ @tab @code{P1Y6M}
+ @tab 1 year 6 months
+@end multitable
+
+Prose forms like "1h 30m", "90 minutes", "1.5 hours" are
+@strong{forbidden} in machine-readable output. They are acceptable in
+@code{--help} text only.
+
+@node Rust Time Guidance
+@section §14.5 — Rust Implementation Guidance
+When writing Rust code that handles time:
+
+@multitable {No @code{NaiveDateTime} in output} {@code{chrono::Local} and @code{jiff::Zoned} (with non-UTC zone) are @strong{forbidden} in serialized output}
+@headitem
+Concern
+ @tab Rule
+@item
+Crate choice
+ @tab Use @code{jiff} (preferred) or @code{chrono} --- never @code{time}
+0.1.x
+@item
+UTC type
+ @tab @code{jiff::Timestamp} or @code{chrono::DateTime<chrono::Utc>} for
+all stored values
+@item
+Local type
+ @tab @code{chrono::Local} and @code{jiff::Zoned} (with non-UTC zone)
+are @strong{forbidden} in serialized output
+@item
+Serialization
+ @tab Always serialize as @code{"2026-03-08T14:30:00Z"} (string, ISO
+8601, @code{Z} suffix)
+@item
+@code{serde}
+ @tab Use @code{#[serde(with = "...")]} or a newtype that enforces UTC
+on deserialization
+@item
+@code{SystemTime}
+ @tab Acceptable for internal durations; convert to UTC ISO 8601 string
+before any output
+@item
+No @code{NaiveDateTime} in output
+ @tab @code{chrono::NaiveDateTime} has no timezone --- forbidden in any
+serialized or logged value
+@end multitable
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Attribution
+@chapter §15 — Attribution, Maintainer & Contact
+@strong{Maintainer:} Mohamed Hammad
+@strong{Contact:} @email{Mohamed.Hammad@@SpacecraftSoftware.org}
+@strong{Copyright:} Copyright (C) 2026 Mohamed Hammad & Spacecraft
+Software | @strong{License:} CC-BY-SA-4.0
+@strong{Website:} @url{https://SpacecraftSoftware.org/}
+
+@menu
+* Project Pages::
+* Required Attribution::
+* Third-Party Attribution::
+@end menu
+
+@node Project Pages
+@section §15.1 — Project Pages
+Each Spacecraft Software project has a dedicated subdomain following the
+pattern @code{https://<ProjectName>.SpacecraftSoftware.org/}. Use the
+project-specific URL in all project-level outputs; use
+@code{https://SpacecraftSoftware.org/} only for umbrella references.
+
+@multitable {Spacecraft Software (main)} {@url{https://Loran-Pages.SpacecraftSoftware.org/}}
+@headitem
+Project
+ @tab URL
+@item
+Spacecraft Software (main)
+ @tab @url{https://SpacecraftSoftware.org/}
+@item
+The Steelbore Standard
+ @tab @url{https://Standard.SpacecraftSoftware.org/}
+@item
+Aetheric
+ @tab @url{https://Aetheric.SpacecraftSoftware.org/}
+@item
+Gitway
+ @tab @url{https://Gitway.SpacecraftSoftware.org/}
+@item
+Ferrocast
+ @tab @url{https://Ferrocast.SpacecraftSoftware.org/}
+@item
+Caliper
+ @tab @url{https://Caliper.SpacecraftSoftware.org/}
+@item
+Craton
+ @tab @url{https://Craton.SpacecraftSoftware.org/}
+@item
+Ironway
+ @tab @url{https://Ironway.SpacecraftSoftware.org/}
+@item
+Zamak
+ @tab @url{https://Zamak.SpacecraftSoftware.org/}
+@item
+Bravais
+ @tab @url{https://Bravais.SpacecraftSoftware.org/}
+@item
+Mawaqit
+ @tab @url{https://Mawaqit.SpacecraftSoftware.org/}
+@item
+Flux
+ @tab @url{https://Flux.SpacecraftSoftware.org/}
+@item
+Anvil
+ @tab @url{https://Anvil.SpacecraftSoftware.org/}
+@item
+Construct
+ @tab @url{https://Construct.SpacecraftSoftware.org/}
+@item
+Ferrite_OS
+ @tab @url{https://Ferrite.SpacecraftSoftware.org/}
+@item
+Forge
+ @tab @url{https://Forge.SpacecraftSoftware.org/}
+@item
+Ginx
+ @tab @url{https://Ginx.SpacecraftSoftware.org/}
+@item
+Loran
+ @tab @url{https://Loran.SpacecraftSoftware.org/}
+@item
+Pearlite
+ @tab @url{https://Pearlite.SpacecraftSoftware.org/}
+@item
+MCP Servers
+ @tab @url{https://MCP-Servers.SpacecraftSoftware.org/}
+@item
+Lode
+ @tab @url{https://Lode.SpacecraftSoftware.org/}
+@item
+Sonde
+ @tab @url{https://Sonde.SpacecraftSoftware.org/}
+@item
+Vacuum
+ @tab @url{https://Vacuum.SpacecraftSoftware.org/}
+@item
+Vault
+ @tab @url{https://Vault.SpacecraftSoftware.org/}
+@item
+Docs
+ @tab @url{https://Docs.SpacecraftSoftware.org/}
+@item
+Loran Pages
+ @tab @url{https://Loran-Pages.SpacecraftSoftware.org/}
+@end multitable
+
+When a new project is created, add its subdomain to this table
+immediately.
+
+@node Required Attribution
+@section §15.2 — Mandatory Attribution in Project Outputs
+Every Spacecraft Software product @strong{must} surface the following
+attribution in at least one of: @code{--help} output, @code{--version}
+output, README, or About/Info screen.
+
+@strong{Required attribution block:}
+
+@verbatim
+Maintained by Mohamed Hammad <Mohamed.Hammad@SpacecraftSoftware.org>
+Copyright (C) 2026 Mohamed Hammad & Spacecraft Software  |  License: GPL-3.0-or-later
+https://<ProjectName>.SpacecraftSoftware.org/
+
+(The License line shows the project's own license — GPL-3.0-or-later or AGPL-3.0-or-later per §4.1.)
+@end verbatim
+
+@strong{Per-surface rules:}
+
+@multitable {About / Info (GUI/TUI)} {REUSE two-tag header (§4.3): @code{SPDX-FileCopyrightText} + @code{SPDX-License-Identifier} (@code{GPL-3.0-or-later} or @code{AGPL-3.0-or-later})}
+@headitem
+Surface
+ @tab Required content
+@item
+@code{--version}
+ @tab Maintainer name, project URL, copyright year
+@item
+@code{--help}
+ @tab Project URL and maintainer name (at footer)
+@item
+README
+ @tab "Maintainer" section: name,
+@code{Mohamed.Hammad@@SpacecraftSoftware.org}, project URL
+@item
+About / Info (GUI/TUI)
+ @tab Maintainer name, project URL, copyright year
+@item
+SPDX header
+ @tab REUSE two-tag header (§4.3): @code{SPDX-FileCopyrightText} +
+@code{SPDX-License-Identifier} (@code{GPL-3.0-or-later} or
+@code{AGPL-3.0-or-later})
+@end multitable
+
+@strong{Specific rules:}
+
+@itemize
+@item
+The contact email is always
+@code{Mohamed.Hammad@@SpacecraftSoftware.org} --- never a personal
+domain, GitHub handle, or other address.
+
+@item
+The copyright year reflects the year of first release or current year,
+or a range (e.g., @code{2025-2026}) when a project spans multiple years.
+
+@item
+Link text for project pages must use the full URL as the display text or
+a clear label (e.g.,
+@code{[Gitway](https://Gitway.SpacecraftSoftware.org/)}), never an
+opaque label.
+
+@item
+For CLI @code{--version} output in human mode, the footer line format
+is:
+
+@verbatim
+Maintained by Mohamed Hammad <Mohamed.Hammad@SpacecraftSoftware.org>
+https://<ProjectName>.SpacecraftSoftware.org/
+@end verbatim
+
+@item
+For CLI @code{--version} output in JSON/machine mode, include in
+@code{metadata}:
+
+@verbatim
+"maintainer": "Mohamed Hammad <Mohamed.Hammad@SpacecraftSoftware.org>",
+"website": "https://<ProjectName>.SpacecraftSoftware.org/"
+@end verbatim
+
+@item
+@strong{Email obfuscation in plain-text prose.} In plain-text prose
+contexts (README body, CONTRIBUTING.md, human-readable documentation)
+where the address is not a clickable link,
+@code{Mohamed.Hammad [at] SpacecraftSoftware.org} is permitted as a
+scraper-resistant form. @code{# Maintainer:} lines in PKGBUILDs and
+@code{SPDX-FileCopyrightText} headers @strong{must} always use the full
+address --- those formats are parsed by @code{makepkg}/@code{pkgcheck}
+and @code{reuse lint} respectively, and obfuscation breaks them.
+
+@end itemize
+
+@node Third-Party Attribution
+@section §15.3 — Third-Party Attribution
+Spacecraft Software artifacts must give credit where credit is due. When
+a project or skill @strong{substantially builds on third-party work},
+that credit appears in a @code{CREDITS.md} at the artifact's root ---
+@code{<project-root>/CREDITS.md} for projects,
+@code{<skill-name>/CREDITS.md} for skills.
+
+@code{CREDITS.md} is the inbound counterpart to §15.2's outbound
+attribution: §15.2 tells consumers who maintains Spacecraft Software;
+§15.3 tells consumers whose work Spacecraft Software stands on.
+
+@strong{Triggers} (any one obligates a @code{CREDITS.md}):
+
+@itemize
+@item
+Content adapted, derived, or copied verbatim from an external source
+under any license (permissive or copyleft).
+@item
+A library, framework, or specification whose ideas or implementation
+form a substantial conceptual basis for the artifact, beyond routine
+dependency use.
+@item
+Named prior art, research, or design work whose insights were borrowed.
+@end itemize
+
+@strong{Not triggered by} (license metadata alone suffices):
+
+@itemize
+@item
+Routine package-manager dependencies whose @code{LICENSE} files are
+surfaced mechanically via Cargo, npm, pip, Nix, etc.
+@item
+Well-known standards and specifications (POSIX, RFC, ISO, GFM, ODF,
+OOXML) that the artifact conforms to but does not redistribute.
+@item
+Public-domain conventions and common idioms.
+@end itemize
+
+@strong{Required content per credited work:}
+
+@multitable {Source URL} {Required} {@code{https://github.com/microsoft/rust-guidelines}}
+@headitem
+Field
+ @tab Required
+ @tab Example
+@item
+Name
+ @tab Yes
+ @tab @code{Microsoft Pragmatic Rust Guidelines}
+@item
+Author(s)
+ @tab Yes
+ @tab @code{Microsoft Corporation}
+@item
+License
+ @tab Yes
+ @tab @code{MIT License}
+@item
+Source URL
+ @tab Yes
+ @tab @code{https://github.com/microsoft/rust-guidelines}
+@item
+Scope
+ @tab Yes
+ @tab One-line description of what was adapted/used
+@end multitable
+
+A skill MAY keep a deeper, scope-limited attribution file inside its
+@code{references/} directory (typically
+@code{references/ATTRIBUTION.md}) when the credit applies specifically
+to adapted reference content. The root @code{CREDITS.md} remains
+canonical and should link down to any such deeper file.
+
+SPDX headers (§4) cover license compliance mechanically;
+@code{CREDITS.md} is the human-readable narrative --- who, what, and how
+the upstream work shaped the Spacecraft Software artifact.
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Compliance Checklist
+@chapter §16 — Compliance Checklist (Audit Gate)
+Before finalising @strong{any} Spacecraft Software artifact, mentally
+verify:
+
+@itemize
+@item
+☐ @strong{§2} Aerospace/Sci-Fi/AI naming convention applied to all
+@strong{new} identifiers; legacy (pre-v1.2) names preserved unless
+explicitly renamed
+@item
+☐ @strong{§3.1} Stability: memory safety (Rust, or ASLR+CFI documented);
+robust error handling, fault tolerance, and test-verified
+@item
+☐ @strong{§3.2} Performance: multi-core/multi-thread concurrency by
+default (or serial trade-off documented); concurrency designed-in;
+benchmarking before/after
+@item
+☐ @strong{§3.3} Hardened security; PQC readiness addressed
+@item
+☐ @strong{§4.1} License is @code{GPL-3.0-or-later} or
+@code{AGPL-3.0-or-later} (AGPL for network-facing; per §4.1)
+@item
+☐ @strong{§4.2} Upstream copyright notices, license texts, and
+@code{NOTICE}/@code{AUTHORS} preserved verbatim; upstream licenses
+shipped in @code{LICENSES/}
+@item
+☐ @strong{§4.3} REUSE-compliant: two-tag SPDX header
+(@code{SPDX-FileCopyrightText} + @code{SPDX-License-Identifier}) on
+every file (or @code{.license} sidecar / @code{REUSE.toml} entry);
+@code{LICENSES/} directory present; @code{reuse lint} passes
+@item
+☐ @strong{§5} Project Posture: README/NOTICE/CONTRIBUTING present;
+default personal-hobby stance applied; general-use carve-outs declared
+in project README
+@item
+☐ @strong{§5.5} Package distribution: @code{packaging/guix.scm},
+@code{packaging/default.nix}, and @code{packaging/PKGBUILD} present,
+buildable, and carrying correct version + SHA-256 checksum (in each
+package manager's native format) before any release tag is pushed
+@item
+☐ @strong{§6.1} POSIX-compliant CLI/system tools
+@item
+☐ @strong{§7} Shell scripts are POSIX-compatible; Nushell/Ion native
+variants provided where shell-native idioms are required; no Bashisms in
+shared scripts
+@item
+☐ @strong{§8} Texinfo manual present for user-facing programs
+(@code{doc/<project>.texi}); builds to @code{.info}, @code{.html}, and
+@code{.pdf}; @code{install-info} hook present in all three package
+manifests (§5.5) --- N/A for scripts and internal tooling
+@item
+☐ @strong{§9} PFA: no tracking, minimal permissions, local storage
+default
+@item
+☐ @strong{§10} CUA + Vim-like key bindings planned/implemented
+@item
+☐ @strong{§11} Spacecraft Software color palette used; Void Navy
+background mandatory; new apps expose colors via a named
+@code{Steelbore} theme (§11.1) --- no bare hex literals in UI logic
+@item
+☐ @strong{§12} FOSS-licensed fonts only (Share Tech Mono / Inconsolata)
+@item
+☐ @strong{§13} Material Design UI/UX; WCAG 2.1 AA verified
+@item
+☐ @strong{§14} ISO 8601 dates; 24h time; UTC Z is the default primary
+timestamp (companion local time with UTC offset permitted, never a
+replacement) --- unless the project filed the §14.2.1 domain exception
+for inherently local-time-bound data; ISO 8601 durations; metric units
+@item
+☐ @strong{§15} Attribution present: maintainer name
+(@code{Mohamed Hammad}), contact
+(@code{Mohamed.Hammad@@SpacecraftSoftware.org}), and project URL in
+@code{--version} / README / About
+@item
+☐ @strong{§15.3} Third-party work credited in @code{CREDITS.md} at
+project/skill root when triggers apply; deeper
+@code{references/ATTRIBUTION.md} present where reference content is
+adapted from external sources
+@item
+☐ @strong{§6.3} All commits to Spacecraft Software Git remotes
+cryptographically signed with the
+@code{Mohamed.Hammad@@SpacecraftSoftware.org} key and showing "Verified"
+on the hosting platform; rewrites preserve signatures; programmatic and
+assistant-driven commits signed too
+@end itemize
+
+If any item is not applicable to the current artifact type (e.g., color
+palette for a pure Rust library), note it as N/A rather than silently
+skipping it.
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Skill Cross-References
+@unnumbered Skill Cross-References
+@multitable {Authoring or building a Texinfo manual} {@code{spacecraft-cli-shell} + @code{spacecraft-cli-preference}}
+@headitem
+Task
+ @tab Load this skill
+@item
+Writing any Rust code
+ @tab @code{microsoft-rust-guidelines}
+@item
+Writing or reviewing shell scripts
+ @tab @code{spacecraft-cli-shell} + @code{spacecraft-cli-preference}
+@item
+Generating DOCX / ODT / PDF on demand
+ @tab @code{spacecraft-document-format}
+@item
+Authoring or building a Texinfo manual
+ @tab @code{spacecraft-texinfo}
+@item
+Creating IDE / terminal themes
+ @tab @code{spacecraft-theme-factory}
+@item
+All other Spacecraft Software work
+ @tab @code{spacecraft-standard}
+@end multitable
+
+@node Concept Index
+@unnumbered Concept Index
+
+@printindex cp
+
+@bye
