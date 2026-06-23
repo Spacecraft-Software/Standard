@@ -1,6 +1,28 @@
-# Derived deliverables — uploaded as release assets, not version-controlled
-The_Steelbore_Standard.odt
+# Generated outputs — produced from The_Steelbore_Standard.texi via `make`
+# Run: make info  → .info    make html → .html    make md → .md    make pdf → .pdf
+# On request only: make docx → .docx
+The_Steelbore_Standard.info
+The_Steelbore_Standard.html
+The_Steelbore_Standard.pdf
 The_Steelbore_Standard.docx
+The_Steelbore_Standard.odt
+
+# TeX auxiliary files
+*.aux
+*.log
+*.toc
+*.cp
+*.cps
+*.fn
+*.fns
+*.ky
+*.kys
+*.pg
+*.pgs
+*.tp
+*.tps
+*.vr
+*.vrs
 
 # Agent-local guidance and exports (not for publication)
 CLAUDE.md
