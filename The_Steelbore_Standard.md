@@ -23,6 +23,14 @@ concerns.
 
 ## Changelog
 
+- **v1.31 (2026-06-24):** **§3.2** compiler optimization flag
+  documentation rule extended — previously only *disabled* flags
+  required documentation; now **both applied and disabled** flags must
+  be explicitly noted (comment in build file or build-time message).
+  Symmetrical notation makes the full flag state visible at compile time
+  and makes build errors traceable to specific flags.
+  Compliance-checklist §3.2 bullet updated.
+
 - **v1.30 (2026-06-24):** **§3.2** reframed — modern hardware
   universally provides multi-core/multi-thread capability; harnessing
   that concurrency is the primary performance lever. Concurrency is an
@@ -458,13 +466,16 @@ approach outperforms or is safer, it must be chosen and the trade-off
 documented.
 
 - Release builds should use CPU-optimized flags — `-march=native`, LTO,
-  PGO — **where the toolchain and target support them reliably.** Any
-  such flag known to break or destabilize builds on a given platform,
-  toolchain, or linker configuration (e.g., LTO under certain NixOS,
-  cross-compilation, or static-linking setups) MUST be disabled and the
-  reason documented. Stability (Priority 1) outranks Performance
-  (Priority 2), so a build-breaking or instability-inducing optimization
-  always yields — never ship a broken build for the sake of a flag.
+  PGO — **where the toolchain and target support them reliably.**
+  **Every applied flag must be explicitly noted** (e.g., a comment in
+  the build file or a build-time message); **every disabled flag and the
+  reason for disabling must be equally noted.** Visible flag state at
+  compile time makes errors traceable to a specific flag. Any flag known
+  to break or destabilize a build on a given platform, toolchain, or
+  linker configuration (e.g., LTO under certain NixOS,
+  cross-compilation, or static-linking setups) MUST be disabled.
+  Stability (Priority 1) outranks Performance (Priority 2) — never ship
+  a broken build for the sake of a flag.
 
 - Benchmarking is **mandatory** before and after any optimization work;
   regressions must be documented and justified — and it is the evidence
@@ -1262,7 +1273,8 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
 - [ ] **§3.2** Performance: concurrency considered throughout
   architecture design; adopted where it advances performance, abandoned
   where it degrades performance or compromises Stability; serial
-  trade-off documented; benchmarking before/after
+  trade-off documented; compiler optimization flags applied/disabled
+  with explicit notation; benchmarking before/after
 
 - [ ] **§3.3** Hardened security; PQC readiness addressed
 
