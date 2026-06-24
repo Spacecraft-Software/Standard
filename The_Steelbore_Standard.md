@@ -23,6 +23,16 @@ concerns.
 
 ## Changelog
 
+- **v1.30 (2026-06-24):** **§3.2** reframed — modern hardware
+  universally provides multi-core/multi-thread capability; harnessing
+  that concurrency is the primary performance lever. Concurrency is an
+  **architecture-level concern**, considered from the ground up
+  throughout design (not bolted on at implementation).
+  Adoption/abandonment conditions explicit: embrace concurrency where it
+  advances performance; abandon it where it degrades performance
+  (overhead, contention, serial workloads) or compromises Priority 1
+  (Stability). Compliance-checklist bullet revised.
+
 - **v1.29 (2026-06-23):** Switch source of truth from GFM Markdown to
   Texinfo: `The_Steelbore_Standard.texi` is now the canonical source;
   `The_Steelbore_Standard.md` and `The_Steelbore_Standard.html` are
@@ -432,16 +442,20 @@ means of achieving it — but it is not the whole of Priority 1.**
 
 ## §3.2 — Priority 2: Performance
 
-Performance is the foremost priority after stability. The default means
-of achieving it is **multi-core, multi-thread concurrency** —
-parallelism is the expected baseline, not an afterthought — *unless*
-concurrency would materially degrade performance (synchronization
-overhead, lock contention, or inherently serial / small workloads
-outweighing the gains), in which case a simpler or serial approach must
-be chosen and the trade-off documented.
+Performance is the foremost priority after stability. Modern hardware
+universally provides **multi-core, multi-thread** capability; harnessing
+that concurrency is the primary means of achieving performance.
+Concurrency is not an afterthought — it must be **considered from the
+ground up**, throughout architecture design: data ownership, thread
+boundaries, synchronization points, and parallelism opportunities must
+be identified during design, not discovered during optimization.
 
-- Concurrency must be **designed-in from the start**, never bolted on
-  retroactively.
+Concurrency is adopted where it genuinely advances performance. It is
+**abandoned** where it degrades performance (synchronization overhead,
+lock contention, or inherently serial / small workloads) or where it
+would compromise Priority 1 (Stability). When a serial or simpler
+approach outperforms or is safer, it must be chosen and the trade-off
+documented.
 
 - Release builds should use CPU-optimized flags — `-march=native`, LTO,
   PGO — **where the toolchain and target support them reliably.** Any
@@ -1245,9 +1259,10 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
 - [ ] **§3.1** Stability: memory safety (Rust, or ASLR+CFI documented);
   robust error handling, fault tolerance, and test-verified
 
-- [ ] **§3.2** Performance: multi-core/multi-thread concurrency by
-  default (or serial trade-off documented); concurrency designed-in;
-  benchmarking before/after
+- [ ] **§3.2** Performance: concurrency considered throughout
+  architecture design; adopted where it advances performance, abandoned
+  where it degrades performance or compromises Stability; serial
+  trade-off documented; benchmarking before/after
 
 - [ ] **§3.3** Hardened security; PQC readiness addressed
 

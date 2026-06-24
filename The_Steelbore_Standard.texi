@@ -5,11 +5,11 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 1.29
+@settitle The Steelbore Standard 1.30
 @c %**end of header
 
-@set VERSION 1.29
-@set UPDATED 2026-06-23
+@set VERSION 1.30
+@set UPDATED 2026-06-24
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
 @copying
@@ -105,6 +105,16 @@ are separate concerns.
 @node Changelog
 @section Changelog
 @itemize
+@item
+@strong{v1.30 (2026-06-24):} @strong{§3.2} reframed --- modern hardware
+universally provides multi-core/multi-thread capability; harnessing that
+concurrency is the primary performance lever. Concurrency is an
+@strong{architecture-level concern}, considered from the ground up
+throughout design (not bolted on at implementation).
+Adoption/abandonment conditions explicit: embrace concurrency where it
+advances performance; abandon it where it degrades performance (overhead,
+contention, serial workloads) or compromises Priority 1 (Stability).
+Compliance-checklist bullet revised.
 @item
 @strong{v1.29 (2026-06-23):} Switch source of truth from GFM Markdown to
 Texinfo: @file{The_Steelbore_Standard.texi} is now the canonical source;
@@ -640,18 +650,23 @@ not asserted by inspection alone.
 
 @node Priority 2
 @section §3.2 — Priority 2: Performance
-Performance is the foremost priority after stability. The default means
-of achieving it is @strong{multi-core, multi-thread concurrency} ---
-parallelism is the expected baseline, not an afterthought ---
-@emph{unless} concurrency would materially degrade performance
-(synchronization overhead, lock contention, or inherently serial / small
-workloads outweighing the gains), in which case a simpler or serial
-approach must be chosen and the trade-off documented.
+Performance is the foremost priority after stability. Modern hardware
+universally provides @strong{multi-core, multi-thread} capability;
+harnessing that concurrency is the primary means of achieving
+performance. Concurrency is not an afterthought --- it must be
+@strong{considered from the ground up}, throughout architecture design:
+data ownership, thread boundaries, synchronization points, and
+parallelism opportunities must be identified during design, not
+discovered during optimization.
+
+Concurrency is adopted where it genuinely advances performance. It is
+@strong{abandoned} where it degrades performance (synchronization
+overhead, lock contention, or inherently serial / small workloads) or
+where it would compromise Priority 1 (Stability). When a serial or
+simpler approach outperforms or is safer, it must be chosen and the
+trade-off documented.
 
 @itemize
-@item
-Concurrency must be @strong{designed-in from the start}, never bolted on
-retroactively.
 @item
 Release builds should use CPU-optimized flags --- @code{-march=native},
 LTO, PGO --- @strong{where the toolchain and target support them
@@ -2100,9 +2115,10 @@ explicitly renamed
 ☐ @strong{§3.1} Stability: memory safety (Rust, or ASLR+CFI documented);
 robust error handling, fault tolerance, and test-verified
 @item
-☐ @strong{§3.2} Performance: multi-core/multi-thread concurrency by
-default (or serial trade-off documented); concurrency designed-in;
-benchmarking before/after
+☐ @strong{§3.2} Performance: concurrency considered throughout
+architecture design; adopted where it advances performance, abandoned
+where it degrades performance or compromises Stability; serial
+trade-off documented; benchmarking before/after
 @item
 ☐ @strong{§3.3} Hardened security; PQC readiness addressed
 @item
