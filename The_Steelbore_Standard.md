@@ -23,6 +23,11 @@ concerns.
 
 ## Changelog
 
+- **v1.32 (2026-07-15):** **§17 added** — Development Progress Tracking
+  & Reporting codified, specifying milestones, MVP, and total PRD
+  completion tracking using a 20-character Unicode progress bar.
+  Compliance Checklist updated.
+
 - **v1.31 (2026-06-24):** **§3.2** compiler optimization flag
   documentation rule extended — previously only *disabled* flags
   required documentation; now **both applied and disabled** flags must
@@ -1259,6 +1264,45 @@ shaped the Spacecraft Software artifact.
 
 ————————————————————————
 
+# §17 — Development Progress Tracking & Reporting
+
+When implementing features or writing code based on a Product
+Requirements Document (PRD) or project plan, coding assistants and
+developers must continuously track and report progress. This reporting
+ensures transparency, early detection of drift, and alignment on the
+implementation status of key milestones.
+
+## §17.1 — Progress Reporting Format
+
+Every progress report must include the percentage of completion for
+individual milestones, the overall progress of the Minimum Viable
+Product (MVP), and the total progress of the PRD.
+
+**Format template:**
+
+    [Progress: ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱] 70%
+    Milestones: M0: 100% | M1: 100% | M2: 70% | M3: 0% | M4: 0%
+    Product Status: MVP: 90% | PRD: 70%
+
+## §17.2 — Progress Bar Style
+
+The progress bar must use high-visibility Unicode block characters
+(e.g., `▰` for filled and `▱` for empty) to form a clean, static,
+20-character visual representation of total PRD completion. Do not use
+legacy ASCII characters like `#` or `-` for the progress bar.
+
+## §17.3 — Reporting Cadence
+
+Progress must be reported:
+
+- At the start of a coding task (initial estimate/baseline)
+
+- At the completion of each logical component or milestone task
+
+- When summarizing the work done at the end of a turn/message
+
+————————————————————————
+
 # §16 — Compliance Checklist (Audit Gate)
 
 Before finalising **any** Spacecraft Software artifact, mentally verify:
@@ -1336,6 +1380,10 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
   project/skill root when triggers apply; deeper
   `references/ATTRIBUTION.md` present where reference content is adapted
   from external sources
+
+- [ ] **§17** Development progress tracked and reported continuously
+  with milestone percentages, MVP, total PRD completion, and a Unicode
+  progress bar
 
 - [ ] **§6.3** All commits to Spacecraft Software Git remotes
   cryptographically signed with the

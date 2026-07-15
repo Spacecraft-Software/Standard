@@ -5,11 +5,11 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 1.31
+@settitle The Steelbore Standard 1.32
 @c %**end of header
 
-@set VERSION 1.31
-@set UPDATED 2026-06-24
+@set VERSION 1.32
+@set UPDATED 2026-07-15
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
 @copying
@@ -69,6 +69,7 @@ Maintained by Mohamed Hammad
 * UI/UX Design System::         §13 — Material Design & accessibility.
 * Date Time Units::             §14 — ISO 8601, UTC Z, metric units.
 * Attribution::                 §15 — Maintainer, project pages, credits.
+* Development Progress Tracking:: §17 — Development progress tracking and reporting.
 * Compliance Checklist::        §16 — Audit gate checklist.
 * Skill Cross-References::      Skill cross-reference table.
 * Concept Index::               Alphabetical concept index.
@@ -105,6 +106,11 @@ are separate concerns.
 @node Changelog
 @section Changelog
 @itemize
+@item
+@strong{v1.32 (2026-07-15):} @strong{§17 added} --- Development Progress
+Tracking & Reporting codified, specifying milestones, MVP, and total PRD completion
+tracking using a 20-character Unicode progress bar. Compliance Checklist
+updated.
 @item
 @strong{v1.31 (2026-06-24):} @strong{§3.2} compiler optimization flag
 documentation rule extended --- previously only @emph{disabled} flags
@@ -2112,6 +2118,45 @@ the upstream work shaped the Spacecraft Software artifact.
 ------------------------------------------------------------------------
 @end ifnottex
 
+@node Development Progress Tracking
+@chapter §17 — Development Progress Tracking & Reporting
+
+When implementing features or writing code based on a Product Requirements Document (PRD) or project plan, coding assistants and developers must continuously track and report progress. This reporting ensures transparency, early detection of drift, and alignment on the implementation status of key milestones.
+
+@section §17.1 — Progress Reporting Format
+
+Every progress report must include the percentage of completion for individual milestones, the overall progress of the Minimum Viable Product (MVP), and the total progress of the PRD.
+
+@strong{Format template:}
+@example
+[Progress: ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱] 70%
+Milestones: M0: 100% | M1: 100% | M2: 70% | M3: 0% | M4: 0%
+Product Status: MVP: 90% | PRD: 70%
+@end example
+
+@section §17.2 — Progress Bar Style
+
+The progress bar must use high-visibility Unicode block characters (e.g., @code{▰} for filled and @code{▱} for empty) to form a clean, static, 20-character visual representation of total PRD completion. Do not use legacy ASCII characters like @code{#} or @code{-} for the progress bar.
+
+@section §17.3 — Reporting Cadence
+
+Progress must be reported:
+@itemize
+@item
+At the start of a coding task (initial estimate/baseline)
+@item
+At the completion of each logical component or milestone task
+@item
+When summarizing the work done at the end of a turn/message
+@end itemize
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
 @node Compliance Checklist
 @chapter §16 — Compliance Checklist (Audit Gate)
 Before finalising @strong{any} Spacecraft Software artifact, mentally
@@ -2193,6 +2238,10 @@ for inherently local-time-bound data; ISO 8601 durations; metric units
 project/skill root when triggers apply; deeper
 @code{references/ATTRIBUTION.md} present where reference content is
 adapted from external sources
+@item
+☐ @strong{§17} Development progress tracked and reported continuously
+with milestone percentages, MVP, total PRD completion, and a Unicode
+progress bar
 @item
 ☐ @strong{§6.3} All commits to Spacecraft Software Git remotes
 cryptographically signed with the
