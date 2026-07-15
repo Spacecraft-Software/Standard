@@ -206,7 +206,7 @@ three projects present in @code{PROJECTS.md} but missing from the table
 (@code{Vault.SpacecraftSoftware.org}). @strong{§3.1 and Skill
 Cross-References:} corrected skill reference from @code{rust-guidelines}
 to @code{microsoft-rust-guidelines} to match the actual skill ID in the
-upstream @code{spacecraft-standard} skill.
+upstream @code{spacecraft-standard-constitution} skill.
 @item
 @strong{v1.20 (2026-06-17):} @strong{§5.5 added:} Package Distribution
 Requirements --- every released package must ship
@@ -238,7 +238,7 @@ to @code{CC-BY-SA-4.0} (@code{CC-BY-4.0} for max-reuse cases);
 @strong{third-party-derived} artifacts preserve their upstream license
 per §4.2. (2) @strong{Skill-license correction:} clarified that skills
 are software-class --- the published Standard document is
-@code{CC-BY-SA-4.0} but the @code{spacecraft-standard} skill encoding is
+@code{CC-BY-SA-4.0} but the @code{spacecraft-standard-constitution} skill encoding is
 @code{GPL-3.0-or-later} (the v1.17 skill metadata is corrected back to
 GPL accordingly). (3) @strong{§4.1 migration policy (replaces v1.17's
 "no forced re-license"):} existing projects are to be reviewed and
@@ -590,7 +590,7 @@ commit.
 @node Skill IDs
 @section §2.2 — Skill IDs are functional, not codenamed
 Skill directory names and @code{SKILL.md} @code{name} fields are
-@strong{functional identifiers} (e.g., @code{spacecraft-standard},
+@strong{functional identifiers} (e.g., @code{spacecraft-standard-constitution},
 @code{spacecraft-document-format}) and are not subject to the §2
 codename convention. §2 reserves codenames for
 projects/modules/utilities/releases, not for skill identifiers.
@@ -811,7 +811,7 @@ Skills are @strong{software-class} → @code{GPL-3.0-or-later} (no skill
 is network-facing, so AGPL does not apply). Note the deliberate split
 for the Standard itself: the @strong{published Standard document} is
 @code{CC-BY-SA-4.0} (it is a document), while its
-@code{spacecraft-standard} @strong{skill} encoding is
+@code{spacecraft-standard-constitution} @strong{skill} encoding is
 @code{GPL-3.0-or-later} (it is a skill).
 
 @node Upstream License
@@ -2278,13 +2278,13 @@ Generating DOCX / ODT / PDF on demand
  @tab @code{spacecraft-document-format}
 @item
 Authoring or building a Texinfo manual
- @tab @code{spacecraft-texinfo}
+ @tab @code{spacecraft-texinfo-document}
 @item
 Creating IDE / terminal themes
  @tab @code{spacecraft-theme-factory}
 @item
 All other Spacecraft Software work
- @tab @code{spacecraft-standard}
+ @tab @code{spacecraft-standard-constitution}
 @end multitable
 
 @node Concept Index

@@ -119,7 +119,7 @@ concerns.
   (`Vault.SpacecraftSoftware.org`). **§3.1 and Skill Cross-References:**
   corrected skill reference from `rust-guidelines` to
   `microsoft-rust-guidelines` to match the actual skill ID in the
-  upstream `spacecraft-standard` skill.
+  upstream `spacecraft-standard-constitution` skill.
 
 - **v1.20 (2026-06-17):** **§5.5 added:** Package Distribution
   Requirements — every released package must ship `packaging/guix.scm`
@@ -149,14 +149,14 @@ concerns.
   **third-party-derived** artifacts preserve their upstream license per
   §4.2. (2) **Skill-license correction:** clarified that skills are
   software-class — the published Standard document is `CC-BY-SA-4.0` but
-  the `spacecraft-standard` skill encoding is `GPL-3.0-or-later` (the
-  v1.17 skill metadata is corrected back to GPL accordingly). (3) **§4.1
-  migration policy (replaces v1.17’s "no forced re-license"):** existing
-  projects are to be reviewed and relicensed to the best-suited
-  GPL/AGPL, per project, on signed commits. The Standard and Construct
-  repos are now REUSE-compliant (`reuse lint`-clean) with `LICENSES/`
-  directories and `REUSE.toml`. (4) **§2:** added *Equilibrium* and
-  *Dune* to the endorsed sci-fi naming sources.
+  the `spacecraft-standard-constitution` skill encoding is
+  `GPL-3.0-or-later` (the v1.17 skill metadata is corrected back to GPL
+  accordingly). (3) **§4.1 migration policy (replaces v1.17’s "no forced
+  re-license"):** existing projects are to be reviewed and relicensed to
+  the best-suited GPL/AGPL, per project, on signed commits. The Standard
+  and Construct repos are now REUSE-compliant (`reuse lint`-clean) with
+  `LICENSES/` directories and `REUSE.toml`. (4) **§2:** added
+  *Equilibrium* and *Dune* to the endorsed sci-fi naming sources.
 
 - **v1.17 (2026-06-08):** Licensing & build overhaul. (1) **Standard
   relicensed** from `GPL-3.0-or-later` to **`CC-BY-SA-4.0`**, effective
@@ -402,7 +402,7 @@ commit.
 ## §2.2 — Skill IDs are functional, not codenamed
 
 Skill directory names and `SKILL.md` `name` fields are **functional
-identifiers** (e.g., `spacecraft-standard`,
+identifiers** (e.g., `spacecraft-standard-constitution`,
 `spacecraft-document-format`) and are not subject to the §2 codename
 convention. §2 reserves codenames for
 projects/modules/utilities/releases, not for skill identifiers.
@@ -554,8 +554,9 @@ class:
 Skills are **software-class** → `GPL-3.0-or-later` (no skill is
 network-facing, so AGPL does not apply). Note the deliberate split for
 the Standard itself: the **published Standard document** is
-`CC-BY-SA-4.0` (it is a document), while its `spacecraft-standard`
-**skill** encoding is `GPL-3.0-or-later` (it is a skill).
+`CC-BY-SA-4.0` (it is a document), while its
+`spacecraft-standard-constitution` **skill** encoding is
+`GPL-3.0-or-later` (it is a skill).
 
 ## §4.2 — Upstream License Compliance (preserve what you build on)
 
@@ -1404,8 +1405,8 @@ skipping it.
 | Writing any Rust code | `microsoft-rust-guidelines` |
 | Writing or reviewing shell scripts | `spacecraft-cli-shell` + `spacecraft-cli-preference` |
 | Generating DOCX / ODT / PDF on demand | `spacecraft-document-format` |
-| Authoring or building a Texinfo manual | `spacecraft-texinfo` |
+| Authoring or building a Texinfo manual | `spacecraft-texinfo-document` |
 | Creating IDE / terminal themes | `spacecraft-theme-factory` |
-| All other Spacecraft Software work | `spacecraft-standard` |
+| All other Spacecraft Software work | `spacecraft-standard-constitution` |
 
 # Concept Index
