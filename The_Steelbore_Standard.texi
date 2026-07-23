@@ -5,11 +5,11 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 1.32
+@settitle The Steelbore Standard 1.33
 @c %**end of header
 
-@set VERSION 1.32
-@set UPDATED 2026-07-15
+@set VERSION 1.33
+@set UPDATED 2026-07-23
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
 @copying
@@ -66,10 +66,11 @@ Maintained by Mohamed Hammad
 * Key Bindings::                §10 — CUA + Vim key binding requirements.
 * Color Palette::               §11 — WCAG-compliant color palette.
 * Typography::                  §12 — FOSS-licensed font requirements.
-* UI/UX Design System::         §13 — Material Design & accessibility.
+* UI/UX Design System::         §13 — Material Design & visual design system.
 * Date Time Units::             §14 — ISO 8601, UTC Z, metric units.
 * Attribution::                 §15 — Maintainer, project pages, credits.
 * Development Progress Tracking:: §17 — Development progress tracking and reporting.
+* Accessibility::               §18 — Accessible mode for CLI, TUI & GUI.
 * Compliance Checklist::        §16 — Audit gate checklist.
 * Skill Cross-References::      Skill cross-reference table.
 * Concept Index::               Alphabetical concept index.
@@ -106,6 +107,21 @@ are separate concerns.
 @node Changelog
 @section Changelog
 @itemize
+@item
+@strong{v1.33 (2026-07-23):} @strong{§18 added} --- Accessibility codified
+as a first-class, auditable chapter covering CLI, TUI, and GUI. Accessible
+mode is an @emph{opt-in layer}: mandatory for developers to implement, off
+by default for users, activated by @code{--accessible} /
+@code{SPACECRAFT_A11Y} / config. The @code{Steelbore} theme is unchanged and
+remains the sole default; two additive sibling variants
+(@code{steelbore-high-contrast}, @code{steelbore-mono}) join the §11.1
+registry. @strong{§10} extended with keybinding remappability and reserved
+assistive-technology chords. @strong{§11} clarified: palette contrast is
+verified against Void Navy only --- text on a palette-colored fill requires
+its own pair verification. @strong{§13} accessibility target raised from
+@strong{WCAG 2.1 AA to WCAG 2.2 Level AA}, with @strong{EN 301 549 clause 11
+(non-web software)} adopted as the normative anchor for CLI/TUI.
+Compliance Checklist updated.
 @item
 @strong{v1.32 (2026-07-15):} @strong{§17 added} --- Development Progress
 Tracking & Reporting codified, specifying milestones, MVP, and total PRD completion
@@ -1397,6 +1413,36 @@ contexts
 feature. Minimum: hjkl navigation where full Vim layer is impractical
 @end multitable
 
+@strong{Remappability (mandatory).} Every binding must be user-remappable
+through the project's configuration layer --- a fixed, non-configurable
+keymap is non-compliant. Users of alternative input devices, non-QWERTY
+layouts, and assistive technology cannot be assumed to reach any particular
+chord.
+
+@strong{Reserved assistive-technology chords.} The following modifiers are
+claimed by screen readers and @strong{must not} be captured by a Spacecraft
+Software application; capturing them takes keys away from the users who
+depend on them most:
+
+@multitable {@kbd{Insert} / @kbd{KP_Insert}} {Orca (GNOME/Linux) --- the screen reader's own modifier}
+@headitem
+Chord
+ @tab Claimed by
+@item
+@kbd{Insert} / @kbd{CapsLock}
+ @tab NVDA (Windows) --- the NVDA modifier key
+@item
+@kbd{Insert} / @kbd{KP_Insert}
+ @tab Orca (GNOME/Linux) --- the screen reader's own modifier
+@item
+@kbd{Ctrl}+@kbd{Option}
+ @tab VoiceOver (macOS) --- the "VO" modifier
+@end multitable
+
+Every action reachable by pointer must also be reachable by keyboard; focus
+order must be linear and the focused element must be visibly indicated. See
+§18 for the wider accessibility requirements this supports.
+
 @iftex
 @bigskip@hrule@bigskip
 @end iftex
@@ -1450,6 +1496,26 @@ Liquid Coolant
 @strong{@code{#000027} (Void Navy) is the mandatory background for ALL
 Spacecraft Software surfaces.} No alternative background is permitted.
 This is non-negotiable.
+
+@strong{Scope of the contrast guarantee.} Every foreground token above is
+verified against the Void Navy background and passes WCAG Level AA
+(Molten Amber 7.64:1, Steel Blue 4.77:1, Radium Green 14.87:1, Red Oxide
+6.74:1, Liquid Coolant 14.74:1). That guarantee covers
+@strong{foreground-on-background pairings only}. Palette tokens paired with
+@emph{each other} are mostly far below the 3:1 floor --- Molten Amber on
+Red Oxide is 1.13:1 and Radium Green on Liquid Coolant is 1.01:1, which is
+indistinguishable. Therefore:
+
+@itemize
+@item
+Rendering palette-colored @strong{text on a palette-colored fill} (a chip,
+badge, filled button, or selected row) is @strong{forbidden} unless that
+specific pair has been measured at ≥4.5:1 for text, or ≥3:1 for
+non-text UI boundaries.
+@item
+Color may never be the @strong{sole} carrier of meaning. Every colored
+status must also carry a text tag or symbol --- see §18.2.
+@end itemize
 
 For document/file generation → load the
 @code{spacecraft-document-format} skill. For IDE/terminal themes → load
@@ -1516,6 +1582,83 @@ Existing apps are encouraged but not required to migrate; new apps are
 required.
 @end itemize
 
+@subsection §11.1.1 — Accessibility Variants (additive siblings)
+
+@code{steelbore} is and remains the @strong{sole default theme}. The
+variants below are @strong{additive siblings} inside the same theme
+registry, selected only by explicit user action or by the §18.1 accessible-mode
+toggle. They never alter, replace, or take precedence over @code{steelbore},
+and the §11 canonical palette table above is unchanged by their existence.
+
+@multitable {@code{steelbore-high-contrast}} {§18.1 accessible mode, or explicit selection} {Every role token lifted to ≥7:1 (WCAG AAA) on Void Navy}
+@headitem
+Variant
+ @tab Selected by
+ @tab Behavior
+@item
+@code{steelbore}
+ @tab @strong{Default} --- always, unless overridden
+ @tab Canonical §11 palette, unchanged
+@item
+@code{steelbore-high-contrast}
+ @tab §18.1 accessible mode, or explicit selection
+ @tab Every role token lifted to ≥7:1 (WCAG AAA) on Void Navy
+@item
+@code{steelbore-mono}
+ @tab Explicit selection, or @code{NO_COLOR}
+ @tab 4-bit ANSI only --- defers entirely to the user's terminal palette
+@end multitable
+
+@code{steelbore-high-contrast} lifts @strong{only the two tokens that need
+it}. Tokens already at or above 7:1 are carried over untouched, keeping the
+variant as close to the brand as accessibility permits:
+
+@multitable {@code{foreground}} {Molten Amber} {@code{#7FAEDC}} {@code{#D98E32}} {14.87:1}
+@headitem
+Theme token
+ @tab Base token
+ @tab Variant hex
+ @tab Contrast
+@item
+@code{background}
+ @tab Void Navy
+ @tab @code{#000027}
+ @tab (canvas)
+@item
+@code{foreground}
+ @tab Molten Amber
+ @tab @code{#D98E32}
+ @tab 7.64:1
+@item
+@code{accent}
+ @tab Steel Blue
+ @tab @code{#7FAEDC}
+ @tab 8.73:1
+@item
+@code{success}
+ @tab Radium Green
+ @tab @code{#50FA7B}
+ @tab 14.87:1
+@item
+@code{error}
+ @tab Red Oxide
+ @tab @code{#FF8080}
+ @tab 8.41:1
+@item
+@code{info}
+ @tab Liquid Coolant
+ @tab @code{#8BE9FD}
+ @tab 14.74:1
+@end multitable
+
+Only @code{accent} (Steel Blue @code{#4B7EB0} → @code{#7FAEDC}) and
+@code{error} (Red Oxide @code{#FF5C5C} → @code{#FF8080}) shift; the other
+four are the §11 values verbatim. @strong{Void Navy remains the background
+in every variant} --- high contrast is achieved by lifting foregrounds, never
+by abandoning the canvas. These two hexes are accessibility-derived lifts of
+existing role tokens, not new brand colors, and may not be used outside the
+variant.
+
 @iftex
 @bigskip@hrule@bigskip
 @end iftex
@@ -1566,12 +1709,13 @@ or another FOSS-licensed repository.
 graphical applications. Theme Material components with the §11 color
 palette.
 @item
-@strong{WCAG 2.1 Level AA} contrast is the minimum for all color
-pairings. Any new color additions must be WCAG-verified before adoption.
+@strong{WCAG 2.2 Level AA} contrast is the minimum for all color
+pairings. Any new color additions must be WCAG-verified before adoption,
+and the verification must state @emph{which pairing} was measured (§11).
 @item
-@strong{Accessibility:} screen readers, keyboard-only navigation, and
-system accessibility preferences (reduced motion, high contrast) must
-all be respected.
+@strong{Accessibility} is governed by @strong{§18}, which applies to CLI,
+TUI, and GUI alike. §13 is the graphical design system; §18 is the
+accessibility contract. Where the two overlap, §18 governs.
 @end itemize
 
 @iftex
@@ -2157,6 +2301,257 @@ When summarizing the work done at the end of a turn/message
 ------------------------------------------------------------------------
 @end ifnottex
 
+@node Accessibility
+@chapter §18 — Accessibility (Opt-In Mode Layer)
+
+Spacecraft Software applications must be usable by people who navigate by
+screen reader, by keyboard alone, or with low vision. This chapter is the
+accessibility contract for @strong{all} application classes --- CLI, TUI, and
+GUI --- and supersedes §13's design-system framing wherever the two overlap.
+
+@strong{Two-sided rule.} Accessibility support is @strong{mandatory for the
+developer to implement} and @strong{optional for the user to activate}:
+
+@itemize
+@item
+@strong{Every} Spacecraft Software application MUST ship a working accessible
+mode. This applies to new and existing projects alike --- there is no
+new-projects-only phase-in.
+@item
+Accessible mode is @strong{off by default}. The default experience is the
+@code{Steelbore} theme and standard rendering, entirely unchanged. Enabling
+accessibility never becomes a precondition for using the software normally,
+and shipping it never degrades the default presentation.
+@end itemize
+
+@strong{Normative targets.} @strong{WCAG 2.2 Level AA} where the success
+criteria apply, and @strong{EN 301 549 clause 11 (non-web software)} as the
+anchor for CLI and TUI applications, which WCAG addresses only indirectly.
+Clause 11 is cited because it is the only normative text that speaks to
+terminal software; the European Accessibility Act has been enforceable since
+2025-06-28.
+
+@menu
+* Accessible Mode Activation::
+* CLI and TUI Accessibility::
+* GUI Accessibility::
+* Accessibility Verification::
+@end menu
+
+@node Accessible Mode Activation
+@section §18.1 — Activation
+
+Accessible mode resolves once at startup from four sources. Precedence,
+highest first:
+
+@multitable {@strong{4. Auto-detect hints}} {@code{SPACECRAFT_A11Y=1} / @code{SPACECRAFT_A11Y=0} --- the umbrella-wide environment variable}
+@headitem
+Source
+ @tab Form
+@item
+@strong{1. Command-line flag}
+ @tab @code{--accessible} / @code{--no-accessible}
+@item
+@strong{2. Environment}
+ @tab @code{SPACECRAFT_A11Y=1} / @code{SPACECRAFT_A11Y=0} --- the
+umbrella-wide environment variable
+@item
+@strong{3. Configuration}
+ @tab @code{[accessibility] enabled = true} in the project's config file
+@item
+@strong{4. Auto-detect hints}
+ @tab @code{TERM=dumb}, @code{NO_COLOR}, or @code{GTK_MODULES} containing
+@code{gail:atk}
+@end multitable
+
+@itemize
+@item
+A hint (source 4) @strong{may} enable accessible mode, but must never be
+inferred from an ambiguous signal. An explicit @code{--no-accessible} or
+@code{SPACECRAFT_A11Y=0} always wins, at every level.
+@item
+Unset at every source ⇒ @strong{standard @code{Steelbore} rendering,
+unchanged}. Silence is never read as consent to change the default
+presentation.
+@item
+The resolved state and the source that decided it must be reported under
+@code{--verbose}, so a user can tell why the mode is on or off.
+@item
+The toggle is a @strong{single switch} governing every behavior in §18.2 and
+§18.3 together. Per-feature accessibility flags fragment the contract and are
+not a substitute.
+@end itemize
+
+@node CLI and TUI Accessibility
+@section §18.2 — CLI & TUI Requirements
+
+@strong{The constraint that shapes everything here:} a terminal has no
+accessibility tree. There is no ARIA, there are no roles, and there are no
+live regions. A screen reader reads the emulator's character grid, so a
+redraw-based interface produces re-reads and speech loops rather than useful
+speech. Accessibility cannot be delegated to the TUI framework --- no terminal
+UI library provides it --- so the application must supply a linear fallback
+itself.
+
+@subsection §18.2.1 — Rules that apply in every mode
+
+These are not gated behind the toggle. They are correctness requirements for
+all output, always:
+
+@itemize
+@item
+@strong{Color is never the sole carrier of meaning.} Every colored status
+carries a text tag: @code{[OK]}, @code{[ERROR]}, @code{[WARN]},
+@code{[INFO]}. A red line that says only "failed to connect" is
+non-compliant; @code{[ERROR] failed to connect} is compliant.
+@item
+@strong{No text on colored fills} unless that specific pair is verified per
+§11 --- palette tokens are verified against Void Navy, not against each
+other.
+@item
+@strong{Diagnostics go to @code{stderr}}, results to @code{stdout}, and the
+two are never interleaved into one visual block.
+@item
+@strong{@code{NO_COLOR}, @code{FORCE_COLOR}, @code{CLICOLOR}, and
+@code{TERM=dumb}} are honored with the precedence already defined by the
+@code{spacecraft-cli-standard} skill.
+@end itemize
+
+@subsection §18.2.2 — Rules that apply in accessible mode
+
+@multitable {@strong{No decorative art}} {Spinners, marquees, blinking text, and progress animations are replaced by a single static line carrying monotonic progress}
+@headitem
+Requirement
+ @tab Rule
+@item
+@strong{No animation}
+ @tab Spinners, marquees, blinking text, and progress animations are
+replaced by a single static line carrying monotonic progress
+(@code{Working@dots{} 40%}), rewritten at most once per second
+@item
+@strong{No decorative art}
+ @tab ASCII art, banners, box-drawing decoration, and figlet headers are
+suppressed. Where the art is @emph{informational} (a diagram, a chart),
+emit an equivalent text description instead --- do not simply drop it
+@item
+@strong{Linear output}
+ @tab Output is append-only and reads correctly top-to-bottom. Blank lines
+separate logical sections so a screen reader can navigate by paragraph
+@item
+@strong{Tabular fallback}
+ @tab Any table offers a non-columnar rendering --- one
+@code{field: value} pair per line --- since column alignment conveys
+nothing through speech
+@item
+@strong{Prompt legibility}
+ @tab Interactive prompts state the question, the available choices, and
+the default in plain text before awaiting input. Prompts that rely on
+cursor positioning or redraw to convey state are non-compliant
+@end multitable
+
+@subsection §18.2.3 — TUI linear mode
+
+Any full-screen TUI MUST additionally provide a @strong{non-redraw,
+append-only stream mode}, reachable through the same §18.1 toggle. In linear
+mode the application writes new state as new lines rather than repainting
+regions, and does not take over the alternate screen buffer.
+
+Where a TUI would otherwise be the only way to perform an operation, an
+equivalent @strong{non-interactive CLI path} must exist --- flags plus
+@code{--json} output --- so the operation remains scriptable and reachable
+without navigating a visual grid. Per §8, this path must be documented in the
+project's Texinfo manual alongside the interactive one.
+
+@node GUI Accessibility
+@section §18.3 — GUI Requirements
+
+Graphical applications expose an accessibility tree to the platform's
+assistive-technology API. Which bridge to use depends on how the UI is drawn:
+
+@multitable {@strong{Rust, custom-drawn UI}} {@strong{AccessKit} (Apache-2.0) --- one API over UI Automation (Windows), NSAccessibility (macOS), and AT-SPI (Linux)}
+@headitem
+UI stack
+ @tab Required bridge
+@item
+@strong{Rust, custom-drawn UI}
+ @tab @strong{AccessKit} (Apache-2.0) --- one API over UI Automation
+(Windows), NSAccessibility (macOS), and AT-SPI (Linux). Already integrated
+in egui, Slint, Bevy, Freya, Xilem, and winit
+@item
+@strong{GTK 4}
+ @tab @code{GtkAccessible} --- WAI-ARIA roles and states surfaced over
+AT-SPI
+@item
+@strong{Flutter}
+ @tab @code{Semantics} widgets and @code{SemanticsRole}
+@item
+@strong{Qt}
+ @tab @code{QAccessible}
+@end multitable
+
+Custom-drawn widgets are the failure case to watch: a canvas-rendered control
+is invisible to assistive technology unless the application publishes its
+role and state explicitly. This is precisely the gap AccessKit exists to
+close, which is why it is required rather than merely suggested for Rust GUI
+work (§3.1 already makes Rust the preferred language).
+
+@strong{Requirements:}
+
+@itemize
+@item
+Every interactive element carries an explicit accessible @strong{name} and
+@strong{role}. Purely decorative elements are explicitly marked decorative
+so they are skipped rather than read as noise.
+@item
+State changes that matter to the user are @strong{announced}, not merely
+repainted.
+@item
+System preferences for @strong{reduced motion} and @strong{high contrast}
+are honored --- these are read from the platform, independently of the §18.1
+toggle, because the user has already expressed the preference system-wide.
+@item
+Keyboard reachability and focus visibility follow §10.
+@end itemize
+
+@node Accessibility Verification
+@section §18.4 — Verification & Remediation
+
+@strong{Verification.} An accessibility claim is not satisfied by inspection.
+Before a release:
+
+@itemize
+@item
+@strong{CLI/TUI:} pipe the accessible-mode output through a speech
+synthesizer (e.g. @code{espeak-ng}) and confirm it is comprehensible when
+heard rather than seen. Confirm the non-interactive path completes the same
+operations as the interactive one.
+@item
+@strong{GUI:} exercise the application with a real screen reader --- Orca on
+Linux, NVDA on Windows, VoiceOver on macOS --- and confirm every interactive
+element announces a name and a role.
+@item
+@strong{Contrast:} measure the actual pairings used, not just
+foreground-on-background, and record the ratios (§11).
+@item
+@strong{Keyboard:} complete every primary task without a pointing device.
+@end itemize
+
+@strong{Remediation for existing projects.} §18 applies to every project
+immediately on adoption of v1.33, which means projects predating it are
+non-compliant until retrofitted. This is stated plainly rather than softened
+into a recommendation. Until a project conforms, it MUST carry a
+@strong{dated remediation entry} in @code{PROJECTS.md} recording its current
+accessibility state and the intended remediation. An absent entry is a
+compliance failure in its own right --- a project may be unfinished, but it
+may not be silently unfinished.
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
 @node Compliance Checklist
 @chapter §16 — Compliance Checklist (Audit Gate)
 Before finalising @strong{any} Spacecraft Software artifact, mentally
@@ -2214,7 +2609,9 @@ manifests (§5.5) --- N/A for scripts and internal tooling
 ☐ @strong{§9} PFA: no tracking, minimal permissions, local storage
 default
 @item
-☐ @strong{§10} CUA + Vim-like key bindings planned/implemented
+☐ @strong{§10} CUA + Vim-like key bindings planned/implemented; bindings
+user-remappable; assistive-technology modifier chords (NVDA/Orca/VoiceOver)
+not captured
 @item
 ☐ @strong{§11} Spacecraft Software color palette used; Void Navy
 background mandatory; new apps expose colors via a named
@@ -2222,7 +2619,8 @@ background mandatory; new apps expose colors via a named
 @item
 ☐ @strong{§12} FOSS-licensed fonts only (Share Tech Mono / Inconsolata)
 @item
-☐ @strong{§13} Material Design UI/UX; WCAG 2.1 AA verified
+☐ @strong{§13} Material Design UI/UX; WCAG 2.2 AA verified, stating which
+pairing was measured
 @item
 ☐ @strong{§14} ISO 8601 dates; 24h time; UTC Z is the default primary
 timestamp (companion local time with UTC offset permitted, never a
@@ -2242,6 +2640,13 @@ adapted from external sources
 ☐ @strong{§17} Development progress tracked and reported continuously
 with milestone percentages, MVP, total PRD completion, and a Unicode
 progress bar
+@item
+☐ @strong{§18} Accessible mode implemented and off by default; §18.1
+toggle honored with correct precedence; status never color-only; no
+animation or decorative art in accessible mode; TUI ships a linear mode and
+a non-interactive CLI path; GUI publishes accessible names and roles
+(AccessKit for Rust); verified with a real screen reader; existing projects
+carry a dated remediation entry in @code{PROJECTS.md} until they conform
 @item
 ☐ @strong{§6.3} All commits to Spacecraft Software Git remotes
 cryptographically signed with the
@@ -2263,7 +2668,7 @@ skipping it.
 
 @node Skill Cross-References
 @unnumbered Skill Cross-References
-@multitable {Authoring or building a Texinfo manual} {@code{spacecraft-cli-shell} + @code{spacecraft-cli-preference}}
+@multitable {Implementing or auditing accessibility (§18)} {@code{spacecraft-cli-shell} + @code{spacecraft-cli-preference}}
 @headitem
 Task
  @tab Load this skill
@@ -2282,6 +2687,9 @@ Authoring or building a Texinfo manual
 @item
 Creating IDE / terminal themes
  @tab @code{spacecraft-theme-factory}
+@item
+Implementing or auditing accessibility (§18)
+ @tab @code{spacecraft-accessibility}
 @item
 All other Spacecraft Software work
  @tab @code{spacecraft-standard-constitution}
