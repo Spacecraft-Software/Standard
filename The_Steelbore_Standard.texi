@@ -9,7 +9,7 @@
 @c %**end of header
 
 @set VERSION 1.33
-@set UPDATED 2026-07-23
+@set UPDATED 2026-07-24
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
 @copying
@@ -108,11 +108,16 @@ are separate concerns.
 @section Changelog
 @itemize
 @item
-@strong{v1.33 (2026-07-23):} @strong{§18 added} --- Accessibility codified
+@strong{v1.33 (2026-07-24):} @strong{§18 added} --- Accessibility codified
 as a first-class, auditable chapter covering CLI, TUI, and GUI. Accessible
 mode is an @emph{opt-in layer}: mandatory for developers to implement, off
 by default for users, activated by @code{--accessible} /
-@code{SPACECRAFT_A11Y} / config. The @code{Steelbore} theme is unchanged and
+@code{SPACECRAFT_A11Y} / config. @strong{§18.5} carves out @strong{games},
+which are exempt from §18 and §10 in full --- accessibility in a game is
+optional, nothing is enforced, and its absence is never a compliance
+failure; §18.5 offers a recommended list and shared vocabulary a game may
+decline. Games are identified by declaration plus the §18.5 registry,
+mirroring the §5.3 general-use carve-out. The @code{Steelbore} theme is unchanged and
 remains the sole default; two additive sibling variants
 (@code{steelbore-high-contrast}, @code{steelbore-mono}) join the §11.1
 registry. @strong{§10} extended with keybinding remappability and reserved
@@ -1399,6 +1404,13 @@ permissions, or networking, verify all three PFA requirements are met.
 @chapter §10 — Key Bindings
 All interactive applications must support @strong{both}:
 
+@strong{Scope.} This chapter does @strong{not} apply to projects registered
+as @strong{games} under §18.5 --- games are exempt from §10 in full,
+including the CUA and Vim rows below. Modal editing and text-editor chords
+are a poor fit for real-time play; a game's control scheme is entirely at
+the maintainer's discretion. §18.5 restates the useful parts as
+recommendations a game may decline.
+
 @multitable {@strong{Vim}} {Modal editing layer (Normal / Insert / Visual mode) as opt-in feature. Minimum: hjkl navigation where full Vim layer is impractical}
 @headitem
 Scheme
@@ -2314,8 +2326,9 @@ developer to implement} and @strong{optional for the user to activate}:
 
 @itemize
 @item
-@strong{Every} Spacecraft Software application MUST ship a working accessible
-mode. This applies to new and existing projects alike --- there is no
+@strong{Every} Spacecraft Software application @strong{other than a project
+registered as a game (§18.5)} MUST ship a working accessible mode. This
+applies to new and existing projects alike --- there is no
 new-projects-only phase-in.
 @item
 Accessible mode is @strong{off by default}. The default experience is the
@@ -2336,6 +2349,7 @@ terminal software; the European Accessibility Act has been enforceable since
 * CLI and TUI Accessibility::
 * GUI Accessibility::
 * Accessibility Verification::
+* Games Carve-Out::
 @end menu
 
 @node Accessible Mode Activation
@@ -2543,7 +2557,93 @@ into a recommendation. Until a project conforms, it MUST carry a
 @strong{dated remediation entry} in @code{PROJECTS.md} recording its current
 accessibility state and the intended remediation. An absent entry is a
 compliance failure in its own right --- a project may be unfinished, but it
-may not be silently unfinished.
+may not be silently unfinished. @strong{Projects registered as games (§18.5)
+are excluded} --- they owe no remediation entry, because they owe no
+conformance.
+
+@node Games Carve-Out
+@section §18.5 — Games Carve-Out
+
+@strong{Projects registered as games are exempt from §18 in full and from
+§10 in full.} Accessibility features in a game are @strong{optional}: none
+is required, nothing is enforced, and their absence is never a compliance
+failure. A game may ship an elaborate accessibility suite, a single option,
+or nothing at all --- entirely at the maintainer's discretion (§5.4).
+
+@strong{Rationale:} §18 is built on CLI, TUI, and GUI assumptions --- a
+character grid, or a widget tree with roles and names. Games satisfy
+neither. They are real-time simulations rendering custom, non-widget
+interfaces where play itself is the purpose, and the accessibility
+techniques that suit them (remappable controls, colorblind-safe signalling,
+subtitles, difficulty options) are a different discipline from the one §18
+codifies. Mandating §18 on a game would enforce the wrong requirements at
+disproportionate cost.
+
+This is the @strong{only} carve-out in §18, and it is narrow: it applies to
+projects registered below, not to any project that merely has a playful or
+game-like interface.
+
+@subsection §18.5.1 — Declaration & Registry
+
+A project is a game for the purposes of this Standard when @strong{both}
+hold --- the same declaration-plus-registry pattern as the §5.3 general-use
+carve-out:
+
+@itemize
+@item
+The declaration appears in the project's @code{README.md}, alongside the
+§5.2 posture section.
+@item
+The project is listed in the registry below.
+@end itemize
+
+@strong{Games registry} (keep in sync with @code{PROJECTS.md} and the §2.1
+registry):
+
+@multitable {(all other projects)} {@strong{Game} --- exempt from §18 and §10}
+@headitem
+Project
+ @tab Class
+@item
+Ironway
+ @tab @strong{Game} --- exempt from §18 and §10
+@item
+(all other projects)
+ @tab Standard --- §18 and §10 apply in full
+@end multitable
+
+@subsection §18.5.2 — Recommended for Games (never required)
+
+The following are @strong{suggestions}, offered because they are
+low-cost and widely expected in games. A game may adopt any, all, or none
+of them; declining is not a compliance failure and needs no justification:
+
+@itemize
+@item
+@strong{Remappable controls} --- already standard practice in games,
+independent of accessibility.
+@item
+@strong{Leave screen-reader chords alone} --- @kbd{Insert},
+@kbd{CapsLock}, @kbd{KP_Insert}, and @kbd{Ctrl}+@kbd{Option} are claimed by
+NVDA, Orca, and VoiceOver. Capturing them collides with a screen reader the
+player may be running.
+@item
+@strong{Colorblind-safe signalling} --- pair hue with shape, icon, or text
+so status does not rest on color alone.
+@item
+@strong{Subtitles and captions} for spoken or plot-critical audio.
+@item
+@strong{Honor the system reduced-motion preference} where the engine
+exposes it.
+@end itemize
+
+@subsection §18.5.3 — Shared Vocabulary
+
+If a game @emph{chooses} to ship an accessibility toggle, it should use the
+§18.1 names (@code{--accessible}, @code{SPACECRAFT_A11Y}) and the §11.1.1
+theme-variant names rather than inventing its own. This constrains only the
+@emph{naming} of features the game already decided to build --- it requires
+no feature to exist, and adds nothing to the exemption above.
 
 @iftex
 @bigskip@hrule@bigskip
@@ -2611,7 +2711,7 @@ default
 @item
 ☐ @strong{§10} CUA + Vim-like key bindings planned/implemented; bindings
 user-remappable; assistive-technology modifier chords (NVDA/Orca/VoiceOver)
-not captured
+not captured --- N/A for projects registered as games (§18.5)
 @item
 ☐ @strong{§11} Spacecraft Software color palette used; Void Navy
 background mandatory; new apps expose colors via a named
@@ -2646,7 +2746,8 @@ toggle honored with correct precedence; status never color-only; no
 animation or decorative art in accessible mode; TUI ships a linear mode and
 a non-interactive CLI path; GUI publishes accessible names and roles
 (AccessKit for Rust); verified with a real screen reader; existing projects
-carry a dated remediation entry in @code{PROJECTS.md} until they conform
+carry a dated remediation entry in @code{PROJECTS.md} until they conform ---
+N/A for projects registered as games (§18.5), which are exempt in full
 @item
 ☐ @strong{§6.3} All commits to Spacecraft Software Git remotes
 cryptographically signed with the

@@ -23,19 +23,25 @@ concerns.
 
 ## Changelog
 
-- **v1.33 (2026-07-23):** **§18 added** — Accessibility codified as a
+- **v1.33 (2026-07-24):** **§18 added** — Accessibility codified as a
   first-class, auditable chapter covering CLI, TUI, and GUI. Accessible
   mode is an *opt-in layer*: mandatory for developers to implement, off
   by default for users, activated by `--accessible` / `SPACECRAFT_A11Y`
-  / config. The `Steelbore` theme is unchanged and remains the sole
-  default; two additive sibling variants (`steelbore-high-contrast`,
-  `steelbore-mono`) join the §11.1 registry. **§10** extended with
-  keybinding remappability and reserved assistive-technology chords.
-  **§11** clarified: palette contrast is verified against Void Navy only
-  — text on a palette-colored fill requires its own pair verification.
-  **§13** accessibility target raised from **WCAG 2.1 AA to WCAG 2.2
-  Level AA**, with **EN 301 549 clause 11 (non-web software)** adopted
-  as the normative anchor for CLI/TUI. Compliance Checklist updated.
+  / config. **§18.5** carves out **games**, which are exempt from §18
+  and §10 in full — accessibility in a game is optional, nothing is
+  enforced, and its absence is never a compliance failure; §18.5 offers
+  a recommended list and shared vocabulary a game may decline. Games are
+  identified by declaration plus the §18.5 registry, mirroring the §5.3
+  general-use carve-out. The `Steelbore` theme is unchanged and remains
+  the sole default; two additive sibling variants
+  (`steelbore-high-contrast`, `steelbore-mono`) join the §11.1 registry.
+  **§10** extended with keybinding remappability and reserved
+  assistive-technology chords. **§11** clarified: palette contrast is
+  verified against Void Navy only — text on a palette-colored fill
+  requires its own pair verification. **§13** accessibility target
+  raised from **WCAG 2.1 AA to WCAG 2.2 Level AA**, with **EN 301 549
+  clause 11 (non-web software)** adopted as the normative anchor for
+  CLI/TUI. Compliance Checklist updated.
 
 - **v1.32 (2026-07-15):** **§17 added** — Development Progress Tracking
   & Reporting codified, specifying milestones, MVP, and total PRD
@@ -889,6 +895,13 @@ permissions, or networking, verify all three PFA requirements are met.
 
 All interactive applications must support **both**:
 
+**Scope.** This chapter does **not** apply to projects registered as
+**games** under §18.5 — games are exempt from §10 in full, including the
+CUA and Vim rows below. Modal editing and text-editor chords are a poor
+fit for real-time play; a game’s control scheme is entirely at the
+maintainer’s discretion. §18.5 restates the useful parts as
+recommendations a game may decline.
+
 | Scheme | Requirement |
 |----|----|
 | **CUA** | Standard bindings (Ctrl+C/X/V/Z/S) must work in all text input contexts |
@@ -1403,9 +1416,10 @@ overlap.
 **Two-sided rule.** Accessibility support is **mandatory for the
 developer to implement** and **optional for the user to activate**:
 
-- **Every** Spacecraft Software application MUST ship a working
-  accessible mode. This applies to new and existing projects alike —
-  there is no new-projects-only phase-in.
+- **Every** Spacecraft Software application **other than a project
+  registered as a game (§18.5)** MUST ship a working accessible mode.
+  This applies to new and existing projects alike — there is no
+  new-projects-only phase-in.
 
 - Accessible mode is **off by default**. The default experience is the
   `Steelbore` theme and standard rendering, entirely unchanged. Enabling
@@ -1561,7 +1575,80 @@ softened into a recommendation. Until a project conforms, it MUST carry
 a **dated remediation entry** in `PROJECTS.md` recording its current
 accessibility state and the intended remediation. An absent entry is a
 compliance failure in its own right — a project may be unfinished, but
-it may not be silently unfinished.
+it may not be silently unfinished. **Projects registered as games
+(§18.5) are excluded** — they owe no remediation entry, because they owe
+no conformance.
+
+## §18.5 — Games Carve-Out
+
+**Projects registered as games are exempt from §18 in full and from §10
+in full.** Accessibility features in a game are **optional**: none is
+required, nothing is enforced, and their absence is never a compliance
+failure. A game may ship an elaborate accessibility suite, a single
+option, or nothing at all — entirely at the maintainer’s discretion
+(§5.4).
+
+**Rationale:** §18 is built on CLI, TUI, and GUI assumptions — a
+character grid, or a widget tree with roles and names. Games satisfy
+neither. They are real-time simulations rendering custom, non-widget
+interfaces where play itself is the purpose, and the accessibility
+techniques that suit them (remappable controls, colorblind-safe
+signalling, subtitles, difficulty options) are a different discipline
+from the one §18 codifies. Mandating §18 on a game would enforce the
+wrong requirements at disproportionate cost.
+
+This is the **only** carve-out in §18, and it is narrow: it applies to
+projects registered below, not to any project that merely has a playful
+or game-like interface.
+
+### §18.5.1 — Declaration & Registry
+
+A project is a game for the purposes of this Standard when **both** hold
+— the same declaration-plus-registry pattern as the §5.3 general-use
+carve-out:
+
+- The declaration appears in the project’s `README.md`, alongside the
+  §5.2 posture section.
+
+- The project is listed in the registry below.
+
+**Games registry** (keep in sync with `PROJECTS.md` and the §2.1
+registry):
+
+| Project              | Class                                |
+|----------------------|--------------------------------------|
+| Ironway              | **Game** — exempt from §18 and §10   |
+| (all other projects) | Standard — §18 and §10 apply in full |
+
+### §18.5.2 — Recommended for Games (never required)
+
+The following are **suggestions**, offered because they are low-cost and
+widely expected in games. A game may adopt any, all, or none of them;
+declining is not a compliance failure and needs no justification:
+
+- **Remappable controls** — already standard practice in games,
+  independent of accessibility.
+
+- **Leave screen-reader chords alone** — `Insert`, `CapsLock`,
+  `KP_Insert`, and `Ctrl`+`Option` are claimed by NVDA, Orca, and
+  VoiceOver. Capturing them collides with a screen reader the player may
+  be running.
+
+- **Colorblind-safe signalling** — pair hue with shape, icon, or text so
+  status does not rest on color alone.
+
+- **Subtitles and captions** for spoken or plot-critical audio.
+
+- **Honor the system reduced-motion preference** where the engine
+  exposes it.
+
+### §18.5.3 — Shared Vocabulary
+
+If a game *chooses* to ship an accessibility toggle, it should use the
+§18.1 names (`--accessible`, `SPACECRAFT_A11Y`) and the §11.1.1
+theme-variant names rather than inventing its own. This constrains only
+the *naming* of features the game already decided to build — it requires
+no feature to exist, and adds nothing to the exemption above.
 
 ————————————————————————
 
@@ -1621,7 +1708,8 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
 
 - [ ] **§10** CUA + Vim-like key bindings planned/implemented; bindings
   user-remappable; assistive-technology modifier chords
-  (NVDA/Orca/VoiceOver) not captured
+  (NVDA/Orca/VoiceOver) not captured — N/A for projects registered as
+  games (§18.5)
 
 - [ ] **§11** Spacecraft Software color palette used; Void Navy
   background mandatory; new apps expose colors via a named `Steelbore`
@@ -1656,7 +1744,8 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
   mode and a non-interactive CLI path; GUI publishes accessible names
   and roles (AccessKit for Rust); verified with a real screen reader;
   existing projects carry a dated remediation entry in `PROJECTS.md`
-  until they conform
+  until they conform — N/A for projects registered as games (§18.5),
+  which are exempt in full
 
 - [ ] **§6.3** All commits to Spacecraft Software Git remotes
   cryptographically signed with the
