@@ -29,7 +29,7 @@ repository](https://github.com/Spacecraft-Software/Standard), newest
 entry first. It is kept out of this document so the standard reads as
 the rules *in force* rather than the record of how they got there.
 
-This document is **version 1.37**, updated 2026-07-26 (§14: UTC, ISO
+This document is **version 1.38**, updated 2026-07-26 (§14: UTC, ISO
 8601). The skill encoding of the standard keeps a parallel history in
 `spacecraft-standard-constitution/references/CHANGELOG.md` in the
 [Construct
@@ -338,24 +338,37 @@ machine-readable license and copyright metadata. Every project MUST be
   `LICENSES/GPL-3.0-or-later.txt`, `LICENSES/AGPL-3.0-or-later.txt`,
   plus any upstream licenses per §4.2).
 
-- **Root `LICENSE` is a symbolic link.** GitHub reads a repository’s
-  license from a root `LICENSE` file; REUSE requires the verbatim texts
-  under `LICENSES/`. Both are satisfied with a single source of truth:
-  the root `LICENSE` MUST be a symbolic link to the project’s primary
-  license text inside `LICENSES/` — never a second, duplicated copy of
-  the text.
+- **Root `LICENSE` holds the text; `LICENSES/` links to it.** GitHub
+  reads a repository’s license from a root `LICENSE` file; REUSE
+  requires the verbatim texts under `LICENSES/`. Both are satisfied from
+  a single source of truth: the root `LICENSE` is a **regular file**
+  carrying the verbatim text of the project’s primary license, and
+  `LICENSES/<SPDX-id>.txt` for that same license is a **symbolic link**
+  to it. Every project MUST ship both.
 
-      ln -s LICENSES/GPL-3.0-or-later.txt LICENSE
-      git add LICENSE
+      cp <canonical license text> LICENSE
+      ln -s ../LICENSE LICENSES/GPL-3.0-or-later.txt
+      git add LICENSE LICENSES/GPL-3.0-or-later.txt
 
-  Git stores the result as a symlink (mode `120000`), GitHub follows it
-  for license detection, and `reuse lint` stays clean. The link target
-  is the repository’s **primary** license per §4.1.1 —
-  `GPL-3.0-or-later` (or `AGPL-3.0-or-later` when network-facing) for a
-  software-primary repo, `CC-BY-SA-4.0` for a document-primary repo. A
-  duplicated regular-file `LICENSE` is **non-compliant**: the two copies
-  drift, and a stale root `LICENSE` misreports the project’s license to
-  every GitHub visitor.
+  The direction matters. `reuse` reads the working tree through the
+  filesystem, so it follows the link and lints clean. GitHub’s detector
+  reads **git blobs**, and a symlink’s blob is the target *path*, not
+  the license text — so a symlinked root `LICENSE` is reported as
+  `NOASSERTION` and the project shows no identified license. Any
+  secondary license in `LICENSES/` (§4.2 upstream texts, a
+  differently-licensed tooling class per §4.1.1) stays a regular file;
+  only the primary license is linked.
+
+  The root text MUST be a **canonical, unmodified** copy of the license
+  as published (the FSF text for the GPL family, the Creative Commons
+  text for CC-BY-SA-4.0, or the corresponding
+  [choosealicense.com](https://choosealicense.com) copy). Reflowed,
+  Markdown-formatted, or otherwise reformatted license texts defeat
+  GitHub’s detection even when the wording is intact.
+
+  Two independently maintained copies of the same license text are
+  **non-compliant**: they drift, and a stale root `LICENSE` misreports
+  the project’s license to every GitHub visitor.
 
 - **CI gate:** `reuse lint` MUST pass before shipping.
 
@@ -400,7 +413,7 @@ templates:
 | `NOTICE.md` | Full no-warranty / no-liability statement; defers to the project’s GPL/AGPL license (§4.1) for binding terms |
 | `CONTRIBUTING.md` | Contribution scope, PR-acceptance discretion, sign-off, security reporting, license-of-contributions |
 | `LICENSES/` | REUSE license directory (§4.3): verbatim text of every license used (`GPL-3.0-or-later` or `AGPL-3.0-or-later`, plus any upstream licenses per §4.2) |
-| `LICENSE` | Symbolic link to the primary license text in `LICENSES/` (§4.3) — e.g. `ln -s LICENSES/GPL-3.0-or-later.txt LICENSE`. Not a duplicated copy of the text. |
+| `LICENSE` | Verbatim, canonical text of the project’s primary license, as a regular file (§4.3). `LICENSES/<SPDX-id>.txt` for that license is a symbolic link back to it — `ln -s ../LICENSE LICENSES/GPL-3.0-or-later.txt` — so the text exists once. |
 
 Customize only the project name, scope, and any project-specific
 carve-outs.
@@ -1702,8 +1715,9 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
 - [ ] **§4.3** REUSE-compliant: two-tag SPDX header
   (`SPDX-FileCopyrightText` + `SPDX-License-Identifier`) on every file
   (or `.license` sidecar / `REUSE.toml` entry); `LICENSES/` directory
-  present; root `LICENSE` is a symbolic link into `LICENSES/` (never a
-  duplicated copy); `reuse lint` passes
+  present; root `LICENSE` carries the canonical license text and
+  `LICENSES/<SPDX-id>.txt` symlinks to it (never two independent
+  copies); `reuse lint` passes
 
 - [ ] **§5** Project Posture: README/NOTICE/CONTRIBUTING present;
   default personal-hobby stance applied; general-use carve-outs declared

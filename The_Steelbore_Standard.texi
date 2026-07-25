@@ -5,10 +5,10 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 1.37
+@settitle The Steelbore Standard 1.38
 @c %**end of header
 
-@set VERSION 1.37
+@set VERSION 1.38
 @set UPDATED 2026-07-26
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
@@ -594,26 +594,39 @@ used in the repo lives in @code{LICENSES/<SPDX-id>.txt} (e.g.,
 @code{LICENSES/AGPL-3.0-or-later.txt}, plus any upstream licenses per
 §4.2).
 @item
-@strong{Root @code{LICENSE} is a symbolic link.} GitHub reads a
-repository's license from a root @code{LICENSE} file; REUSE requires the
-verbatim texts under @code{LICENSES/}. Both are satisfied with a single
-source of truth: the root @code{LICENSE} MUST be a symbolic link to the
-project's primary license text inside @code{LICENSES/} --- never a
-second, duplicated copy of the text.
+@strong{Root @code{LICENSE} holds the text; @code{LICENSES/} links to
+it.} GitHub reads a repository's license from a root @code{LICENSE}
+file; REUSE requires the verbatim texts under @code{LICENSES/}. Both are
+satisfied from a single source of truth: the root @code{LICENSE} is a
+@strong{regular file} carrying the verbatim text of the project's
+primary license, and @code{LICENSES/<SPDX-id>.txt} for that same license
+is a @strong{symbolic link} to it. Every project MUST ship both.
 
 @verbatim
-ln -s LICENSES/GPL-3.0-or-later.txt LICENSE
-git add LICENSE
+cp <canonical license text> LICENSE
+ln -s ../LICENSE LICENSES/GPL-3.0-or-later.txt
+git add LICENSE LICENSES/GPL-3.0-or-later.txt
 @end verbatim
 
-Git stores the result as a symlink (mode @code{120000}), GitHub follows
-it for license detection, and @code{reuse lint} stays clean. The link
-target is the repository's @strong{primary} license per §4.1.1 ---
-@code{GPL-3.0-or-later} (or @code{AGPL-3.0-or-later} when
-network-facing) for a software-primary repo, @code{CC-BY-SA-4.0} for a
-document-primary repo. A duplicated regular-file @code{LICENSE} is
-@strong{non-compliant}: the two copies drift, and a stale root
-@code{LICENSE} misreports the project's license to every GitHub visitor.
+The direction matters. @code{reuse} reads the working tree through the
+filesystem, so it follows the link and lints clean. GitHub's detector
+reads @strong{git blobs}, and a symlink's blob is the target
+@emph{path}, not the license text --- so a symlinked root
+@code{LICENSE} is reported as @code{NOASSERTION} and the project shows
+no identified license. Any secondary license in @code{LICENSES/} (§4.2
+upstream texts, a differently-licensed tooling class per §4.1.1) stays a
+regular file; only the primary license is linked.
+
+The root text MUST be a @strong{canonical, unmodified} copy of the
+license as published (the FSF text for the GPL family, the Creative
+Commons text for CC-BY-SA-4.0, or the corresponding
+@uref{https://choosealicense.com,choosealicense.com} copy). Reflowed,
+Markdown-formatted, or otherwise reformatted license texts defeat
+GitHub's detection even when the wording is intact.
+
+Two independently maintained copies of the same license text are
+@strong{non-compliant}: they drift, and a stale root @code{LICENSE}
+misreports the project's license to every GitHub visitor.
 @item
 @strong{CI gate:} @code{reuse lint} MUST pass before shipping.
 @end itemize
@@ -706,9 +719,10 @@ used (@code{GPL-3.0-or-later} or @code{AGPL-3.0-or-later}, plus any
 upstream licenses per §4.2)
 @item
 @code{LICENSE}
- @tab Symbolic link to the primary license text in @code{LICENSES/}
-(§4.3) --- e.g. @code{ln -s LICENSES/GPL-3.0-or-later.txt LICENSE}. Not
-a duplicated copy of the text.
+ @tab Verbatim, canonical text of the project's primary license, as a
+regular file (§4.3). @code{LICENSES/<SPDX-id>.txt} for that license is a
+symbolic link back to it --- @code{ln -s ../LICENSE
+LICENSES/GPL-3.0-or-later.txt} --- so the text exists once.
 @end multitable
 
 Customize only the project name, scope, and any project-specific
@@ -3048,9 +3062,9 @@ shipped in @code{LICENSES/}
 ☐ @strong{§4.3} REUSE-compliant: two-tag SPDX header
 (@code{SPDX-FileCopyrightText} + @code{SPDX-License-Identifier}) on
 every file (or @code{.license} sidecar / @code{REUSE.toml} entry);
-@code{LICENSES/} directory present; root @code{LICENSE} is a symbolic
-link into @code{LICENSES/} (never a duplicated copy); @code{reuse lint}
-passes
+@code{LICENSES/} directory present; root @code{LICENSE} carries the
+canonical license text and @code{LICENSES/<SPDX-id>.txt} symlinks to it
+(never two independent copies); @code{reuse lint} passes
 @item
 ☐ @strong{§5} Project Posture: README/NOTICE/CONTRIBUTING present;
 default personal-hobby stance applied; general-use carve-outs declared
