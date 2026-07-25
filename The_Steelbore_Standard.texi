@@ -5,11 +5,11 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 1.35
+@settitle The Steelbore Standard 1.36
 @c %**end of header
 
-@set VERSION 1.35
-@set UPDATED 2026-07-25
+@set VERSION 1.36
+@set UPDATED 2026-07-26
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
 @copying
@@ -107,6 +107,21 @@ are separate concerns.
 @node Changelog
 @section Changelog
 @itemize
+@item
+@strong{v1.36 (2026-07-26):} @strong{§4.3:} the root @code{LICENSE} file
+is now @strong{required} and MUST be a @strong{symbolic link} to the
+project's primary license text in @code{LICENSES/} (e.g. @code{ln -s
+LICENSES/GPL-3.0-or-later.txt LICENSE}) --- upgrading the former "a root
+@code{LICENSE} MAY remain as a GitHub-detection pointer" allowance.
+GitHub follows the symlink for license detection while REUSE keeps the
+verbatim texts in @code{LICENSES/}, giving both one source of truth; a
+duplicated regular-file @code{LICENSE} is non-compliant because the two
+copies drift. Link target follows the §4.1.1 artifact class
+(@code{GPL-3.0-or-later} / @code{AGPL-3.0-or-later} for software-primary
+repos, @code{CC-BY-SA-4.0} for document-primary repos). @strong{§5.2:}
+@code{LICENSE} added as a required posture file in its own right.
+@strong{§16:} compliance-checklist §4.3 bullet extended with the symlink
+requirement.
 @item
 @strong{v1.35 (2026-07-25):} @strong{§11 becomes a palette family.} The
 single canonical palette is replaced by a registry of six: the
@@ -948,8 +963,28 @@ entry in the repo-root @code{REUSE.toml}. No file is left uncovered
 used in the repo lives in @code{LICENSES/<SPDX-id>.txt} (e.g.,
 @code{LICENSES/GPL-3.0-or-later.txt},
 @code{LICENSES/AGPL-3.0-or-later.txt}, plus any upstream licenses per
-§4.2). A root @code{LICENSE} file MAY remain as a pointer for GitHub's
-license detection.
+§4.2).
+@item
+@strong{Root @code{LICENSE} is a symbolic link.} GitHub reads a
+repository's license from a root @code{LICENSE} file; REUSE requires the
+verbatim texts under @code{LICENSES/}. Both are satisfied with a single
+source of truth: the root @code{LICENSE} MUST be a symbolic link to the
+project's primary license text inside @code{LICENSES/} --- never a
+second, duplicated copy of the text.
+
+@verbatim
+ln -s LICENSES/GPL-3.0-or-later.txt LICENSE
+git add LICENSE
+@end verbatim
+
+Git stores the result as a symlink (mode @code{120000}), GitHub follows
+it for license detection, and @code{reuse lint} stays clean. The link
+target is the repository's @strong{primary} license per §4.1.1 ---
+@code{GPL-3.0-or-later} (or @code{AGPL-3.0-or-later} when
+network-facing) for a software-primary repo, @code{CC-BY-SA-4.0} for a
+document-primary repo. A duplicated regular-file @code{LICENSE} is
+@strong{non-compliant}: the two copies drift, and a stale root
+@code{LICENSE} misreports the project's license to every GitHub visitor.
 @item
 @strong{CI gate:} @code{reuse lint} MUST pass before shipping.
 @end itemize
@@ -1039,8 +1074,12 @@ reporting, license-of-contributions
 @code{LICENSES/}
  @tab REUSE license directory (§4.3): verbatim text of every license
 used (@code{GPL-3.0-or-later} or @code{AGPL-3.0-or-later}, plus any
-upstream licenses per §4.2). A root @code{LICENSE} MAY remain as a
-GitHub-detection pointer.
+upstream licenses per §4.2)
+@item
+@code{LICENSE}
+ @tab Symbolic link to the primary license text in @code{LICENSES/}
+(§4.3) --- e.g. @code{ln -s LICENSES/GPL-3.0-or-later.txt LICENSE}. Not
+a duplicated copy of the text.
 @end multitable
 
 Customize only the project name, scope, and any project-specific
@@ -3380,7 +3419,9 @@ shipped in @code{LICENSES/}
 ☐ @strong{§4.3} REUSE-compliant: two-tag SPDX header
 (@code{SPDX-FileCopyrightText} + @code{SPDX-License-Identifier}) on
 every file (or @code{.license} sidecar / @code{REUSE.toml} entry);
-@code{LICENSES/} directory present; @code{reuse lint} passes
+@code{LICENSES/} directory present; root @code{LICENSE} is a symbolic
+link into @code{LICENSES/} (never a duplicated copy); @code{reuse lint}
+passes
 @item
 ☐ @strong{§5} Project Posture: README/NOTICE/CONTRIBUTING present;
 default personal-hobby stance applied; general-use carve-outs declared
