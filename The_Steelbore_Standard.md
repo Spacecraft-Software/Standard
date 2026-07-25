@@ -23,6 +23,32 @@ concerns.
 
 ## Changelog
 
+- **v1.35 (2026-07-25):** **§11 becomes a palette family.** The single
+  canonical palette is replaced by a registry of six: the Steelbore 2
+  palette of v1.34 is now named **Steelbore Modern** and remains the
+  default and canonical binding, and the v1.33 six-token palette is
+  **un-retired** and preserved as **Steelbore Classic** (§11.2) —
+  reversing the v1.34 retirement, which stands only as a version-history
+  note. Four alternates are registered in §11.3, each anchored on two
+  fixed colors and verified against its own canvas and surfaces:
+  **Steelbore Blue** (Orbit Navy `#0A1024` / Electric Blue `#0066FF`),
+  **Steelbore BlackPinkPanther** (Core Black `#141418` / Plasma Magenta
+  `#E445FF`), **Steelbore MatrixGreen** (Circuit Navy `#0C1A2B` / Solar
+  Lime `#B6FF3B`), and **Steelbore NavyWhite** (Pearl Silver `#E7E5E0` /
+  Lunar Navy `#111827`) — the family’s first **light-canvas** palette.
+  **§11.1 generalized:** the eleven role tokens are now the contract for
+  every palette, so application logic is palette-agnostic (Classic keeps
+  its legacy six-role contract). **§11.1.1 generalized:** every palette
+  ships a `<slug>-high-contrast` sibling; `steelbore-mono` is
+  palette-independent. **§11.4 added:** palette-selection rules — Modern
+  is the default and needs no declaration, a project adopts exactly one
+  palette and declares it in `README.md`, tokens are never mixed across
+  palettes, and the canvas is mandatory within its palette. The Void
+  Navy rule is accordingly scoped to Modern rather than stated globally.
+  One restricted pairing exists family-wide: Electric Blue at 3.91:1 is
+  large-text/icon/non-text-UI only (§11.3.1). §16 checklist §11 bullet
+  updated.
+
 - **v1.34 (2026-07-25):** **§11 rewritten** — the **Steelbore 2**
   palette adopted: nine tokens, a new **surface class** (Quantum Blue
   `#0E2A47` elevated panels, Deep Matrix `#0B1A12` code/terminal wells —
@@ -950,10 +976,30 @@ supports.
 
 ————————————————————————
 
-# §11 — Spacecraft Software Color Palette (WCAG-Compliant)
+# §11 — Spacecraft Software Color Palettes (WCAG-Compliant)
 
-The **only** permitted colors for Spacecraft Software interfaces and
-documents (the **Steelbore 2** generation):
+Spacecraft Software ships a **palette family**. Every palette in the
+family declares exactly one **canvas**, a full set of §11.1 role tokens,
+and a verified contrast matrix.
+
+**`Steelbore Modern` is the default and canonical palette.** Every
+artifact uses Modern unless its project explicitly declares an alternate
+under §11.4. The remainder of §11 defines Modern; §11.2 and §11.3 define
+the alternates.
+
+| Theme slug | Palette | Canvas | Status |
+|----|----|----|----|
+| `steelbore` | Steelbore Modern | `#000027` | **Default** — all artifacts unless declared |
+| `steelbore-classic` | Steelbore Classic | `#000027` | Legacy contract (§11.2) |
+| `steelbore-blue` | Steelbore Blue | `#0A1024` | Alternate (§11.3) |
+| `steelbore-blackpinkpanther` | Steelbore BlackPinkPanther | `#141418` | Alternate (§11.3) |
+| `steelbore-matrixgreen` | Steelbore MatrixGreen | `#0C1A2B` | Alternate (§11.3) |
+| `steelbore-navywhite` | Steelbore NavyWhite | `#E7E5E0` | Alternate (§11.3) — light canvas |
+
+## §11.0 — Steelbore Modern (canonical palette)
+
+The permitted colors for Steelbore Modern (the **Steelbore 2**
+generation):
 
 | Token | Hex | RGB | Class | Role |
 |----|----|----|----|----|
@@ -967,10 +1013,13 @@ documents (the **Steelbore 2** generation):
 | Mars Red | `#FF3B3B` | RGB(255, 59, 59) | Foreground | Error status |
 | Plasma Magenta | `#E445FF` | RGB(228, 69, 255) | Foreground | Warning / attention |
 
-**`#000027` (Void Navy) is the mandatory background for ALL Spacecraft
-Software surfaces.** No alternative background is permitted. This is
-non-negotiable. Surface-class tokens are *fills placed on* Void Navy,
-never replacements for it.
+**`#000027` (Void Navy) is the mandatory canvas for every surface under
+Steelbore Modern**, and Modern is the default palette, so Void Navy is
+the background of every Spacecraft Software artifact that has not
+declared an alternate under §11.4. Within a palette the canvas is
+non-negotiable: surface-class tokens are *fills placed on* the canvas,
+never replacements for it. Mixing tokens across palettes is forbidden
+(§11.4).
 
 ## §11.0.1 — The Surface Class
 
@@ -1011,10 +1060,14 @@ px regular), icons, and non-text UI** (≥3:1). Normal-size error prose on
 a surface is set in Platinum Mist carrying the mandatory `[ERROR]` tag
 (§18.2), with Mars Red as border or icon accent only.
 
-The guarantee covers the eighteen pairings in the matrix above **only**.
-Foreground tokens paired with *each other* mostly fail the 3:1 floor
-(Acid Lime on Platinum Mist is 1.11:1; Plasma Orange on Mars Red is
-1.15:1). Therefore:
+The guarantee covers the eighteen pairings in the matrix above **only**,
+and only for Steelbore Modern. **Every palette in the family carries its
+own verified matrix** — §11.2 for Classic, §11.3 for the alternates —
+measured the same way against that palette’s own canvas and surfaces;
+the complete per-palette matrices ship in the canonical `steelbore.toml`
+(§11.4). Foreground tokens paired with *each other* mostly fail the 3:1
+floor (Acid Lime on Platinum Mist is 1.11:1; Plasma Orange on Mars Red
+is 1.15:1). Therefore:
 
 - Rendering palette-colored **text on a palette-colored fill** (a chip,
   badge, filled button, or selected row) is **forbidden** unless that
@@ -1037,8 +1090,14 @@ skill.
 
 When building a new Spacecraft Software application (GUI, TUI, or web),
 all palette references **must** be accessed through a named theme called
-**`Steelbore`** rather than referenced as bare hex literals. The
-`Steelbore` theme is the canonical color contract:
+**`Steelbore`** rather than referenced as bare hex literals.
+
+The **eleven role tokens below are the contract for every palette in the
+family**: Modern, and each alternate in §11.3, binds this same set to
+its own colors, so application logic written against the contract works
+unchanged under any of them. (Classic is the one exception — it keeps
+its legacy six-role contract, §11.2.) The canonical binding, and the
+default, is Steelbore Modern:
 
 | Theme token   | Maps to palette token | Hex       |
 |---------------|-----------------------|-----------|
@@ -1079,6 +1138,12 @@ only by explicit user action or by the §18.1 accessible-mode toggle.
 They never alter, replace, or take precedence over `steelbore`, and the
 §11 canonical palette table above is unchanged by their existence.
 
+The variant *pattern* generalizes to the whole family: a project that
+has declared an alternate palette under §11.4 ships
+`<palette-slug>-high-contrast` as its accessible-mode target, with that
+palette’s lifts as given in §11.2 and §11.3. `steelbore-mono` is
+palette-independent and serves every palette.
+
 | Variant | Selected by | Behavior |
 |----|----|----|
 | `steelbore` | **Default** — always, unless overridden | Canonical §11 palette, unchanged |
@@ -1111,14 +1176,193 @@ lifting foregrounds, never by abandoning the canvas. The lifted hexes
 are accessibility-derived lifts of existing role tokens, not new brand
 colors, and may not be used outside the variant.
 
-## §11.2 — Retired Tokens (v1.33 → v1.34)
+## §11.2 — Steelbore Classic Color Palette
 
-Molten Amber `#D98E32`, Steel Blue `#4B7EB0`, Radium Green `#50FA7B`,
-Red Oxide `#FF5C5C`, and Liquid Coolant `#8BE9FD` are **retired** from
-§11 and may not appear in new artifacts. Existing artifacts carrying
-them are grandfathered per §11.1 until their next minor release. The
-`#7FAEDC` / `#FF8080` high-contrast lifts of v1.33 are retired with
-their base tokens.
+**Steelbore Classic** is the original six-token palette that served as
+the canonical palette through v1.33. It is **preserved as a named member
+of the palette family** — not retired — and remains available to any
+project that declares it under §11.4. It shares Void Navy with Modern.
+
+| Token          | Hex       | Role                          | vs Void Navy |
+|----------------|-----------|-------------------------------|--------------|
+| Void Navy      | `#000027` | **Background / canvas**       | (canvas)     |
+| Molten Amber   | `#D98E32` | Primary text / active readout | 7.64:1       |
+| Steel Blue     | `#4B7EB0` | Primary accent / structural   | 4.77:1       |
+| Radium Green   | `#50FA7B` | Success / safe status         | 14.87:1      |
+| Red Oxide      | `#FF5C5C` | Warning / error status        | 6.74:1       |
+| Liquid Coolant | `#8BE9FD` | Info / links                  | 14.74:1      |
+
+Classic keeps its **legacy six-role contract** (`background`,
+`foreground`, `accent`, `success`, `error`, `info`) rather than the
+eleven-token §11.1 contract. It defines **no surface class**, so §11.0.1
+does not apply to it and every foreground is measured against Void Navy
+alone. Its high-contrast sibling `steelbore-classic-high-contrast` lifts
+`accent` to `#7FAEDC` (8.73:1) and `error` to `#FF8080` (8.41:1); the
+other four tokens are already ≥7:1 and carry over verbatim.
+
+Because Classic pairs its tokens against a single background, the
+token-on-token rule of §11.0.2 applies to it unchanged — Molten Amber on
+Red Oxide is 1.13:1 and Radium Green on Liquid Coolant is 1.01:1.
+
+## §11.3 — Alternate Palettes
+
+Four alternate palettes are registered. Each declares its own canvas,
+its own surfaces, and a full set of §11.1 role tokens verified against
+all three of its backgrounds. **A project adopts exactly one palette**
+(§11.4); tokens are never mixed across palettes.
+
+Ratios below are *vs that palette’s canvas*. The complete
+three-background matrices ship in the canonical `steelbore.toml`. Every
+token listed clears 4.5:1 on all three of its backgrounds unless marked
+†.
+
+### §11.3.1 — Steelbore Blue
+
+Anchored on **Orbit Navy** and **Electric Blue**.
+
+| Role token    | Color         | Hex       | vs canvas    |
+|---------------|---------------|-----------|--------------|
+| `background`  | Orbit Navy    | `#0A1024` | (canvas)     |
+| `surface`     | Deep Orbit    | `#0F1728` | 1.05:1       |
+| `surface-alt` | Orbit Divider | `#1B2436` | 1.22:1       |
+| `foreground`  | Ion White     | `#E6F0FF` | 16.42:1      |
+| `accent`      | Electric Blue | `#0066FF` | **3.91:1** † |
+| `structure`   | Dawn Sky      | `#3390FF` | 5.91:1       |
+| `success`     | Signal Green  | `#28C76F` | 8.53:1       |
+| `error`       | Ember Red     | `#FF6B6B` | 6.80:1       |
+| `warning`     | Solar Amber   | `#FFC857` | 12.27:1      |
+| `focus`       | Warm Thruster | `#FF8A4B` | 8.08:1       |
+| `border`      | Dawn Sky      | `#3390FF` | 5.91:1       |
+
+† **Electric Blue is an anchor color and is restricted.** At 3.91:1 on
+the canvas (3.70:1 on `surface`, 3.21:1 on `surface-alt`) it clears the
+3:1 non-text floor but not 4.5:1, so it is limited to **large text
+(≥18.66 px bold / ≥24 px regular), icons, and non-text UI** on every
+background. Normal-size accent prose is set in Ion White or Dawn Sky,
+with Electric Blue as fill, border, or icon accent.
+
+`steelbore-blue-high-contrast` lifts `accent` to Azure Bright `#79B4FF`
+(8.80:1), `structure` and `border` to Azure Hue `#66A3FF` (7.41:1), and
+`error` to `#FF8F8F` (8.61:1). All other tokens carry over verbatim, and
+the † restriction does not apply under high contrast.
+
+### §11.3.2 — Steelbore BlackPinkPanther
+
+Anchored on **Core Black** and **Plasma Magenta**.
+
+| Role token    | Color          | Hex       | vs canvas |
+|---------------|----------------|-----------|-----------|
+| `background`  | Core Black     | `#141418` | (canvas)  |
+| `surface`     | Panther Slate  | `#1E1E22` | 1.11:1    |
+| `surface-alt` | Dark Grey      | `#28282D` | 1.25:1    |
+| `foreground`  | Panther White  | `#FFFFFF` | 18.37:1   |
+| `accent`      | Plasma Magenta | `#E445FF` | 5.77:1    |
+| `structure`   | Pink Accent    | `#FC8AFF` | 8.94:1    |
+| `success`     | Mint Signal    | `#5BE49B` | 11.39:1   |
+| `error`       | Ember Red      | `#FF6B6B` | 6.62:1    |
+| `warning`     | Solar Amber    | `#FFC857` | 11.94:1   |
+| `focus`       | Soft Pink      | `#FDBBFF` | 12.01:1   |
+| `border`      | Pink Accent    | `#FC8AFF` | 8.94:1    |
+
+Every token clears 4.5:1 on all three backgrounds — no restricted
+pairings. Plasma Magenta is shared with Steelbore Modern, where it
+carries the `warning` role; here it is the `accent`. That is permitted
+because roles are palette-scoped, but the two palettes are never mixed
+(§11.4).
+
+`steelbore-blackpinkpanther-high-contrast` lifts `accent` to `#F07BFF`
+(7.86:1) and `error` to `#FF8F8F` (8.38:1); all other tokens carry over
+verbatim.
+
+### §11.3.3 — Steelbore MatrixGreen
+
+Anchored on **Circuit Navy** and **Solar Lime**.
+
+| Role token    | Color          | Hex       | vs canvas |
+|---------------|----------------|-----------|-----------|
+| `background`  | Circuit Navy   | `#0C1A2B` | (canvas)  |
+| `surface`     | Slate Charcoal | `#1B2630` | 1.14:1    |
+| `surface-alt` | Ambient Black  | `#05070A` | 1.15:1    |
+| `foreground`  | Soft Silver    | `#C7D2D9` | 11.39:1   |
+| `accent`      | Solar Lime     | `#B6FF3B` | 14.48:1   |
+| `structure`   | Electric Cyan  | `#00F0FF` | 12.44:1   |
+| `success`     | Matrix Teal    | `#00B39A` | 6.61:1    |
+| `error`       | Ember Red      | `#FF6B6B` | 6.32:1    |
+| `warning`     | Solar Amber    | `#FFC857` | 11.39:1   |
+| `focus`       | Solar Lime     | `#B6FF3B` | 14.48:1   |
+| `border`      | Electric Cyan  | `#00F0FF` | 12.44:1   |
+
+MatrixGreen is the one palette whose `surface-alt` is *darker* than its
+canvas. That is permitted — §11.0.1 requires only that surfaces be fills
+on the canvas with a measured boundary, not that they be lighter. Lime
+Shadow `#8AC22A` is reserved as the pressed/active state for Solar Lime
+and is not a role token. Every token clears 4.5:1 on all three
+backgrounds.
+
+`steelbore-matrixgreen-high-contrast` lifts `success` to `#2FD3BB`
+(9.31:1) and `error` to `#FF8F8F` (7.99:1); all other tokens are already
+≥7:1 and carry over verbatim.
+
+### §11.3.4 — Steelbore NavyWhite
+
+Anchored on **Pearl Silver** and **Lunar Navy**. This is the family’s
+only **light-canvas** palette: the canvas is the light tone and the
+foreground is the dark one.
+
+| Role token    | Color              | Hex       | vs canvas |
+|---------------|--------------------|-----------|-----------|
+| `background`  | Pearl Silver       | `#E7E5E0` | (canvas)  |
+| `surface`     | Pearl Silver Light | `#F4F3F1` | 1.14:1    |
+| `surface-alt` | Pearl Silver Dark  | `#D4D2CD` | 1.20:1    |
+| `foreground`  | Lunar Navy         | `#111827` | 14.09:1   |
+| `accent`      | Cerulean Deep      | `#2A5580` | 6.16:1    |
+| `structure`   | Lunar Navy Soft    | `#1C2433` | 12.36:1   |
+| `success`     | Verdant Deep       | `#2A6349` | 5.60:1    |
+| `error`       | Crimson Deep       | `#93211F` | 6.73:1    |
+| `warning`     | Amber Deep         | `#6F4E0C` | 6.02:1    |
+| `focus`       | Cerulean Deep      | `#2A5580` | 6.16:1    |
+| `border`      | Lunar Navy Soft    | `#1C2433` | 12.36:1   |
+
+**On a light canvas the accent and status hues must be deepened.** The
+lighter source tints — Cerulean Edge `#3A6EA5` (4.22:1), Success Green
+`#4C8C6F` (3.15:1), Crimson Pulse `#B94A48` (4.03:1), Amber Signal
+`#D9A441` (1.79:1) — do not reach 4.5:1 on Pearl Silver and are
+permitted only as **non-text fills**, never as text or as a meaningful
+boundary. Every role token above clears 4.5:1 on all three backgrounds.
+
+`steelbore-navywhite-high-contrast` *darkens* rather than lightens:
+`accent` and `focus` to `#1F4A73` (7.30:1), `success` to `#16452F`
+(8.66:1), `error` to `#7E1C1A` (8.07:1), and `warning` to `#5A3F09`
+(7.76:1). `foreground` and `structure` are already ≥7:1 and carry over
+verbatim.
+
+## §11.4 — Palette Selection
+
+- **Modern is the default.** An artifact that declares nothing uses
+  `steelbore`. No declaration is required to be compliant.
+
+- **One palette per project.** A project adopting an alternate declares
+  it in its `README.md` beside the §5.2 posture section and registers
+  the theme under that slug. Tokens from two palettes are never combined
+  in one interface — the contrast guarantees are computed per-palette
+  and do not survive mixing.
+
+- **Every palette ships its high-contrast sibling.** The §18.1
+  accessible-mode toggle selects `<palette-slug>-high-contrast`;
+  `steelbore-mono` is palette-independent and serves them all.
+
+- **The canvas is mandatory within its palette.** Substituting a
+  different background for a declared palette is non-compliant.
+
+- **Values are read, never retyped.** The canonical machine-readable
+  source for every palette, variant, and contrast matrix is
+  `steelbore.toml`, shipped by the `steelbore-color-palette` skill.
+  Where this document and that file disagree, this document governs and
+  the file is corrected.
+
+- Documents, editor themes, and terminal themes follow the project’s
+  declared palette. Where no project context exists (a standalone
+  document, a one-off diagram), use Modern.
 
 ————————————————————————
 
@@ -1797,12 +2041,13 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
   (NVDA/Orca/VoiceOver) not captured — N/A for projects registered as
   games (§18.5)
 
-- [ ] **§11** Spacecraft Software color palette used (Steelbore 2); Void
-  Navy background mandatory; surface tokens are fills only, never text
-  (§11.0.1); token-on-token pairings outside the §11.0.2 matrix measured
-  before use; no retired v1.33 tokens in new artifacts (§11.2); new apps
-  expose colors via a named `Steelbore` theme (§11.1) — no bare hex
-  literals in UI logic
+- [ ] **§11** A registered palette is used — Steelbore Modern by
+  default, or exactly one declared alternate (§11.4), never a mix; that
+  palette’s canvas is used unaltered; surface tokens are fills only,
+  never text (§11.0.1); token-on-token pairings outside the palette’s
+  verified matrix measured before use; new apps expose colors via a
+  named `Steelbore` theme binding the §11.1 role tokens — no bare hex
+  literals in UI logic — and ship the palette’s `-high-contrast` sibling
 
 - [ ] **§12** FOSS-licensed fonts only (Share Tech Mono / Inconsolata)
 
