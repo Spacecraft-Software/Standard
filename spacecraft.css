@@ -3,23 +3,30 @@
 
    Spacecraft Software HTML theme for texi2any output.
    Apply with:  texi2any --html --no-split --css-include=spacecraft.css FILE.texi
-   Palette: Steelbore Standard §10.  Typography: §11 (Share Tech Mono / Inconsolata, both OFL).
+   Palette: Steelbore Standard §11 (Steelbore 2, v1.34).  Typography: §12
+   (Share Tech Mono / Inconsolata, both OFL).
+   Canonical copy: /spacecraft-software/construct/steelbore-color-palette/assets/spacecraft.css
+   — the copies in standard/ and spacecraft-texinfo-document/assets/ are synced
+   derivatives; edit the canonical copy first and keep all three byte-identical.
    Fonts load from Google Fonts; system monospace is the offline fallback. */
 
 @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&family=Share+Tech+Mono&display=swap');
 
 :root {
-  --void-navy:       #000027;  /* background / canvas        */
-  --molten-amber:    #D98E32;  /* body text / active readout */
-  --steel-blue:      #4B7EB0;  /* H1 / accent / visited link */
-  --radium-green:    #50FA7B;  /* H2 / success               */
-  --liquid-coolant:  #8BE9FD;  /* H3 / info / link           */
-  --red-oxide:       #FF5C5C;  /* warning / error            */
+  --void-navy:       #000027;  /* canvas — background, all surfaces  */
+  --quantum-blue:    #0E2A47;  /* surface — elevated panels / cards  */
+  --deep-matrix:     #0B1A12;  /* surface — code / terminal wells    */
+  --platinum-mist:   #D9DEE5;  /* body text / default readout        */
+  --plasma-orange:   #FF5E00;  /* H1 / primary accent / visited link */
+  --pulse-violet:    #8A6CFF;  /* H3 / structure / links / borders   */
+  --acid-lime:       #B4FF00;  /* H2 / success / focus indicator     */
+  --mars-red:        #FF3B3B;  /* error status                       */
+  --plasma-magenta:  #E445FF;  /* warning / attention                */
 }
 
 body {
   background-color: var(--void-navy);
-  color: var(--molten-amber);
+  color: var(--platinum-mist);
   font-family: 'Inconsolata', monospace;
   font-size: 16px;
   line-height: 1.6;
@@ -35,42 +42,43 @@ h1, h2, h3, h4, h5, h6,
   line-height: 1.25;
 }
 
-h1, .titlefont, .settitle           { color: var(--steel-blue); }
-h2, .chapter, .unnumbered, .appendix { color: var(--steel-blue); }
-h3, .section                         { color: var(--radium-green); }
-h4, h5, h6, .subsection, .subsubsection { color: var(--liquid-coolant); }
+h1, .titlefont, .settitle           { color: var(--plasma-orange); }
+h2, .chapter, .unnumbered, .appendix { color: var(--plasma-orange); }
+h3, .section                         { color: var(--acid-lime); }
+h4, h5, h6, .subsection, .subsubsection { color: var(--pulse-violet); font-style: italic; }
 
-a:link    { color: var(--liquid-coolant); }
-a:visited { color: var(--steel-blue); }
-a:hover   { color: var(--radium-green); }
+a:link    { color: var(--pulse-violet); }
+a:visited { color: var(--plasma-orange); }
+a:hover   { color: var(--acid-lime); }
+a:focus-visible { outline: 2px solid var(--acid-lime); outline-offset: 2px; }
 
 code, samp, kbd, tt, pre, .verbatim,
 .example, .smallexample, .lisp {
   font-family: 'Inconsolata', monospace;
-  color: var(--liquid-coolant);
+  color: var(--platinum-mist);
 }
 
 pre.example, pre.verbatim, pre.smallexample, pre.lisp, pre.display {
-  background-color: rgba(75, 126, 176, 0.12);  /* steel-blue wash */
-  border-left: 3px solid var(--steel-blue);
+  background-color: var(--deep-matrix);  /* surface: code / terminal well */
+  border-left: 3px solid var(--pulse-violet);  /* drawn edge (§11.0.1)    */
   border-radius: 4px;
   padding: 0.75rem 1rem;
   overflow-x: auto;
 }
 
 blockquote, .quotation {
-  border-left: 3px solid var(--molten-amber);
+  border-left: 3px solid var(--plasma-orange);
   margin-left: 0;
   padding-left: 1rem;
-  color: var(--molten-amber);
+  color: var(--platinum-mist);
 }
 
 table { border-collapse: collapse; }
-th, td { border: 1px solid var(--steel-blue); padding: 0.35rem 0.6rem; }
-th { color: var(--radium-green); font-family: 'Share Tech Mono', monospace; }
+th, td { border: 1px solid var(--pulse-violet); padding: 0.35rem 0.6rem; }
+th { color: var(--acid-lime); font-family: 'Share Tech Mono', monospace; }
 
 /* Definition commands (@deffn etc.) */
-dt { color: var(--radium-green); }
-dfn, var { color: var(--molten-amber); font-style: italic; }
+dt { color: var(--acid-lime); }
+dfn, var { color: var(--plasma-orange); font-style: italic; }
 
-hr { border: none; border-top: 1px solid var(--steel-blue); }
+hr { border: none; border-top: 1px solid var(--pulse-violet); }
