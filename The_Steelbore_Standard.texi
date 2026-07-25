@@ -132,9 +132,13 @@ Modern is the default and needs no declaration, a project adopts
 exactly one palette and declares it in @file{README.md}, tokens are
 never mixed across palettes, and the canvas is mandatory within its
 palette. The Void Navy rule is accordingly scoped to Modern rather than
-stated globally. One restricted pairing exists family-wide: Electric
-Blue at 3.91:1 is large-text/icon/non-text-UI only (§11.3.1). §16
-checklist §11 bullet updated.
+stated globally. Restricted pairings family-wide: Modern's two on
+Quantum Blue are unchanged (Pulse Violet 3.93:1, Mars Red 4.12:1, plus
+@code{border} aliasing @code{structure} --- §11.0.2), and the four
+alternates add exactly one, Electric Blue at 3.91:1 on every Steelbore
+Blue background (§11.3.1); all are large-text/icon/non-text-UI only.
+§18.2.1 and the §16 checklist §11 bullet generalized from Void Navy to
+the declared palette's backgrounds.
 @item
 @strong{v1.34 (2026-07-25):} @strong{§11 rewritten} --- the
 @strong{Steelbore 2} palette adopted: nine tokens, a new
@@ -1998,8 +2002,15 @@ palette} (§11.4); tokens are never mixed across palettes.
 
 Ratios below are @emph{vs that palette's canvas}. The complete
 three-background matrices ship in the canonical @code{steelbore.toml}.
-Every token listed clears 4.5:1 on all three of its backgrounds unless
-marked †.
+Status hues not drawn from a palette's source design --- Ember Red
+@code{#FF6B6B}, Solar Amber @code{#FFC857}, Mint Signal @code{#5BE49B}
+--- are shared @code{error}/@code{warning}/@code{success} tones chosen
+to satisfy §11.1 role coverage where the source design defined none.
+Every @emph{foreground} token listed clears 4.5:1 on all three of its
+backgrounds unless marked †. The three background rows in each table
+(@code{background}, @code{surface}, @code{surface-alt}) are fills, not
+foregrounds --- their low ratios against the canvas are expected, and
+§11.0.1's drawn-boundary rule applies to them instead.
 
 @subsection §11.3.1 — Steelbore Blue
 
@@ -2149,8 +2160,8 @@ Role token
  @tab 8.94:1
 @end multitable
 
-Every token clears 4.5:1 on all three backgrounds --- no restricted
-pairings. Plasma Magenta is shared with Steelbore Modern, where it
+Every foreground token clears 4.5:1 on all three backgrounds --- no
+restricted pairings. Plasma Magenta is shared with Steelbore Modern, where it
 carries the @code{warning} role; here it is the @code{accent}. That is
 permitted because roles are palette-scoped, but the two palettes are
 never mixed (§11.4).
@@ -2231,7 +2242,7 @@ MatrixGreen is the one palette whose @code{surface-alt} is
 only that surfaces be fills on the canvas with a measured boundary, not
 that they be lighter. Lime Shadow @code{#8AC22A} is reserved as the
 pressed/active state for Solar Lime and is not a role token. Every
-token clears 4.5:1 on all three backgrounds.
+foreground token clears 4.5:1 on all three backgrounds.
 
 @code{steelbore-matrixgreen-high-contrast} lifts @code{success} to
 @code{#2FD3BB} (9.31:1) and @code{error} to @code{#FF8F8F} (7.99:1);
@@ -2311,8 +2322,8 @@ The lighter source tints --- Cerulean Edge @code{#3A6EA5} (4.22:1),
 Success Green @code{#4C8C6F} (3.15:1), Crimson Pulse @code{#B94A48}
 (4.03:1), Amber Signal @code{#D9A441} (1.79:1) --- do not reach 4.5:1
 on Pearl Silver and are permitted only as @strong{non-text fills},
-never as text or as a meaningful boundary. Every role token above
-clears 4.5:1 on all three backgrounds.
+never as text or as a meaningful boundary. Every foreground role token
+above clears 4.5:1 on all three backgrounds.
 
 @code{steelbore-navywhite-high-contrast} @emph{darkens} rather than
 lightens: @code{accent} and @code{focus} to @code{#1F4A73} (7.30:1),
@@ -3103,9 +3114,10 @@ carries a text tag: @code{[OK]}, @code{[ERROR]}, @code{[WARN]},
 non-compliant; @code{[ERROR] failed to connect} is compliant.
 @item
 @strong{No text on colored fills} unless that specific pair is verified per
-§11 --- foreground tokens are verified against the three §11.0.2
-backgrounds (Void Navy and the two surface tokens), not against each
-other, and surface tokens are never text colors (§11.0.1).
+§11 --- foreground tokens are verified against the declared palette's
+three backgrounds (its canvas and its two surface tokens; §11.0.2 for
+Modern), not against each other, and surface tokens are never text
+colors (§11.0.1).
 @item
 @strong{Diagnostics go to @code{stderr}}, results to @code{stdout}, and the
 two are never interleaved into one visual block.

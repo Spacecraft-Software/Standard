@@ -45,9 +45,13 @@ concerns.
   palette and declares it in `README.md`, tokens are never mixed across
   palettes, and the canvas is mandatory within its palette. The Void
   Navy rule is accordingly scoped to Modern rather than stated globally.
-  One restricted pairing exists family-wide: Electric Blue at 3.91:1 is
-  large-text/icon/non-text-UI only (§11.3.1). §16 checklist §11 bullet
-  updated.
+  Restricted pairings family-wide: Modern’s two on Quantum Blue are
+  unchanged (Pulse Violet 3.93:1, Mars Red 4.12:1, plus `border`
+  aliasing `structure` — §11.0.2), and the four alternates add exactly
+  one, Electric Blue at 3.91:1 on every Steelbore Blue background
+  (§11.3.1); all are large-text/icon/non-text-UI only. §18.2.1 and the
+  §16 checklist §11 bullet generalized from Void Navy to the declared
+  palette’s backgrounds.
 
 - **v1.34 (2026-07-25):** **§11 rewritten** — the **Steelbore 2**
   palette adopted: nine tokens, a new **surface class** (Quantum Blue
@@ -1212,9 +1216,15 @@ all three of its backgrounds. **A project adopts exactly one palette**
 (§11.4); tokens are never mixed across palettes.
 
 Ratios below are *vs that palette’s canvas*. The complete
-three-background matrices ship in the canonical `steelbore.toml`. Every
-token listed clears 4.5:1 on all three of its backgrounds unless marked
-†.
+three-background matrices ship in the canonical `steelbore.toml`. Status
+hues not drawn from a palette’s source design — Ember Red `#FF6B6B`,
+Solar Amber `#FFC857`, Mint Signal `#5BE49B` — are shared
+`error`/`warning`/`success` tones chosen to satisfy §11.1 role coverage
+where the source design defined none. Every *foreground* token listed
+clears 4.5:1 on all three of its backgrounds unless marked †. The three
+background rows in each table (`background`, `surface`, `surface-alt`)
+are fills, not foregrounds — their low ratios against the canvas are
+expected, and §11.0.1’s drawn-boundary rule applies to them instead.
 
 ### §11.3.1 — Steelbore Blue
 
@@ -1264,11 +1274,11 @@ Anchored on **Core Black** and **Plasma Magenta**.
 | `focus`       | Soft Pink      | `#FDBBFF` | 12.01:1   |
 | `border`      | Pink Accent    | `#FC8AFF` | 8.94:1    |
 
-Every token clears 4.5:1 on all three backgrounds — no restricted
-pairings. Plasma Magenta is shared with Steelbore Modern, where it
-carries the `warning` role; here it is the `accent`. That is permitted
-because roles are palette-scoped, but the two palettes are never mixed
-(§11.4).
+Every foreground token clears 4.5:1 on all three backgrounds — no
+restricted pairings. Plasma Magenta is shared with Steelbore Modern,
+where it carries the `warning` role; here it is the `accent`. That is
+permitted because roles are palette-scoped, but the two palettes are
+never mixed (§11.4).
 
 `steelbore-blackpinkpanther-high-contrast` lifts `accent` to `#F07BFF`
 (7.86:1) and `error` to `#FF8F8F` (8.38:1); all other tokens carry over
@@ -1296,8 +1306,8 @@ MatrixGreen is the one palette whose `surface-alt` is *darker* than its
 canvas. That is permitted — §11.0.1 requires only that surfaces be fills
 on the canvas with a measured boundary, not that they be lighter. Lime
 Shadow `#8AC22A` is reserved as the pressed/active state for Solar Lime
-and is not a role token. Every token clears 4.5:1 on all three
-backgrounds.
+and is not a role token. Every foreground token clears 4.5:1 on all
+three backgrounds.
 
 `steelbore-matrixgreen-high-contrast` lifts `success` to `#2FD3BB`
 (9.31:1) and `error` to `#FF8F8F` (7.99:1); all other tokens are already
@@ -1328,7 +1338,8 @@ lighter source tints — Cerulean Edge `#3A6EA5` (4.22:1), Success Green
 `#4C8C6F` (3.15:1), Crimson Pulse `#B94A48` (4.03:1), Amber Signal
 `#D9A441` (1.79:1) — do not reach 4.5:1 on Pearl Silver and are
 permitted only as **non-text fills**, never as text or as a meaningful
-boundary. Every role token above clears 4.5:1 on all three backgrounds.
+boundary. Every foreground role token above clears 4.5:1 on all three
+backgrounds.
 
 `steelbore-navywhite-high-contrast` *darkens* rather than lightens:
 `accent` and `focus` to `#1F4A73` (7.30:1), `success` to `#16452F`
@@ -1809,9 +1820,10 @@ for all output, always:
   `[ERROR] failed to connect` is compliant.
 
 - **No text on colored fills** unless that specific pair is verified per
-  §11 — foreground tokens are verified against the three §11.0.2
-  backgrounds (Void Navy and the two surface tokens), not against each
-  other, and surface tokens are never text colors (§11.0.1).
+  §11 — foreground tokens are verified against the declared palette’s
+  three backgrounds (its canvas and its two surface tokens; §11.0.2 for
+  Modern), not against each other, and surface tokens are never text
+  colors (§11.0.1).
 
 - **Diagnostics go to `stderr`**, results to `stdout`, and the two are
   never interleaved into one visual block.
