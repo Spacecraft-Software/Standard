@@ -24,6 +24,9 @@ The_Steelbore_Standard.odt
 *.vr
 *.vrs
 
+# Chat/session exports parked under chat/ (not for publication)
+chat/
+
 # Agent-local guidance and exports (not for publication)
 CLAUDE.md
 AGENTS.md
