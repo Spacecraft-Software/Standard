@@ -23,6 +23,21 @@ concerns.
 
 ## Changelog
 
+- **v1.36 (2026-07-26):** **§4.3:** the root `LICENSE` file is now
+  **required** and MUST be a **symbolic link** to the project’s primary
+  license text in `LICENSES/` (e.g.
+  `ln -s LICENSES/GPL-3.0-or-later.txt LICENSE`) — upgrading the former
+  "a root `LICENSE` MAY remain as a GitHub-detection pointer" allowance.
+  GitHub follows the symlink for license detection while REUSE keeps the
+  verbatim texts in `LICENSES/`, giving both one source of truth; a
+  duplicated regular-file `LICENSE` is non-compliant because the two
+  copies drift. Link target follows the §4.1.1 artifact class
+  (`GPL-3.0-or-later` / `AGPL-3.0-or-later` for software-primary repos,
+  `CC-BY-SA-4.0` for document-primary repos). **§5.2:** `LICENSE` added
+  as a required posture file in its own right. **§16:**
+  compliance-checklist §4.3 bullet extended with the symlink
+  requirement.
+
 - **v1.35 (2026-07-25):** **§11 becomes a palette family.** The single
   canonical palette is replaced by a registry of six: the Steelbore 2
   palette of v1.34 is now named **Steelbore Modern** and remains the
@@ -676,8 +691,26 @@ machine-readable license and copyright metadata. Every project MUST be
 - **`LICENSES/` directory:** the verbatim text of every license used in
   the repo lives in `LICENSES/<SPDX-id>.txt` (e.g.,
   `LICENSES/GPL-3.0-or-later.txt`, `LICENSES/AGPL-3.0-or-later.txt`,
-  plus any upstream licenses per §4.2). A root `LICENSE` file MAY remain
-  as a pointer for GitHub’s license detection.
+  plus any upstream licenses per §4.2).
+
+- **Root `LICENSE` is a symbolic link.** GitHub reads a repository’s
+  license from a root `LICENSE` file; REUSE requires the verbatim texts
+  under `LICENSES/`. Both are satisfied with a single source of truth:
+  the root `LICENSE` MUST be a symbolic link to the project’s primary
+  license text inside `LICENSES/` — never a second, duplicated copy of
+  the text.
+
+      ln -s LICENSES/GPL-3.0-or-later.txt LICENSE
+      git add LICENSE
+
+  Git stores the result as a symlink (mode `120000`), GitHub follows it
+  for license detection, and `reuse lint` stays clean. The link target
+  is the repository’s **primary** license per §4.1.1 —
+  `GPL-3.0-or-later` (or `AGPL-3.0-or-later` when network-facing) for a
+  software-primary repo, `CC-BY-SA-4.0` for a document-primary repo. A
+  duplicated regular-file `LICENSE` is **non-compliant**: the two copies
+  drift, and a stale root `LICENSE` misreports the project’s license to
+  every GitHub visitor.
 
 - **CI gate:** `reuse lint` MUST pass before shipping.
 
@@ -721,7 +754,8 @@ templates:
 | `README.md` | Includes a "Project Posture" section linking to the two below |
 | `NOTICE.md` | Full no-warranty / no-liability statement; defers to the project’s GPL/AGPL license (§4.1) for binding terms |
 | `CONTRIBUTING.md` | Contribution scope, PR-acceptance discretion, sign-off, security reporting, license-of-contributions |
-| `LICENSES/` | REUSE license directory (§4.3): verbatim text of every license used (`GPL-3.0-or-later` or `AGPL-3.0-or-later`, plus any upstream licenses per §4.2). A root `LICENSE` MAY remain as a GitHub-detection pointer. |
+| `LICENSES/` | REUSE license directory (§4.3): verbatim text of every license used (`GPL-3.0-or-later` or `AGPL-3.0-or-later`, plus any upstream licenses per §4.2) |
+| `LICENSE` | Symbolic link to the primary license text in `LICENSES/` (§4.3) — e.g. `ln -s LICENSES/GPL-3.0-or-later.txt LICENSE`. Not a duplicated copy of the text. |
 
 Customize only the project name, scope, and any project-specific
 carve-outs.
@@ -2023,7 +2057,8 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
 - [ ] **§4.3** REUSE-compliant: two-tag SPDX header
   (`SPDX-FileCopyrightText` + `SPDX-License-Identifier`) on every file
   (or `.license` sidecar / `REUSE.toml` entry); `LICENSES/` directory
-  present; `reuse lint` passes
+  present; root `LICENSE` is a symbolic link into `LICENSES/` (never a
+  duplicated copy); `reuse lint` passes
 
 - [ ] **§5** Project Posture: README/NOTICE/CONTRIBUTING present;
   default personal-hobby stance applied; general-use carve-outs declared
