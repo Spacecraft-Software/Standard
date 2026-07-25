@@ -1748,7 +1748,7 @@ registry, selected only by explicit user action or by the §18.1 accessible-mode
 toggle. They never alter, replace, or take precedence over @code{steelbore},
 and the §11 canonical palette table above is unchanged by their existence.
 
-@multitable {@code{steelbore-high-contrast}} {§18.1 accessible mode, or explicit selection} {Every role token lifted to ≥7:1 (WCAG AAA) on Void Navy}
+@multitable {@code{steelbore-high-contrast}} {§18.1 accessible mode, or explicit selection} {Every foreground role token lifted to ≥7:1 (WCAG AAA) on Void Navy}
 @headitem
 Variant
  @tab Selected by
@@ -1760,7 +1760,7 @@ Variant
 @item
 @code{steelbore-high-contrast}
  @tab §18.1 accessible mode, or explicit selection
- @tab Every role token lifted to ≥7:1 (WCAG AAA) on Void Navy
+ @tab Every foreground role token lifted to ≥7:1 (WCAG AAA) on Void Navy
 @item
 @code{steelbore-mono}
  @tab Explicit selection, or @code{NO_COLOR}
@@ -1815,7 +1815,10 @@ Theme token
 @end multitable
 
 Only @code{accent}, @code{structure}, @code{error}, and @code{warning}
-shift; the other tokens are §11 values verbatim. In the variant, all
+shift; the other tokens are §11 values verbatim, with alias tokens
+following their bases (@code{focus} stays Acid Lime @code{#B4FF00};
+@code{border} follows @code{structure} to @code{#B3A1FF}, keeping every
+foreground-class role token at or above 7:1). In the variant, all
 four lifted tokens also clear 4.5:1 on both surfaces (weakest pairing:
 @code{error} @code{#FF7A7A} on Quantum Blue, 5.77:1), so the §11.0.2 †
 restrictions do not apply under high contrast. @strong{Void Navy remains

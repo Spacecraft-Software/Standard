@@ -1082,7 +1082,7 @@ They never alter, replace, or take precedence over `steelbore`, and the
 | Variant | Selected by | Behavior |
 |----|----|----|
 | `steelbore` | **Default** — always, unless overridden | Canonical §11 palette, unchanged |
-| `steelbore-high-contrast` | §18.1 accessible mode, or explicit selection | Every role token lifted to ≥7:1 (WCAG AAA) on Void Navy |
+| `steelbore-high-contrast` | §18.1 accessible mode, or explicit selection | Every foreground role token lifted to ≥7:1 (WCAG AAA) on Void Navy |
 | `steelbore-mono` | Explicit selection, or `NO_COLOR` | 4-bit ANSI only — defers entirely to the user’s terminal palette |
 
 `steelbore-high-contrast` lifts **only the four tokens that need it**;
@@ -1100,14 +1100,16 @@ as close to the brand as accessibility permits:
 | `warning`    | Plasma Magenta | **`#EE7BFF`** | 8.66:1                |
 
 Only `accent`, `structure`, `error`, and `warning` shift; the other
-tokens are §11 values verbatim. In the variant, all four lifted tokens
-also clear 4.5:1 on both surfaces (weakest pairing: `error` `#FF7A7A` on
-Quantum Blue, 5.77:1), so the §11.0.2 † restrictions do not apply under
-high contrast. **Void Navy remains the background in every variant** —
-high contrast is achieved by lifting foregrounds, never by abandoning
-the canvas. The lifted hexes are accessibility-derived lifts of existing
-role tokens, not new brand colors, and may not be used outside the
-variant.
+tokens are §11 values verbatim, with alias tokens following their bases
+(`focus` stays Acid Lime `#B4FF00`; `border` follows `structure` to
+`#B3A1FF`, keeping every foreground-class role token at or above 7:1).
+In the variant, all four lifted tokens also clear 4.5:1 on both surfaces
+(weakest pairing: `error` `#FF7A7A` on Quantum Blue, 5.77:1), so the
+§11.0.2 † restrictions do not apply under high contrast. **Void Navy
+remains the background in every variant** — high contrast is achieved by
+lifting foregrounds, never by abandoning the canvas. The lifted hexes
+are accessibility-derived lifts of existing role tokens, not new brand
+colors, and may not be used outside the variant.
 
 ## §11.2 — Retired Tokens (v1.33 → v1.34)
 
