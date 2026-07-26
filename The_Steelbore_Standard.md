@@ -29,7 +29,7 @@ repository](https://github.com/Spacecraft-Software/Standard), newest
 entry first. It is kept out of this document so the standard reads as
 the rules *in force* rather than the record of how they got there.
 
-This document is **version 1.38**, updated 2026-07-26 (§14: UTC, ISO
+This document is **version 1.39**, updated 2026-07-26 (§14: UTC, ISO
 8601). The skill encoding of the standard keeps a parallel history in
 `spacecraft-standard-constitution/references/CHANGELOG.md` in the
 [Construct
@@ -902,7 +902,7 @@ Red Oxide is 1.13:1 and Radium Green on Liquid Coolant is 1.01:1.
 
 ## §11.3 — Alternate Palettes
 
-Four alternate palettes are registered. Each declares its own canvas,
+Five alternate palettes are registered. Each declares its own canvas,
 its own surfaces, and a full set of §11.1 role tokens verified against
 all three of its backgrounds. **A project adopts exactly one palette**
 (§11.4); tokens are never mixed across palettes.
@@ -1039,6 +1039,41 @@ backgrounds.
 (7.76:1). `foreground` and `structure` are already ≥7:1 and carry over
 verbatim.
 
+### §11.3.5 — Tokyo Night
+
+Anchored on **Night** and **Tokyo Blue**, registered verbatim from the
+upstream editor theme
+([enkia/tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme)).
+`surface` is that project’s documented *Storm* background and
+`surface-alt` its *Night* `bg_dark` — like MatrixGreen’s Ambient Black,
+the code well sits *darker* than the canvas, which §11.0.1 permits. No
+Spacecraft-derived substitutes were needed: every role token clears
+4.5:1 on all three backgrounds, so this palette is registered as a
+conforming alternate rather than a §11.5 fidelity palette.
+
+| Role token    | Color          | Hex       | vs canvas |
+|---------------|----------------|-----------|-----------|
+| `background`  | Night          | `#1A1B26` | (canvas)  |
+| `surface`     | Storm          | `#24283B` | 1.17:1    |
+| `surface-alt` | Night Deep     | `#16161E` | 1.05:1    |
+| `foreground`  | Starlight      | `#C0CAF5` | 10.59:1   |
+| `accent`      | Tokyo Blue     | `#7AA2F7` | 6.79:1    |
+| `structure`   | Neon Purple    | `#BB9AF7` | 7.39:1    |
+| `success`     | Signal Green   | `#9ECE6A` | 9.35:1    |
+| `error`       | Sakura Red     | `#F7768E` | 6.46:1    |
+| `warning`     | Lantern Yellow | `#E0AF68` | 8.55:1    |
+| `focus`       | Ice Cyan       | `#7DCFFF` | 9.96:1    |
+| `border`      | Neon Purple    | `#BB9AF7` | 7.39:1    |
+
+The upstream comment tone **Comment Slate** `#565F89` (2.76:1 on Night)
+is **not bindable to a role token** — it clears neither the 4.5:1 text
+floor nor the 3:1 non-text floor. Boundaries are drawn in `structure`
+per §11.0.1.
+
+`tokyonight-high-contrast` lifts the two tokens that sit below 7:1 on
+the canvas: `accent` to `#97B6F9` (8.44:1) and `error` to `#F998AA`
+(8.22:1). The other six carry over verbatim.
+
 ## §11.4 — Palette Selection
 
 - **Modern is the default.** An artifact that declares nothing uses
@@ -1066,6 +1101,128 @@ verbatim.
 - Documents, editor themes, and terminal themes follow the project’s
   declared palette. Where no project context exists (a standalone
   document, a one-off diagram), use Modern.
+
+- **Fidelity palettes are not adoptable.** The §11.5 palettes are
+  registered for interoperability and are excluded from this section — a
+  project may not declare one as its palette. They also ship no
+  high-contrast sibling, so the bullet above does not apply to them.
+
+- **Palettes have reference names.** Every palette carries a reference
+  name (§11.4.1) alongside its slug. The slug stays the machine
+  identifier; the reference name is for prose and conversation.
+
+### §11.4.1 — Reference Names
+
+Each palette carries a **reference name** for prose, conversation, and
+documentation. Reference names are *additive*: the slug remains the
+machine identifier that themes, `steelbore.toml` keys, and application
+theme lookups use, and it is unchanged by this section. Both forms
+appear in the canonical file, the reference name as the `reference` key
+of each `[palettes.<slug>]` table.
+
+| Slug (machine identifier)    | Reference name                   |
+|------------------------------|----------------------------------|
+| `steelbore`                  | `steelbore-color-palette`        |
+| `steelbore-classic`          | `steelboreclassic-color-palette` |
+| `steelbore-blue`             | `blue-color-palette`             |
+| `steelbore-blackpinkpanther` | `blackpinkpanther-color-palette` |
+| `steelbore-matrixgreen`      | `matrixgreen-color-palette`      |
+| `steelbore-navywhite`        | `navywhite-color-palette`        |
+| `tokyonight`                 | `tokyonight-color-palette`       |
+| `solarized-dark`             | `solarizeddark-color-palette`    |
+| `solarized-light`            | `solarizedlight-color-palette`   |
+
+————————————————————————
+
+## §11.5 — Fidelity Palettes (registered, non-conforming)
+
+A **fidelity palette** reproduces a widely used external theme
+**exactly**, so Spacecraft Software tooling can meet a user who already
+works in it — an editor, a terminal, a diff viewer. Its values are
+copied verbatim from upstream; no token is substituted, deepened, or
+lifted to make a number pass.
+
+The consequence is stated plainly: **a fidelity palette is not required
+to satisfy §11’s contrast guarantee, and the two registered here do
+not.** The ratios printed below are **the measurement, not a target**.
+They are recorded so the gap is visible rather than discovered later.
+
+**Rules for fidelity palettes.**
+
+- A project **MUST NOT** adopt a fidelity palette as its declared §11.4
+  palette. §13’s WCAG 2.2 Level AA obligation and §18’s accessible-mode
+  requirements are unaffected by this section.
+
+- Where an application offers one as a *user-selectable* theme, a
+  conforming palette remains the default, and `steelbore-mono` (§11.1.1,
+  palette-independent) remains the accessible-mode path.
+
+- A fidelity palette ships **no** `-high-contrast` sibling. Lifting its
+  tokens to 7:1 would change the very values it exists to reproduce.
+
+- Fidelity palettes are recorded in `steelbore.toml` under
+  `meta.fidelity-palettes`, and each theme carries
+  `conformance = "non-conforming"` in its `rules` table.
+
+† marks a token whose worst pairing falls between 3:1 and 4.5:1 — large
+text, icons, and non-text UI only. ‡ marks one below 3:1, which carries
+no legible use at any size.
+
+### §11.5.1 — Solarized Dark
+
+Ethan Schoonover’s Solarized
+([ethanschoonover.com/solarized](https://ethanschoonover.com/solarized/)),
+dark mode: canvas `base03`, elevated tone `base02`, body text `base0`.
+Solarized defines a single elevated tone per mode, so `surface-alt`
+shares `surface`.
+
+| Role token    | Color  | Hex       | vs canvas    |
+|---------------|--------|-----------|--------------|
+| `background`  | base03 | `#002B36` | (canvas)     |
+| `surface`     | base02 | `#073642` | 1.15:1       |
+| `surface-alt` | base02 | `#073642` | 1.15:1       |
+| `foreground`  | base0  | `#839496` | **4.75:1** † |
+| `accent`      | blue   | `#268BD2` | **4.08:1** † |
+| `structure`   | violet | `#6C71C4` | **3.43:1** ‡ |
+| `success`     | green  | `#859900` | **4.69:1** † |
+| `error`       | red    | `#DC322F` | **3.25:1** ‡ |
+| `warning`     | yellow | `#B58900` | **4.68:1** † |
+| `focus`       | cyan   | `#2AA198` | **4.75:1** † |
+| `border`      | violet | `#6C71C4` | **3.43:1** ‡ |
+
+Body text clears AA on the canvas (4.75:1) and falls to 4.11:1 on
+`base02`. Restricted to large text, icons, and non-text UI: `foreground`
+(4.11:1), `accent` (3.53:1), `success` (4.06:1), `warning` (4.05:1),
+`focus` (4.12:1). Below 3:1 on `base02`: `structure` (2.97:1), `error`
+(2.81:1), `border` (2.97:1).
+
+### §11.5.2 — Solarized Light
+
+The same accent set on Solarized’s light bases: canvas `base3`, elevated
+tone `base2`, body text `base00`.
+
+| Role token    | Color  | Hex       | vs canvas    |
+|---------------|--------|-----------|--------------|
+| `background`  | base3  | `#FDF6E3` | (canvas)     |
+| `surface`     | base2  | `#EEE8D5` | 1.14:1       |
+| `surface-alt` | base2  | `#EEE8D5` | 1.14:1       |
+| `foreground`  | base00 | `#657B83` | **4.13:1** † |
+| `accent`      | blue   | `#268BD2` | **3.41:1** † |
+| `structure`   | violet | `#6C71C4` | **4.06:1** † |
+| `success`     | green  | `#859900` | **2.97:1** ‡ |
+| `error`       | red    | `#DC322F` | **4.29:1** † |
+| `warning`     | yellow | `#B58900` | **2.98:1** ‡ |
+| `focus`       | cyan   | `#2AA198` | **2.93:1** ‡ |
+| `border`      | violet | `#6C71C4` | **4.06:1** † |
+
+**Solarized Light does not clear the AA floor for body text.** `base00`
+on `base3` measures 4.13:1, below 4.5:1 — Solarized’s own emphasized
+tone `base01` (4.99:1) would, but substituting it would no longer be
+Solarized. Restricted (3:1–4.5:1): `foreground` (3.64:1), `accent`
+(3.00:1), `structure` (3.57:1), `error` (3.77:1), `border` (3.57:1).
+Below 3:1, and so carrying no legible use at any size: `success`
+(2.62:1), `warning` (2.62:1), `focus` (2.58:1) — an interface built on
+these values cannot signal success, warning, or focus by color at all.
 
 ————————————————————————
 
