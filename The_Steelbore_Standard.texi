@@ -5,11 +5,11 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 1.39
+@settitle The Steelbore Standard 1.40
 @c %**end of header
 
-@set VERSION 1.39
-@set UPDATED 2026-07-26
+@set VERSION 1.40
+@set UPDATED 2026-07-27
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
 @copying
@@ -659,6 +659,7 @@ do; posture says what they should @emph{expect} from the maintainer.
 * General-Use Carve-Out::
 * Maintainer Discretion::
 * Package Distribution::
+* Skill Packaging::
 @end menu
 
 @node Default Posture
@@ -824,6 +825,46 @@ directory layout, comply with that scheme while still meeting the above
 requirements.
 @end itemize
 
+@node Skill Packaging
+@section §5.6 — Skill Packaging Requirements
+Skills are software-class artifacts (§4.1.1) distributed as @code{SKILL.md}
+bundles. The loading agent imposes hard limits that a bundle only discovers
+at install time, when the upload is rejected and the packing work is already
+done. Those limits are therefore enforced @strong{before packing}, not after
+a failure.
+
+@strong{Mandatory rules --- violation blocks shipping:}
+
+@multitable {Over-limit skills do not ship} {The cap MUST be checked by an automated gate that runs both in the skill repository's CI on every pull request and push to the default branch, and in whatever command produces the distributable bundle.}
+@headitem
+Rule
+ @tab Detail
+@item
+Description cap
+ @tab A skill's frontmatter @code{description} MUST NOT exceed
+@strong{1000 rendered characters}. The consuming loader's absolute limit
+is @strong{1024}; 1000 is the deliberate 24-character margin for
+encoding and trailing-newline edge cases.
+@item
+Rendered, not raw
+ @tab "Rendered" means the string the loader sees. A YAML folded scalar
+(@code{description: >}) joins its wrapped lines with single spaces and
+retains a trailing newline, so the raw line lengths are not the
+measurement. Block (@code{>} / @code{|}) and single-line plain or quoted
+forms alike are measured after folding.
+@item
+Machine-enforced
+ @tab The cap MUST be checked by an automated gate that runs both in the
+skill repository's CI on every pull request and push to the default
+branch, and in whatever command produces the distributable bundle. A
+developer-installed git hook is a convenience, never the gate --- hooks
+are opt-in per clone and cannot be relied on.
+@item
+Over-limit skills do not ship
+ @tab A skill whose description exceeds the cap MUST NOT be packed,
+committed, or published. Trim the description; do not raise the cap.
+@end multitable
+
 @iftex
 @bigskip@hrule@bigskip
 @end iftex
@@ -838,6 +879,7 @@ requirements.
 * POSIX Compliance::
 * Post-Quantum Cryptography::
 * Signed Commits::
+* Contribution Targets::
 @end menu
 
 @node POSIX Compliance
@@ -907,6 +949,72 @@ commit-signing algorithm migration is gated on hosting-platform support
 for post-quantum key formats. When GitHub (or Spacecraft Software's own
 Gitway) accepts PQC signing keys, Spacecraft Software commits migrate
 accordingly.
+
+@node Contribution Targets
+@section §6.4 — Authorized Contribution Targets (Non-Negotiable)
+Spacecraft Software work is published only to namespaces Spacecraft
+Software controls. Two are authorized today:
+@uref{https://github.com/Spacecraft-Software,github.com/Spacecraft-Software}
+(the umbrella organization) and
+@uref{https://github.com/UnbreakableMJ,github.com/UnbreakableMJ} (the
+maintainer's personal namespace). A future Spacecraft Software-controlled
+host --- Gitway, or any successor --- inherits the same standing. Every
+other destination is @strong{outbound} and gated.
+
+§6.3 says how a commit must be signed on a Spacecraft Software remote;
+this section says which remotes those are, and what it takes to send
+anything anywhere else.
+
+@strong{Mandatory rules --- violation blocks shipping:}
+
+@multitable {Registries and trackers included} {Publishing to a package registry under a namespace Spacecraft Software does not control (@code{crates.io}, npm, PyPI, AUR, Nixpkgs, Guix, Flathub, and the like), and filing issues, bug reports, or patches on an external tracker or mailing list, are outbound contributions under this same rule.}
+@headitem
+Rule
+ @tab Detail
+@item
+Default-deny outbound
+ @tab No @code{git push}, pull or merge request, patch series, or
+mailing-list submission to any Git remote outside the authorized
+namespaces. Silence is a denial, not permission.
+@item
+Automation never initiates
+ @tab Bots, CI pipelines, scripted workflows, and assistant-driven
+sessions MUST NEVER open an outbound contribution. Authorization for one
+contribution does not carry to the next task, session, or repository.
+@item
+Maintainer-only exception
+ @tab Only Mohamed Hammad, acting explicitly and per contribution, may
+authorize an outbound submission (§5.4 maintainer discretion). The
+authorization names the destination and the change; it does not
+generalize.
+@item
+Registries and trackers included
+ @tab Publishing to a package registry under a namespace Spacecraft
+Software does not control (@code{crates.io}, npm, PyPI, AUR, Nixpkgs,
+Guix, Flathub, and the like), and filing issues, bug reports, or patches
+on an external tracker or mailing list, are outbound contributions under
+this same rule.
+@item
+Forks are inbound-only
+ @tab A fork under an authorized namespace may be created and pushed to
+freely --- that is our namespace. Turning a fork branch into an upstream
+pull request is the gated act, not the fork itself.
+@item
+Prefer carrying the patch
+ @tab When an upstream change is needed, carry the patch in-tree (§4.2
+preserves upstream copyright, license texts, and notices) rather than
+upstreaming it, unless the maintainer authorizes upstreaming.
+@item
+GNU posture does not exempt
+ @tab An artifact under the free-software/GNU posture (§1) still
+requires explicit maintainer authorization before anything is sent to
+GNU, the FSF, or Savannah. That posture yields this standard's identity
+clauses (§2, §11--§12, §15); it does not yield this one.
+@item
+Withdraw mistakes promptly
+ @tab An outbound submission made without authorization MUST be closed
+or withdrawn as soon as it is discovered, and the incident recorded.
+@end multitable
 
 @iftex
 @bigskip@hrule@bigskip
@@ -3408,6 +3516,12 @@ in project README
 buildable, and carrying correct version + SHA-256 checksum (in each
 package manager's native format) before any release tag is pushed
 @item
+☐ @strong{§5.6} Skill packaging: every @code{SKILL.md} @code{description}
+measures ≤ 1000 rendered characters (folded scalars counted as the loader
+sees them, not as raw lines); the cap is enforced by CI @emph{and} by the
+command that produces the bundle, not only by a local git hook --- N/A for
+projects that ship no skills
+@item
 ☐ @strong{§6.1} POSIX-compliant CLI/system tools
 @item
 ☐ @strong{§7} Shell scripts are POSIX-compatible; Nushell/Ion native
@@ -3472,6 +3586,12 @@ cryptographically signed with the
 @code{Mohamed.Hammad@@SpacecraftSoftware.org} key and showing "Verified"
 on the hosting platform; rewrites preserve signatures; programmatic and
 assistant-driven commits signed too
+@item
+☐ @strong{§6.4} No commit, pull request, patch, issue, or package
+publication sent to a namespace outside @code{Spacecraft-Software} /
+@code{UnbreakableMJ} without explicit per-contribution maintainer
+authorization; automation, CI, and assistant-driven work never initiate an
+outbound contribution
 @end itemize
 
 If any item is not applicable to the current artifact type (e.g., color
