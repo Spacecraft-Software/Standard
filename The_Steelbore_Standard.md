@@ -29,7 +29,7 @@ repository](https://github.com/Spacecraft-Software/Standard), newest
 entry first. It is kept out of this document so the standard reads as
 the rules *in force* rather than the record of how they got there.
 
-This document is **version 1.40**, updated 2026-07-27 (§14: UTC, ISO
+This document is **version 1.41**, updated 2026-08-04 (§14: UTC, ISO
 8601). The skill encoding of the standard keeps a parallel history in
 `spacecraft-standard-constitution/references/CHANGELOG.md` in the
 [Construct
@@ -181,6 +181,61 @@ means of achieving it — but it is not the whole of Priority 1.**
 - **Verified by testing** — stability properties must be backed by tests
   (unit, integration, and fuzz/property where applicable) gating CI, not
   asserted by inspection alone.
+
+### §3.1.1 — TypeScript over JavaScript
+
+JavaScript is not a preferred language under §3.1: it is dynamically
+typed, so whole classes of defect that a compiler would reject survive
+into production and surface as run-time failures. The memory-safety
+lever does not apply — the runtime is memory-safe either way — so **type
+safety is the stability lever available here**, and the standard
+requires it be pulled.
+
+Where a memory-safe alternative exists (Rust compiled to WebAssembly,
+Rust or Go for a server, Flutter/Dart for an application UI), it must be
+chosen per §3.1. **Where the JavaScript runtime is genuinely required**
+— a browser page, a Node/Deno/Bun program, an Electron application, an
+npm-distributed tool, a VS Code extension — the source language MUST be
+**TypeScript**. Plain JavaScript source is a documented exemption, not a
+default.
+
+- **Strict mode is mandatory.** `tsconfig.json` sets `"strict": true`,
+  and additionally `noUncheckedIndexedAccess`, `noImplicitOverride`, and
+  `exactOptionalPropertyTypes`. A configuration that relaxes `strict` is
+  a Priority 1 regression.
+
+- **No silent escape hatches.** `any` and non-null assertions (`!`) are
+  prohibited in production paths; use `unknown` plus narrowing.
+  `@ts-ignore` is prohibited outright — where a suppression is
+  unavoidable, use `@ts-expect-error` with a comment naming the reason,
+  so the suppression fails the build once it becomes unnecessary.
+
+- **Validate at the boundary.** Data crossing a trust boundary (network
+  responses, files, environment, IPC, user input) is `unknown` until
+  parsed by a run-time validator. A type annotation is a compile-time
+  claim, not a check — asserting a shape that was never verified is
+  exactly the silent-failure mode §3.1 forbids.
+
+- **Compiled output is not source.** Emitted `.js` (and its source maps)
+  in a build directory is a *derived artifact* and is outside this rule.
+  The rule governs what is authored and committed.
+
+- **The build must typecheck.** `tsc --noEmit` (or the equivalent
+  project-wide check) gates CI. A project that only transpiles —
+  stripping types without checking them, as esbuild, SWC, and Bun do by
+  default — has not satisfied this section.
+
+- **Load the guidelines skill** — `spacecraft-typescript-guidelines` —
+  before writing or reviewing any TypeScript.
+
+**Exemptions.** Plain JavaScript remains acceptable, without filing,
+only where TypeScript cannot express the artifact: a tool’s own
+configuration file that must be `.js` (e.g. `eslint.config.js` where no
+TypeScript loader is available), a vendored or upstream-derived file
+carried under §4.2, and generated output. Anything else — including "it
+is only a small script" — requires a documented technical exemption in
+the project’s README or architecture notes, in the same manner as the
+§3.1 memory-safe-language exemption.
 
 ## §3.2 — Priority 2: Performance
 
@@ -1899,6 +1954,14 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
 - [ ] **§3.1** Stability: memory safety (Rust, or ASLR+CFI documented);
   robust error handling, fault tolerance, and test-verified
 
+- [ ] **§3.1.1** Where the JavaScript runtime is required, source is
+  **TypeScript** under `"strict": true` (plus
+  `noUncheckedIndexedAccess`, `noImplicitOverride`,
+  `exactOptionalPropertyTypes`); no `any` / `!` / `@ts-ignore` in
+  production paths; boundary data validated at run time; `tsc --noEmit`
+  gates CI; any plain-JavaScript source outside the listed exemptions is
+  documented — N/A for projects with no JavaScript runtime
+
 - [ ] **§3.2** Performance: concurrency considered throughout
   architecture design; adopted where it advances performance, abandoned
   where it degrades performance or compromises Stability; serial
@@ -2018,6 +2081,7 @@ skipping it.
 | Task | Load this skill |
 |----|----|
 | Writing any Rust code | `microsoft-rust-guidelines` |
+| Writing any TypeScript (§3.1.1) | `spacecraft-typescript-guidelines` |
 | Writing or reviewing shell scripts | `spacecraft-cli-shell` + `spacecraft-cli-preference` |
 | Generating DOCX / ODT / PDF on demand | `spacecraft-document-format` |
 | Authoring or building a Texinfo manual | `spacecraft-texinfo-document` |
