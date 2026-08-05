@@ -5,10 +5,10 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 1.43
+@settitle The Steelbore Standard 1.44
 @c %**end of header
 
-@set VERSION 1.43
+@set VERSION 1.44
 @set UPDATED 2026-08-05
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
@@ -3777,7 +3777,7 @@ Creating IDE / terminal themes
  @tab @code{spacecraft-theme-factory}
 @item
 Implementing or auditing accessibility (§18)
- @tab @code{spacecraft-accessibility}
+ @tab @code{spacecraft-accessibility-support}
 @item
 All other Spacecraft Software work
  @tab @code{spacecraft-standard-constitution}
