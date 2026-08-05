@@ -5,10 +5,10 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 1.42
+@settitle The Steelbore Standard 1.43
 @c %**end of header
 
-@set VERSION 1.42
+@set VERSION 1.43
 @set UPDATED 2026-08-05
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
@@ -482,6 +482,33 @@ Benchmarking is @strong{mandatory} before and after any optimization
 work; regressions must be documented and justified --- and it is the
 evidence by which the concurrency-vs-serial trade-off above is decided.
 @end itemize
+
+@menu
+* Platform Flag Caveats::
+@end menu
+
+@node Platform Flag Caveats
+@subsection §3.2.1 — Platform-Specific Compiler & Linker Flag Caveats
+
+Compiler and linker optimization flags are @strong{not universally
+portable} across operating systems and distributions. Just as
+systemd-specific settings do not apply to non-systemd distros (e.g., GNU
+Guix System, Void Linux, Gentoo with OpenRC), linker and LTO flags must
+be adapted to the target platform's toolchain layout.
+
+@strong{NixOS / Steelbore OS Bravais:} Because NixOS isolates packages in
+the @file{/nix/store}, GCC's LTO plugin is not on the standard linker
+search path. When using @code{-flto} (Link Time Optimization) on NixOS,
+you @strong{must} explicitly point GCC's linker to the GCC LTO plugin via
+@code{-fuse-ld=mold} (preferred) or @code{-fuse-ld=bfd} (fallback).
+Without this, LTO-enabled builds will fail to link.
+
+@quotation
+@strong{Rule:} Whenever recommending or applying compiler/linker flags ---
+especially @code{-flto}, @code{-march=native}, or PGO --- verify whether
+the target OS requires supplementary flags or alternative linker
+selection. Document the OS-specific requirements alongside the flags.
+@end quotation
 
 @node Priority 3
 @section §3.3 — Priority 3: Security by Design
