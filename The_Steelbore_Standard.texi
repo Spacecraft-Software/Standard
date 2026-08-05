@@ -5,11 +5,11 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 1.41
+@settitle The Steelbore Standard 1.42
 @c %**end of header
 
-@set VERSION 1.41
-@set UPDATED 2026-08-04
+@set VERSION 1.42
+@set UPDATED 2026-08-05
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
 @copying
@@ -66,7 +66,7 @@ Maintained by Mohamed Hammad
 * Key Bindings::                §10 — CUA + Vim key binding requirements.
 * Color Palette::               §11 — WCAG-compliant color palette.
 * Typography::                  §12 — FOSS-licensed font requirements.
-* UI/UX Design System::         §13 — Material Design & visual design system.
+* UI/UX Design System::         §13 — Declared component system & visual design.
 * Date Time Units::             §14 — ISO 8601, UTC Z, metric units.
 * Attribution::                 §15 — Maintainer, project pages, credits.
 * Development Progress Tracking:: §17 — Development progress tracking and reporting.
@@ -2600,9 +2600,44 @@ or another FOSS-licensed repository.
 @chapter §13 — UI/UX Design System
 @itemize
 @item
-@strong{Material Design} is the required component system for all
-graphical applications. Theme Material components with the §11 color
-palette.
+@strong{Every graphical application declares exactly one component
+system}, named in its @file{README.md} beside the §5.2 posture section,
+and themes it with the §11 palette. Which system is determined by the
+platform, not by preference:
+
+@multitable {Flutter, web, mobile, and cross-platform GUI} {@strong{GNOME HIG} via libadwaita --- @code{spacecraft-gtk-guidelines}}
+@headitem
+Application class
+ @tab Required component system
+@item
+@strong{Flutter, web, mobile, and cross-platform GUI}
+ @tab @strong{Material Design}
+@item
+@strong{GTK 4 desktop}
+ @tab @strong{GNOME HIG} via libadwaita --- @code{spacecraft-gtk-guidelines}
+@item
+@strong{Qt 6 desktop}
+ @tab @strong{KDE HIG} via Qt Quick Controls / Fusion --- @code{spacecraft-qt-guidelines}
+@item
+@strong{Custom-drawn or immediate-mode UI}
+ @tab Material Design, unless a platform HIG is declared
+@end multitable
+
+@strong{Rationale.} Material Design is a coherent, accessible system and
+remains the default wherever the platform does not supply one. A native
+desktop toolkit does supply one: GTK ships Adwaita and the GNOME HIG, Qt
+ships Fusion and the KDE HIG, and both are wired into the platform's
+window management, settings, and accessibility stack. Imposing Material
+on top of either produces an application that matches neither its own
+toolkit nor Material, and that fights the very platform integration §18
+depends on. The mandate is therefore that a system is @strong{declared
+and followed consistently} --- not that one particular system is used
+everywhere.
+@item
+@strong{§11 binding is unconditional.} Whichever system is declared, all
+palette references go through the named @code{steelbore} theme (§11.1).
+A component system chooses the widget vocabulary; it never supplies the
+colors.
 @item
 @strong{WCAG 2.2 Level AA} contrast is the minimum for all color
 pairings. Any new color additions must be WCAG-verified before adoption,
@@ -3626,7 +3661,10 @@ literals in UI logic --- and ship the palette's
 @item
 ☐ @strong{§12} FOSS-licensed fonts only (Share Tech Mono / Inconsolata)
 @item
-☐ @strong{§13} Material Design UI/UX; WCAG 2.2 AA verified, stating which
+☐ @strong{§13} Exactly one component system declared in @file{README.md}
+and followed --- Material Design for Flutter/web/mobile/cross-platform,
+GNOME HIG for GTK 4, KDE HIG for Qt 6; themed through the
+@code{steelbore} theme (§11.1); WCAG 2.2 AA verified, stating which
 pairing was measured
 @item
 ☐ @strong{§14} ISO 8601 dates; 24h time; UTC Z is the default primary
@@ -3701,6 +3739,12 @@ Generating DOCX / ODT / PDF on demand
 @item
 Authoring or building a Texinfo manual
  @tab @code{spacecraft-texinfo-document}
+@item
+Writing GTK 4 / GNOME desktop code (§13)
+ @tab @code{spacecraft-gtk-guidelines}
+@item
+Writing Qt 6 / KDE desktop code (§13)
+ @tab @code{spacecraft-qt-guidelines}
 @item
 Creating IDE / terminal themes
  @tab @code{spacecraft-theme-factory}
