@@ -29,7 +29,7 @@ repository](https://github.com/Spacecraft-Software/Standard), newest
 entry first. It is kept out of this document so the standard reads as
 the rules *in force* rather than the record of how they got there.
 
-This document is **version 1.42**, updated 2026-08-05 (§14: UTC, ISO
+This document is **version 1.43**, updated 2026-08-05 (§14: UTC, ISO
 8601). The skill encoding of the standard keeps a parallel history in
 `spacecraft-standard-constitution/references/CHANGELOG.md` in the
 [Construct
@@ -269,6 +269,26 @@ documented.
 - Benchmarking is **mandatory** before and after any optimization work;
   regressions must be documented and justified — and it is the evidence
   by which the concurrency-vs-serial trade-off above is decided.
+
+### §3.2.1 — Platform-Specific Compiler & Linker Flag Caveats
+
+Compiler and linker optimization flags are **not universally portable**
+across operating systems and distributions. Just as systemd-specific
+settings do not apply to non-systemd distros (e.g., GNU Guix System,
+Void Linux, Gentoo with OpenRC), linker and LTO flags must be adapted to
+the target platform’s toolchain layout.
+
+**NixOS / Steelbore OS Bravais:** Because NixOS isolates packages in the
+`/nix/store`, GCC’s LTO plugin is not on the standard linker search
+path. When using `-flto` (Link Time Optimization) on NixOS, you **must**
+explicitly point GCC’s linker to the GCC LTO plugin via `-fuse-ld=mold`
+(preferred) or `-fuse-ld=bfd` (fallback). Without this, LTO-enabled
+builds will fail to link.
+
+> **Rule:** Whenever recommending or applying compiler/linker flags —
+> especially `-flto`, `-march=native`, or PGO — verify whether the
+> target OS requires supplementary flags or alternative linker
+> selection. Document the OS-specific requirements alongside the flags.
 
 ## §3.3 — Priority 3: Security by Design
 
