@@ -29,7 +29,7 @@ repository](https://github.com/Spacecraft-Software/Standard), newest
 entry first. It is kept out of this document so the standard reads as
 the rules *in force* rather than the record of how they got there.
 
-This document is **version 1.43**, updated 2026-08-05 (§14: UTC, ISO
+This document is **version 1.44**, updated 2026-08-05 (§14: UTC, ISO
 8601). The skill encoding of the standard keeps a parallel history in
 `spacecraft-standard-constitution/references/CHANGELOG.md` in the
 [Construct
@@ -2136,7 +2136,7 @@ skipping it.
 | Writing GTK 4 / GNOME desktop code (§13) | `spacecraft-gtk-guidelines` |
 | Writing Qt 6 / KDE desktop code (§13) | `spacecraft-qt-guidelines` |
 | Creating IDE / terminal themes | `spacecraft-theme-factory` |
-| Implementing or auditing accessibility (§18) | `spacecraft-accessibility` |
+| Implementing or auditing accessibility (§18) | `spacecraft-accessibility-support` |
 | All other Spacecraft Software work | `spacecraft-standard-constitution` |
 
 # Concept Index
