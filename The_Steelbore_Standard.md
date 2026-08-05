@@ -29,7 +29,7 @@ repository](https://github.com/Spacecraft-Software/Standard), newest
 entry first. It is kept out of this document so the standard reads as
 the rules *in force* rather than the record of how they got there.
 
-This document is **version 1.41**, updated 2026-08-04 (§14: UTC, ISO
+This document is **version 1.42**, updated 2026-08-05 (§14: UTC, ISO
 8601). The skill encoding of the standard keeps a parallel history in
 `spacecraft-standard-constitution/references/CHANGELOG.md` in the
 [Construct
@@ -1345,8 +1345,33 @@ or another FOSS-licensed repository.
 
 # §13 — UI/UX Design System
 
-- **Material Design** is the required component system for all graphical
-  applications. Theme Material components with the §11 color palette.
+- **Every graphical application declares exactly one component system**,
+  named in its `README.md` beside the §5.2 posture section, and themes
+  it with the §11 palette. Which system is determined by the platform,
+  not by preference:
+
+  | Application class | Required component system |
+  |----|----|
+  | **Flutter, web, mobile, and cross-platform GUI** | **Material Design** |
+  | **GTK 4 desktop** | **GNOME HIG** via libadwaita — `spacecraft-gtk-guidelines` |
+  | **Qt 6 desktop** | **KDE HIG** via Qt Quick Controls / Fusion — `spacecraft-qt-guidelines` |
+  | **Custom-drawn or immediate-mode UI** | Material Design, unless a platform HIG is declared |
+
+  **Rationale.** Material Design is a coherent, accessible system and
+  remains the default wherever the platform does not supply one. A
+  native desktop toolkit does supply one: GTK ships Adwaita and the
+  GNOME HIG, Qt ships Fusion and the KDE HIG, and both are wired into
+  the platform’s window management, settings, and accessibility stack.
+  Imposing Material on top of either produces an application that
+  matches neither its own toolkit nor Material, and that fights the very
+  platform integration §18 depends on. The mandate is therefore that a
+  system is **declared and followed consistently** — not that one
+  particular system is used everywhere.
+
+- **§11 binding is unconditional.** Whichever system is declared, all
+  palette references go through the named `steelbore` theme (§11.1). A
+  component system chooses the widget vocabulary; it never supplies the
+  colors.
 
 - **WCAG 2.2 Level AA** contrast is the minimum for all color pairings.
   Any new color additions must be WCAG-verified before adoption, and the
@@ -2028,8 +2053,11 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
 
 - [ ] **§12** FOSS-licensed fonts only (Share Tech Mono / Inconsolata)
 
-- [ ] **§13** Material Design UI/UX; WCAG 2.2 AA verified, stating which
-  pairing was measured
+- [ ] **§13** Exactly one component system declared in `README.md` and
+  followed — Material Design for Flutter/web/mobile/cross-platform,
+  GNOME HIG for GTK 4, KDE HIG for Qt 6; themed through the `steelbore`
+  theme (§11.1); WCAG 2.2 AA verified, stating which pairing was
+  measured
 
 - [ ] **§14** ISO 8601 dates; 24h time; UTC Z is the default primary
   timestamp (companion local time with UTC offset permitted, never a
@@ -2085,6 +2113,8 @@ skipping it.
 | Writing or reviewing shell scripts | `spacecraft-cli-shell` + `spacecraft-cli-preference` |
 | Generating DOCX / ODT / PDF on demand | `spacecraft-document-format` |
 | Authoring or building a Texinfo manual | `spacecraft-texinfo-document` |
+| Writing GTK 4 / GNOME desktop code (§13) | `spacecraft-gtk-guidelines` |
+| Writing Qt 6 / KDE desktop code (§13) | `spacecraft-qt-guidelines` |
 | Creating IDE / terminal themes | `spacecraft-theme-factory` |
 | Implementing or auditing accessibility (§18) | `spacecraft-accessibility` |
 | All other Spacecraft Software work | `spacecraft-standard-constitution` |
