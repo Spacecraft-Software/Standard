@@ -29,3 +29,38 @@ jobs:
 
       - name: Validate JSON / JSONC / TOML / YAML
         run: python3 .github/validate-configs.py
+
+  # The Standard cites skills by id, but the catalogue lives in Construct, so
+  # nothing here could tell whether a cited skill exists. It shipped for months
+  # naming `spacecraft-accessibility` when the skill had always been
+  # `spacecraft-accessibility-support` — silently, because a missing skill does
+  # not announce itself; it simply never loads, and §18 work directed at it
+  # proceeds without it.
+  #
+  # This job checks out Construct read-only (both repos are public, so no token)
+  # and runs Construct's checker against this document. The dependency direction
+  # is deliberate: the Standard cites the catalogue, so the Standard validates
+  # against it. The version check is off — this document's own masthead version
+  # is the one legitimate pin in the ecosystem.
+  skill-refs:
+    name: Skill references resolve against the Construct catalogue
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          repository: Spacecraft-Software/Construct
+          path: .construct
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate skill references
+        run: |
+          python3 .construct/.github/check-skill-refs.py \
+            --catalogue .construct \
+            --no-version-check \
+            The_Steelbore_Standard.texi The_Steelbore_Standard.md
