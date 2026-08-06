@@ -29,7 +29,7 @@ repository](https://github.com/Spacecraft-Software/Standard), newest
 entry first. It is kept out of this document so the standard reads as
 the rules *in force* rather than the record of how they got there.
 
-This document is **version 1.44**, updated 2026-08-05 (§14: UTC, ISO
+This document is **version 1.45**, updated 2026-08-06 (§14: UTC, ISO
 8601). The skill encoding of the standard keeps a parallel history in
 `spacecraft-standard-constitution/references/CHANGELOG.md` in the
 [Construct
@@ -803,14 +803,20 @@ artifact uses Modern unless its project explicitly declares an alternate
 under §11.4. The remainder of §11 defines Modern; §11.2 and §11.3 define
 the alternates.
 
-| Theme slug | Palette | Canvas | Status |
-|----|----|----|----|
-| `steelbore` | Steelbore Modern | `#000027` | **Default** — all artifacts unless declared |
-| `steelbore-classic` | Steelbore Classic | `#000027` | Legacy contract (§11.2) |
-| `steelbore-blue` | Steelbore Blue | `#0A1024` | Alternate (§11.3) |
-| `steelbore-blackpinkpanther` | Steelbore BlackPinkPanther | `#141418` | Alternate (§11.3) |
-| `steelbore-matrixgreen` | Steelbore MatrixGreen | `#0C1A2B` | Alternate (§11.3) |
-| `steelbore-navywhite` | Steelbore NavyWhite | `#E7E5E0` | Alternate (§11.3) — light canvas |
+| Theme slug | Palette | Canvas | Polarity | Status |
+|----|----|----|----|----|
+| `steelbore` | Steelbore Modern | `#000027` | Dark | **Default** — all artifacts unless declared |
+| `steelbore-classic` | Steelbore Classic | `#000027` | Dark | Legacy contract (§11.2) |
+| `steelbore-blue` | Steelbore Blue | `#0A1024` | Dark | Alternate (§11.3) |
+| `steelbore-blackpinkpanther` | Steelbore BlackPinkPanther | `#141418` | Dark | Alternate (§11.3) |
+| `steelbore-matrixgreen` | Steelbore MatrixGreen | `#0C1A2B` | Dark | Alternate (§11.3) |
+| `steelbore-navywhite` | Steelbore NavyWhite | `#E7E5E0` | **Light** | Alternate (§11.3) — the family’s only light canvas |
+| `tokyonight` | Tokyo Night | `#1A1B26` | Dark | Alternate (§11.3) |
+
+**Polarity** is the canvas’s light/dark class, and it is normative
+content: §11.6.2 pairs a dark palette with a light one so an application
+can follow the platform’s color-scheme preference. Every conforming
+member is dark-canvas except `steelbore-navywhite`.
 
 ## §11.0 — Steelbore Modern (canonical palette)
 
@@ -1199,24 +1205,39 @@ the canvas: `accent` to `#97B6F9` (8.44:1) and `error` to `#F998AA`
 - **Modern is the default.** An artifact that declares nothing uses
   `steelbore`. No declaration is required to be compliant.
 
-- **One palette per project.** A project adopting an alternate declares
-  it in its `README.md` beside the §5.2 posture section and registers
-  the theme under that slug. Tokens from two palettes are never combined
-  in one interface — the contrast guarantees are computed per-palette
-  and do not survive mixing.
+- **One palette per project.** A project **authors** against exactly one
+  palette, declares it in its `README.md` beside the §5.2 posture
+  section, and registers the theme under that slug. That palette is the
+  project’s **default** (§11.6.3), not the only theme it may render:
+  §11.6.1 requires a project to register the family so a system or user
+  declaration can be answered. Tokens from two palettes are never
+  **combined in one interface** — the contrast guarantees are computed
+  per-palette and do not survive mixing. Replacing one palette’s tokens
+  with another’s, whole-surface and at once, is not combining; §11.6.2
+  governs it.
 
 - **Every palette ships its high-contrast sibling.** The §18.1
   accessible-mode toggle selects `<palette-slug>-high-contrast`;
   `steelbore-mono` is palette-independent and serves them all.
 
+- **A project may declare a light/dark pair.** `steelbore` is the
+  family’s dark default and `steelbore-navywhite` its light one —
+  §11.3.4 is the only light-canvas member. A project may name its own
+  pair in `README.md`, or declare `light = none` with a stated reason to
+  ship dark-only. §11.6.2 defines how the pair is used.
+
 - **The canvas is mandatory within its palette.** Substituting a
-  different background for a declared palette is non-compliant.
+  different background for a declared palette is non-compliant. The rule
+  binds whichever palette is *in force*: when §11.6.2 switches palettes,
+  the new palette’s canvas comes with it, unaltered.
 
 - **Values are read, never retyped.** The canonical machine-readable
   source for every palette, variant, and contrast matrix is
   `steelbore.toml`, shipped by the `steelbore-color-palette` skill.
   Where this document and that file disagree, this document governs and
-  the file is corrected.
+  the file is corrected. A theme registry supplied by the operating
+  system (§11.6.4) is advisory and never authoritative; the
+  application’s own copy governs.
 
 - Documents, editor themes, and terminal themes follow the project’s
   declared palette. Where no project context exists (a standalone
@@ -1230,6 +1251,10 @@ the canvas: `accent` to `#97B6F9` (8.44:1) and `error` to `#F998AA`
 - **Palettes have reference names.** Every palette carries a reference
   name (§11.4.1) alongside its slug. The slug stays the machine
   identifier; the reference name is for prose and conversation.
+
+- **The registered set is not the declared palette.** What a project
+  ships in its theme registry, and how a running application chooses
+  among those themes, are §11.6.
 
 ### §11.4.1 — Reference Names
 
@@ -1343,6 +1368,273 @@ Solarized. Restricted (3:1–4.5:1): `foreground` (3.64:1), `accent`
 Below 3:1, and so carrying no legible use at any size: `success`
 (2.62:1), `warning` (2.62:1), `focus` (2.58:1) — an interface built on
 these values cannot signal success, warning, or focus by color at all.
+
+————————————————————————
+
+## §11.6 — System Theme Declaration & Resolution
+
+§11.1 says palette references go through a named theme. §11.4 says a
+project declares one palette. Neither says what happens when the
+*machine* has an opinion — and Steelbore OS does. This section closes
+that gap from both sides: what an application ships and how it decides
+which theme to render, and how an operating system declares the theme it
+wants applications to follow.
+
+**Scope.** This section binds every application published under the two
+namespaces §6.4 authorizes — `github.com/Spacecraft-Software` and
+`github.com/UnbreakableMJ` — in every class that draws a user interface:
+**GUI, TUI, and CLI alike**. A CLI is not exempt. It already honors
+`NO_COLOR` (§18.2.1) and already emits ANSI color, so it already has a
+theme whether or not it names one. A library, a build plugin, or any
+artifact with no user-facing output has no theme to resolve and records
+§11.6 as N/A. **Projects registered as games are not exempt** — §18.5
+carves out §18 and §10, not §11 — but a game satisfies this section in
+its **menus, HUD, and settings chrome**; the simulated world it renders
+is not an interface surface under §11.
+
+### §11.6.1 — Shipping the family
+
+A project **authors** against one palette and **registers** several.
+These are different obligations, and §11.4’s one-palette rule governs
+only the first.
+
+The **registered set** is the thirteen themes that bind the §11.1
+eleven-role contract:
+
+| Obligation | Themes | Why |
+|----|----|----|
+| **MUST register** | The six conforming palettes — `steelbore`, `steelbore-blue`, `steelbore-blackpinkpanther`, `steelbore-matrixgreen`, `steelbore-navywhite`, `tokyonight` — each with its `-high-contrast` sibling, plus `steelbore-mono`. Thirteen themes | Every one binds the same eleven role tokens, so a theme layer that reads `steelbore.toml` registers them in a loop. A declaration can then always be answered |
+| **MAY register** | `steelbore-classic` and `steelbore-classic-high-contrast` | Classic keeps the legacy six-role contract (§11.2) and defines no surface class, so it is registrable only by an application that implements that contract as well |
+| **MUST NOT register** | A §11.5 fidelity palette, other than as an explicitly user-selectable extra | §11.5 bars adoption, and this section is not a route around it |
+
+Three of the thirteen were already required — the project’s own palette
+by §11.4, its `-high-contrast` sibling by §11.1.1, and `steelbore-mono`
+by §11.1.1 — so this section adds ten themes, all of them already
+written out in `steelbore.toml`.
+
+**Registering is not defaulting.** The default remains the project’s
+§11.4 palette (§11.6.3, source 5). Registering the family makes a
+declaration *answerable*; it does not change what renders when nothing
+is declared.
+
+### §11.6.2 — Light and dark
+
+Every conforming palette but one is dark-canvas; `steelbore-navywhite`
+(§11.3.4) is the family’s only light-canvas member. A platform light
+preference therefore cannot be answered by lifting a token — it can only
+be answered by rendering a different palette, and §11.4 has to be read
+precisely for that to be legal.
+
+**Switching is not mixing.** §11.4 forbids *combining* tokens from two
+palettes in one interface, because the contrast guarantees are computed
+per-palette and do not survive mixing. A color-scheme switch combines
+nothing: the whole token set is replaced at once, the new palette’s
+canvas comes with it unaltered, and no frame ever carries a token from
+two palettes. Switching is accordingly compliant, and mixing remains
+forbidden. Two rules follow, and they are hard:
+
+- **The switch is atomic and whole-surface.** A partially re-themed
+  interface — one panel light and another dark, or a canvas cached from
+  the previous palette — is non-compliant. An application that cannot
+  re-theme atomically MUST resolve once at startup and hold until it is
+  restarted, rather than switch a surface at a time.
+
+- **The canvas travels with the palette.** §11.4’s mandatory-canvas rule
+  binds whichever palette is in force. Substituting a light background
+  under a dark palette is the non-compliance §11.4 already names; it is
+  not a light mode.
+
+A project MAY declare a **light/dark pair** in its `README.md` beside
+its §11.4 palette declaration. Where it declares none, the family
+defaults apply:
+
+| Platform preference | Family default | With a declared pair |
+|----|----|----|
+| Prefer dark | `steelbore` | The project’s declared dark member |
+| Prefer light | `steelbore-navywhite` | The project’s declared light counterpart |
+| No preference | Source 4 does not fire — resolution falls through | Source 4 does not fire — resolution falls through |
+
+- **A dark-only project declares it.** A project whose identity does not
+  survive a light canvas MAY declare `light = none` and state the reason
+  in `README.md` — a documented exception, not a free choice, on the
+  same footing as §14.2.1. It then ignores a platform light preference
+  and reports that under `--verbose`. It does *not* get to ignore §18:
+  high contrast and `steelbore-mono` still apply.
+
+- **Solarized is not the pair it looks like.** Solarized Dark and
+  Solarized Light (§11.5) are a natural pair upstream, and §11.5 bars
+  both from adoption — so neither may ever be the target of source 4.
+  Where a user has selected one at source 1 in an application that
+  offers it, that selection stands; it is a user preference, not
+  conformance.
+
+- Each palette’s canvas polarity and its counterpart are recorded in
+  `steelbore.toml`. They are read, never retyped (§11.4).
+
+### §11.6.3 — Resolution order
+
+The theme resolves at startup in two stages: a **base palette**, then a
+**variant overlay**. Keeping them separate is what makes this section
+composable — §18.1 and `NO_COLOR` choose a sibling, never a palette, so
+an accessibility signal can never silently change the brand.
+
+**Stage 1 — the base palette.** Precedence, highest first:
+
+| Source | Form |
+|----|----|
+| **1. In-app selection** | `--theme=<slug>`, or `[theme] name = "<slug>"` in the project’s config file |
+| **2. Environment** | `SPACECRAFT_THEME=<slug>` — the umbrella-wide environment variable, carrying a slug |
+| **3. System declaration** | The `active` key of the highest-precedence §11.6.4 declaration file |
+| **4. Platform color scheme** | The platform’s light/dark preference, mapped through §11.6.2 |
+| **5. Project default** | The project’s declared §11.4 palette — `steelbore` where it declares none |
+
+- **An unusable slug is skipped, never fatal.** A slug that is not a
+  conforming member of the family, or that the application has not
+  registered (§11.6.1), is discarded and resolution continues at the
+  next lower source. A theme is never rendered partially, and a typo in
+  `/etc` never leaves a machine without a working interface (§3.1 —
+  graceful degradation).
+
+- **Fidelity slugs resolve only at source 1.** A §11.5 slug is honored
+  where a user selects it inside an application that offers it, and is
+  ignored at sources 2, 3, and 4 — §11.5 bars adoption, and a system
+  declaration is adoption.
+
+- **Source 4 is graphical only.** A terminal exposes no portable
+  color-scheme query, and probing for one is neither required nor relied
+  upon. For CLI and TUI applications source 4 is simply absent — which
+  is precisely why source 3 exists.
+
+- The resolved theme, the deciding stage-1 source, and the stage-2
+  overlay MUST be reported under `--verbose`, in the same spirit as
+  §18.1: a user can always tell why the interface looks the way it does.
+
+**Stage 2 — the variant overlay.** The overlay chooses which sibling of
+the stage-1 palette renders. It never changes the palette.
+
+| Signal | Renders | Note |
+|----|----|----|
+| **1. Pinned variant** | As named | The user named a `-high-contrast` or `-mono` slug at stage-1 source 1 or 2. An explicit pin outranks every inferred signal |
+| **2. `NO_COLOR`** | `steelbore-mono` | Mono is the only variant that surrenders color outright, so it outranks high contrast: a user who asked for no color may not be handed a colored sheet |
+| **3. §18.1 accessible mode** | `<base>-high-contrast` | Resolved by §18.1, whose four-source precedence this section neither restates nor modifies |
+| **4. Platform high contrast** | `<base>-high-contrast` | The user has already expressed the preference system-wide, so it is read from the platform independently of the §18.1 toggle (§18.3) |
+| **5. None of the above** | The stage-1 palette itself | The §11.1.1 default, unchanged |
+
+- `NO_COLOR` is **a color instruction, not an accessibility
+  instruction**. It selects `steelbore-mono` whether or not it also
+  enabled accessible mode as a §18.1 source-4 hint, and
+  `SPACECRAFT_A11Y=0` does not undo it — turning accessible mode off
+  says nothing about wanting color back.
+
+- `steelbore-mono` is palette-independent (§11.1.1), so under it the
+  stage-1 palette does not render. It is still resolved, and still
+  reported under `--verbose`.
+
+- A declaration file’s `high-contrast` key enters at signal 4. It
+  selects a **theme sibling only** and MUST NOT be read as enabling
+  accessible mode: §18.1 is the only switch for that, and §18’s
+  behavioral requirements are not a color setting.
+
+### §11.6.4 — The system declaration
+
+Steelbore OS MUST provide a way to declare the active theme that a
+**running** application can read. The mechanism is a plain file, and
+that is deliberate: it has to work for a CLI in a text console — no
+session bus, no desktop portal, no daemon, no D-Bus name to acquire.
+
+**Search path**, highest precedence first:
+
+| Path | Role |
+|----|----|
+| `$XDG_CONFIG_HOME/steelbore/theme.toml` | Per-user declaration. `$XDG_CONFIG_HOME` defaults to `~/.config` when unset |
+| `/etc/steelbore/theme.toml` | System declaration, written by the OS configuration |
+
+Keys are read from the highest-precedence file that supplies them: a
+per-user file setting only `active` does not erase the system file’s
+`light` and `dark`. **The absence of both files is no declaration**, and
+resolution moves to source 4. A file present with `active = "steelbore"`
+*is* a declaration — of Modern, explicitly — and the distinction
+matters, because a system may need to pin Modern rather than inherit
+whatever the default later becomes.
+
+**Schema.** TOML, because `steelbore.toml` already is TOML and no
+consumer should need a second parser:
+
+    # /etc/steelbore/theme.toml -- The Steelbore Standard, section 11.6
+    [theme]
+    active              = "steelbore"            # required: a conforming slug
+    dark                = "steelbore"            # optional: the dark member
+    light               = "steelbore-navywhite"  # optional: the light member
+    follow-color-scheme = true                   # optional, default true
+    high-contrast       = false                  # optional, default false
+
+    [meta]
+    standard = "11.6"                            # the clause this file targets
+    source   = "bravais"                         # optional: what wrote it
+
+- **The declaration carries slugs, never colors.** An operating system
+  declares *which* theme; it never supplies the hex values. Values come
+  from `steelbore.toml` by way of the application’s own copy (§11.4).
+  This is the same division §13 draws for component systems: the
+  platform chooses the vocabulary, it never chooses the colors.
+
+- An OS MAY additionally install a resolved registry at
+  `/etc/steelbore/themes.json` for tooling. It is **advisory**: an
+  application MUST NOT require it, and where it disagrees with the
+  application’s own `steelbore.toml`, the application’s copy governs.
+
+- `follow-color-scheme = false` disables source 4 for that scope, so a
+  declared theme survives whatever the desktop’s appearance setting
+  says.
+
+- An unparseable file, or one carrying keys a reader does not know, is
+  **ignored with a warning** and the next source decides. Never fatal.
+  `[meta] standard` lets a reader recognize a file written against a
+  later revision and fall back conservatively rather than guess.
+
+- The environment variable is `SPACECRAFT_THEME`, in the same
+  umbrella-wide `SPACECRAFT_` namespace as §18.1’s `SPACECRAFT_A11Y`,
+  and it carries a **slug**. `STEELBORE_THEME` is **not** a Standard
+  interface and MUST NOT be given slug semantics: it is already in use
+  as a boolean shell flag, and overloading it would make
+  `STEELBORE_THEME=true` resolve to a theme that does not exist and fall
+  through silently.
+
+- Per-role color environment variables (`SPACECRAFT_BACKGROUND` and the
+  like) are **not** a Standard interface. A conforming application reads
+  role values from `steelbore.toml`, not from the environment. An OS may
+  export them for shell scripts and non-conforming third-party programs;
+  nothing in §11 depends on them.
+
+### §11.6.5 — Obligations on the declaring side
+
+The requirement is symmetrical: an operating system that ships §11
+themes ships the declaration too. Steelbore OS — in every flavor, NixOS
+(Bravais), GNU Guix System (Ginx), or any successor — MUST:
+
+- Render §11.6.4’s system declaration from its own theme selection, so
+  the one word that themes the machine is also the word applications
+  read. The declaration is generated, never hand-maintained alongside
+  the selection.
+
+- Export `SPACECRAFT_THEME` into the session environment, so a process
+  that never reads a file still resolves correctly at source 2. The
+  export must reach graphical sessions and system services, not login
+  shells alone.
+
+- Keep the platform’s color-scheme preference **in agreement** with the
+  declared palette’s polarity. A system declaring a light-canvas palette
+  while telling toolkits to prefer dark is internally inconsistent, and
+  third-party applications — which read only the platform preference —
+  will get it wrong.
+
+- Validate the slug at configuration-evaluation time, so an unknown
+  theme fails the build rather than the boot.
+
+An OS that also offers a theme-switching command SHOULD write the
+per-user declaration (`$XDG_CONFIG_HOME/steelbore/theme.toml`) as well
+as its own build-time selection, so a switch takes effect for conforming
+applications without a rebuild.
 
 ————————————————————————
 
@@ -2072,6 +2364,21 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
   named `Steelbore` theme binding the §11.1 role tokens — no bare hex
   literals in UI logic — and ship the palette’s `-high-contrast` sibling
 
+- [ ] **§11.6** Theme resolution implemented in two stages — base
+  palette (in-app selection, then `SPACECRAFT_THEME`, then the §11.6.4
+  system declaration, then the platform color scheme, then the project’s
+  §11.4 default), then variant overlay (a pinned variant, then
+  `NO_COLOR` ⇒ `steelbore-mono`, then §18.1 accessible mode, then
+  platform high contrast); the registered set covers §11.6.1’s thirteen
+  eleven-role themes; an unknown or unregistered slug falls through
+  rather than failing; palette switches are atomic and whole-surface and
+  carry the new canvas; resolved theme and deciding source reported
+  under `--verbose`; no dependence on per-role environment variables —
+  Steelbore OS additionally renders `/etc/steelbore/theme.toml`, exports
+  `SPACECRAFT_THEME`, and keeps the platform color-scheme preference in
+  agreement with the declared polarity (§11.6.5) — N/A for artifacts
+  with no user-facing output
+
 - [ ] **§12** FOSS-licensed fonts only (Share Tech Mono / Inconsolata)
 
 - [ ] **§13** Exactly one component system declared in `README.md` and
@@ -2137,6 +2444,7 @@ skipping it.
 | Writing GTK 4 / GNOME desktop code (§13) | `spacecraft-gtk-guidelines` |
 | Writing Qt 6 / KDE desktop code (§13) | `spacecraft-qt-guidelines` |
 | Creating IDE / terminal themes | `spacecraft-theme-factory` |
+| Resolving or declaring the system theme (§11.6) | `steelbore-color-palette` |
 | Implementing or auditing accessibility (§18) | `spacecraft-accessibility-support` |
 | All other Spacecraft Software work | `spacecraft-standard-constitution` |
 
