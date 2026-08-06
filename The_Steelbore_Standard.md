@@ -1578,6 +1578,7 @@ project-specific URL in all project-level outputs; use
 | Pearlite                   | <https://Pearlite.SpacecraftSoftware.org/>    |
 | MCP Servers                | <https://MCP-Servers.SpacecraftSoftware.org/> |
 | Lode                       | <https://Lode.SpacecraftSoftware.org/>        |
+| Scrubber                   | <https://Scrubber.SpacecraftSoftware.org/>    |
 | Sonde                      | <https://Sonde.SpacecraftSoftware.org/>       |
 | Vacuum                     | <https://Vacuum.SpacecraftSoftware.org/>      |
 | Vault                      | <https://Vault.SpacecraftSoftware.org/>       |
