@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2026 Mohamed Hammad <Mohamed.Hammad@SpacecraftSoftware.org>
+SPDX-License-Identifier: CC-BY-SA-4.0
+-->
+
 # AGENTS.md
 
 ## What this repo is
