@@ -5,11 +5,11 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 1.45
+@settitle The Steelbore Standard 1.46
 @c %**end of header
 
-@set VERSION 1.45
-@set UPDATED 2026-08-06
+@set VERSION 1.46
+@set UPDATED 2026-08-08
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
 @copying
@@ -753,6 +753,7 @@ do; posture says what they should @emph{expect} from the maintainer.
 * Maintainer Discretion::
 * Package Distribution::
 * Skill Packaging::
+* Agent Context Files::
 @end menu
 
 @node Default Posture
@@ -957,6 +958,92 @@ Over-limit skills do not ship
  @tab A skill whose description exceeds the cap MUST NOT be packed,
 committed, or published. Trim the description; do not raise the cap.
 @end multitable
+
+@node Agent Context Files
+@section §5.7 — Agent Context Files
+
+Coding agents load a project's root context file into their window at the
+start of every session. Different harnesses read different filenames ---
+@code{AGENTS.md} is the cross-vendor convention (Codex CLI, Cursor, Aider,
+OpenCode, Goose, Gemini CLI), while Claude Code reads @code{CLAUDE.md}.
+Maintaining both as parallel prose guarantees drift: the two copies are
+edited in different sessions, diverge, and the agent that reads the stale
+one is misinformed. This section fixes a single source of truth.
+
+@strong{@code{AGENTS.md} is the authority.} Every project @strong{must}
+ship an @code{AGENTS.md} at its root, in addition to the §5.2 posture
+files. It is harness-neutral: it carries the project's build, test, and
+lint commands, architectural invariants, forbidden patterns, repository
+layout, and any fact an agent cannot infer from the code itself.
+
+@strong{@code{CLAUDE.md} is a thin overlay, and is also required.} Claude
+Code reads @code{CLAUDE.md} and does @emph{not} read @code{AGENTS.md}, so a
+project shipping only an @code{AGENTS.md} gives a Claude session no project
+context at all. The file @strong{must} consist of an @code{@@AGENTS.md}
+import followed only by content that is meaningless to a non-Claude harness
+--- Skill-tool invocations, @code{.claude/} paths, Claude Code slash
+commands, and Claude-client MCP configuration. It @strong{must not}
+restate, summarize, or mirror @code{AGENTS.md}. Where there is nothing
+Claude-only to say, the import and its note are the whole file:
+
+@example
+# CLAUDE.md
+
+@@AGENTS.md
+
+> Record project knowledge in `AGENTS.md`, not here. This file holds
+> only Claude-Code-only context.
+@end example
+
+@strong{Mandatory rules:}
+
+@multitable {No secrets} {New project knowledge --- a build command, an invariant, a gotcha --- MUST be written to @code{AGENTS.md}. An agent or maintainer adds to @code{CLAUDE.md} only when the fact is meaningless to a harness that is not Claude Code. "Update the context file" always means @code{AGENTS.md}.}
+@headitem
+Rule
+ @tab Detail
+@item
+Write to @code{AGENTS.md}
+ @tab New project knowledge --- a build command, an invariant, a gotcha
+--- MUST be written to @code{AGENTS.md}. An agent or maintainer adds to
+@code{CLAUDE.md} only when the fact is meaningless to a harness that is
+not Claude Code. "Update the context file" always means
+@code{AGENTS.md}.
+@item
+No duplication
+ @tab A rule stated in @code{AGENTS.md} MUST NOT be restated in
+@code{CLAUDE.md}. Instructions of the form "keep these two files in sync"
+are evidence the split is wrong and MUST be removed rather than honored.
+@item
+Both tracked
+ @tab Both files are version-controlled artifacts, not agent-local
+scratch, and both are required. A @code{.gitignore} entry for either one
+breaks the @code{@@AGENTS.md} import on a fresh clone and hides project
+knowledge from every contributor who did not author it.
+@item
+No secrets
+ @tab Because they are tracked and published, context files are subject
+to the same hygiene as any other repository file: no credentials,
+tokens, keys, private hostnames or network topology, or personal
+filesystem paths. A context file that was previously ignored MUST be
+reviewed for sensitive content @strong{before} it is un-ignored.
+@item
+Generated blocks
+ @tab Tooling that renders managed regions into context files (rule
+synchronizers, task systems) MUST target @code{AGENTS.md} only. Writing
+the same block into both files reintroduces the duplication the import
+exists to remove.
+@end multitable
+
+A relative import resolves against the file containing it, never against
+the working directory, so each project's @code{CLAUDE.md} reaches its own
+@code{AGENTS.md}. Claude Code walks up the directory tree and concatenates
+every @code{CLAUDE.md} it finds, so a project nested under another
+inherits the ancestor's context in addition to its own --- which is why an
+ancestor file must not restate what a child already says.
+
+Other harness-specific files (@code{GEMINI.md}, @code{.cursorrules}, and
+similar) follow the @code{CLAUDE.md} pattern: import or reference
+@code{AGENTS.md}, then add only what is specific to that harness.
 
 @iftex
 @bigskip@hrule@bigskip
@@ -4076,6 +4163,14 @@ sees them, not as raw lines); the cap is enforced by CI @emph{and} by the
 command that produces the bundle, not only by a local git hook --- N/A for
 projects that ship no skills
 @item
+☐ @strong{§5.7} Agent context files: @code{AGENTS.md} and
+@code{CLAUDE.md} both present at the repository root and
+version-controlled; @code{CLAUDE.md} is an @code{@@AGENTS.md} import plus
+Claude-only content and restates nothing;
+neither file is gitignored; no credentials, private hostnames, or personal
+filesystem paths in either; managed blocks rendered into @code{AGENTS.md}
+only
+@item
 ☐ @strong{§6.1} POSIX-compliant CLI/system tools
 @item
 ☐ @strong{§7} Shell scripts are POSIX-compatible; Nushell/Ion native
@@ -4213,6 +4308,9 @@ Resolving or declaring the system theme (§11.6)
 @item
 Implementing or auditing accessibility (§18)
  @tab @code{spacecraft-accessibility-support}
+@item
+Authoring @code{AGENTS.md} / @code{CLAUDE.md} (§5.7)
+ @tab @code{spacecraft-agentic-cli}
 @item
 All other Spacecraft Software work
  @tab @code{spacecraft-standard-constitution}
