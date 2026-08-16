@@ -29,7 +29,7 @@ repository](https://github.com/Spacecraft-Software/Standard), newest
 entry first. It is kept out of this document so the standard reads as
 the rules *in force* rather than the record of how they got there.
 
-This document is **version 1.45**, updated 2026-08-06 (§14: UTC, ISO
+This document is **version 1.48**, updated 2026-08-16 (§14: UTC, ISO
 8601). The skill encoding of the standard keeps a parallel history in
 `spacecraft-standard-constitution/references/CHANGELOG.md` in the
 [Construct
@@ -576,6 +576,60 @@ packing**, not after a failure.
 | Rendered, not raw | "Rendered" means the string the loader sees. A YAML folded scalar (`description: >`) joins its wrapped lines with single spaces and retains a trailing newline, so the raw line lengths are not the measurement. Block (`>` / `|`) and single-line plain or quoted forms alike are measured after folding. |
 | Machine-enforced | The cap MUST be checked by an automated gate that runs both in the skill repository’s CI on every pull request and push to the default branch, and in whatever command produces the distributable bundle. A developer-installed git hook is a convenience, never the gate — hooks are opt-in per clone and cannot be relied on. |
 | Over-limit skills do not ship | A skill whose description exceeds the cap MUST NOT be packed, committed, or published. Trim the description; do not raise the cap. |
+
+## §5.7 — Agent Context Files
+
+Coding agents load a project’s root context file into their window at
+the start of every session. Different harnesses read different filenames
+— `AGENTS.md` is the cross-vendor convention (Codex CLI, Cursor, Aider,
+OpenCode, Goose, Gemini CLI), while Claude Code reads `CLAUDE.md`.
+Maintaining both as parallel prose guarantees drift: the two copies are
+edited in different sessions, diverge, and the agent that reads the
+stale one is misinformed. This section fixes a single source of truth.
+
+**`AGENTS.md` is the authority.** Every project **must** ship an
+`AGENTS.md` at its root, in addition to the §5.2 posture files. It is
+harness-neutral: it carries the project’s build, test, and lint
+commands, architectural invariants, forbidden patterns, repository
+layout, and any fact an agent cannot infer from the code itself.
+
+**`CLAUDE.md` is a thin overlay, and is also required.** Claude Code
+reads `CLAUDE.md` and does *not* read `AGENTS.md`, so a project shipping
+only an `AGENTS.md` gives a Claude session no project context at all.
+The file **must** consist of an `@AGENTS.md` import followed only by
+content that is meaningless to a non-Claude harness — Skill-tool
+invocations, `.claude/` paths, Claude Code slash commands, and
+Claude-client MCP configuration. It **must not** restate, summarize, or
+mirror `AGENTS.md`. Where there is nothing Claude-only to say, the
+import and its note are the whole file:
+
+    # CLAUDE.md
+
+    @AGENTS.md
+
+    > Record project knowledge in `AGENTS.md`, not here. This file holds
+    > only Claude-Code-only context.
+
+**Mandatory rules:**
+
+| Rule | Detail |
+|----|----|
+| Write to `AGENTS.md` | New project knowledge — a build command, an invariant, a gotcha — MUST be written to `AGENTS.md`. An agent or maintainer adds to `CLAUDE.md` only when the fact is meaningless to a harness that is not Claude Code. "Update the context file" always means `AGENTS.md`. |
+| No duplication | A rule stated in `AGENTS.md` MUST NOT be restated in `CLAUDE.md`. Instructions of the form "keep these two files in sync" are evidence the split is wrong and MUST be removed rather than honored. |
+| Both tracked | Both files are version-controlled artifacts, not agent-local scratch, and both are required. A `.gitignore` entry for either one breaks the `@AGENTS.md` import on a fresh clone and hides project knowledge from every contributor who did not author it. |
+| No secrets | Because they are tracked and published, context files are subject to the same hygiene as any other repository file: no credentials, tokens, keys, private hostnames or network topology, or personal filesystem paths. A context file that was previously ignored MUST be reviewed for sensitive content **before** it is un-ignored. |
+| Generated blocks | Tooling that renders managed regions into context files (rule synchronizers, task systems) MUST target `AGENTS.md` only. Writing the same block into both files reintroduces the duplication the import exists to remove. |
+
+A relative import resolves against the file containing it, never against
+the working directory, so each project’s `CLAUDE.md` reaches its own
+`AGENTS.md`. Claude Code walks up the directory tree and concatenates
+every `CLAUDE.md` it finds, so a project nested under another inherits
+the ancestor’s context in addition to its own — which is why an ancestor
+file must not restate what a child already says.
+
+Other harness-specific files (`GEMINI.md`, `.cursorrules`, and similar)
+follow the `CLAUDE.md` pattern: import or reference `AGENTS.md`, then
+add only what is specific to that harness.
 
 ————————————————————————
 
@@ -2003,22 +2057,65 @@ implementation status of key milestones.
 
 ## §17.1 — Progress Reporting Format
 
-Every progress report must include the percentage of completion for
-individual milestones, the overall progress of the Minimum Viable
-Product (MVP), and the total progress of the PRD.
+A progress report is a block of labelled rows, one row per tracked
+track. Every row carries its own 20-cell bar and its own percentage, so
+each figure is legible on its own line rather than compressed into a
+shared summary line.
 
 **Format template:**
 
-    [Progress: ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱] 70%
-    Milestones: M0: 100% | M1: 100% | M2: 70% | M3: 0% | M4: 0%
-    Product Status: MVP: 90% | PRD: 70%
+    M0:   [████████████░░░░░░░░]  60%
+    M1:   [████████████░░░░░░░░]  60%
+    M2:   [████████████░░░░░░░░]  60%
+    M3:   [████████████░░░░░░░░]  60%
+    M4:   [████████████░░░░░░░░]  60%
+    MVP:  [██████████████░░░░░░]  70%
+    TODO: [████████████░░░░░░░░]  60%
+    PLAN: [████████████░░░░░░░░]  60%
+    PRD:  [████████████░░░░░░░░]  60%
+
+**Row order** is fixed: milestone rows `M0`…`Mn` in ascending order,
+then `MVP`, then `TODO`, then `PLAN`, then `PRD`.
+
+**Only applicable rows are emitted.** The milestone rows match the
+milestones the plan actually defines — there is no fixed count, and
+`M0`–`M4` in the template above is an illustration, not a required set.
+`TODO`, `PLAN`, and `PRD` each appear only when the task is driven by
+such an artifact. `MVP` is always present. A row is never padded in at
+0% to fill out the block: a fabricated track reports progress against
+nothing and misrepresents the work.
 
 ## §17.2 — Progress Bar Style
 
-The progress bar must use high-visibility Unicode block characters
-(e.g., `▰` for filled and `▱` for empty) to form a clean, static,
-20-character visual representation of total PRD completion. Do not use
-legacy ASCII characters like `#` or `-` for the progress bar.
+Every bar is a static, 20-cell, high-visibility Unicode bar. Legacy
+ASCII characters — `#`, `-`, `=` — are forbidden in any bar.
+
+A single cell style applies to every row — milestones, `MVP`, `TODO`,
+`PLAN`, and `PRD` alike: filled cells are `█` (U+2588), empty cells are
+`░` (U+2591), and the brackets are tight, with no space inside either
+bracket.
+
+**Column alignment is normative.** With one style shared by every row,
+alignment follows from three rules:
+
+- On every row, the label and its colon are left-aligned in a
+  six-character field, followed immediately by `[`.
+
+- That places the first bar cell in column 8, so every bar occupies
+  columns 8 through 27 and the closing bracket lands in column 28.
+
+- The percentage is right-aligned in a five-character field immediately
+  after the closing bracket, so its `%` sign lands in column 33 whether
+  the value is one, two, or three digits. The separator never drops
+  below one space — at exactly 100% the number consumes one of the two
+  separator spaces — and the block stays aligned at every value.
+
+**Cell count.** The number of filled cells is the percentage scaled to
+twenty cells and rounded to the nearest cell. Two saturation rules
+override the rounding: a bar shows twenty filled cells **only** at
+exactly 100%, and zero filled cells **only** at exactly 0%. Rounding 99%
+up to a visually complete bar reports work as finished that is not,
+which is the drift this chapter exists to catch.
 
 ## §17.3 — Reporting Cadence
 
@@ -2337,6 +2434,13 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
   command that produces the bundle, not only by a local git hook — N/A
   for projects that ship no skills
 
+- [ ] **§5.7** Agent context files: `AGENTS.md` and `CLAUDE.md` both
+  present at the repository root and version-controlled; `CLAUDE.md` is
+  an `@AGENTS.md` import plus Claude-only content and restates nothing;
+  neither file is gitignored; no credentials, private hostnames, or
+  personal filesystem paths in either; managed blocks rendered into
+  `AGENTS.md` only
+
 - [ ] **§6.1** POSIX-compliant CLI/system tools
 
 - [ ] **§7** Shell scripts are POSIX-compatible; Nushell/Ion native
@@ -2401,9 +2505,10 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
   `references/ATTRIBUTION.md` present where reference content is adapted
   from external sources
 
-- [ ] **§17** Development progress tracked and reported continuously
-  with milestone percentages, MVP, total PRD completion, and a Unicode
-  progress bar
+- [ ] **§17** Development progress tracked and reported continuously as
+  the §17.1 labelled-row block — one 20-cell bar per track, milestone
+  rows then MVP then TODO/PLAN/PRD, only the rows that apply; every row
+  set in `█`/`░` with tight brackets, columns aligned, no ASCII bars
 
 - [ ] **§18** Accessible mode implemented and off by default; §18.1
   toggle honored with correct precedence; status never color-only; no
@@ -2446,6 +2551,7 @@ skipping it.
 | Creating IDE / terminal themes | `spacecraft-theme-factory` |
 | Resolving or declaring the system theme (§11.6) | `steelbore-color-palette` |
 | Implementing or auditing accessibility (§18) | `spacecraft-accessibility-support` |
+| Authoring `AGENTS.md` / `CLAUDE.md` (§5.7) | `spacecraft-agentic-cli` |
 | All other Spacecraft Software work | `spacecraft-standard-constitution` |
 
 # Concept Index
