@@ -5,10 +5,10 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 1.48
+@settitle The Steelbore Standard 1.49
 @c %**end of header
 
-@set VERSION 1.48
+@set VERSION 1.49
 @set UPDATED 2026-08-16
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
@@ -115,7 +115,7 @@ they got there.
 This document is @strong{version @value{VERSION}}, updated
 @value{UPDATED} (§14: UTC, ISO 8601). The skill encoding of the standard
 keeps a parallel history in
-@file{spacecraft-standard-constitution/references/CHANGELOG.md} in the
+@file{spacecraft-steelbore-standard/references/CHANGELOG.md} in the
 @uref{https://github.com/Spacecraft-Software/Construct,Construct
 repository}; both are synced to the same version and date.
 
@@ -308,7 +308,7 @@ commit.
 @node Skill IDs
 @section §2.2 — Skill IDs are functional, not codenamed
 Skill directory names and @code{SKILL.md} @code{name} fields are
-@strong{functional identifiers} (e.g., @code{spacecraft-standard-constitution},
+@strong{functional identifiers} (e.g., @code{spacecraft-steelbore-standard},
 @code{spacecraft-document-format}) and are not subject to the §2
 codename convention. §2 reserves codenames for
 projects/modules/utilities/releases, not for skill identifiers.
@@ -622,7 +622,7 @@ Skills are @strong{software-class} → @code{GPL-3.0-or-later} (no skill
 is network-facing, so AGPL does not apply). Note the deliberate split
 for the Standard itself: the @strong{published Standard document} is
 @code{CC-BY-SA-4.0} (it is a document), while its
-@code{spacecraft-standard-constitution} @strong{skill} encoding is
+@code{spacecraft-steelbore-standard} @strong{skill} encoding is
 @code{GPL-3.0-or-later} (it is a skill).
 
 @node Upstream License
@@ -4339,7 +4339,7 @@ Authoring @code{AGENTS.md} / @code{CLAUDE.md} (§5.7)
  @tab @code{spacecraft-agentic-cli}
 @item
 All other Spacecraft Software work
- @tab @code{spacecraft-standard-constitution}
+ @tab @code{spacecraft-steelbore-standard}
 @end multitable
 
 @node Concept Index
