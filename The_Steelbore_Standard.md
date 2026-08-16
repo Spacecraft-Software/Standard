@@ -29,7 +29,7 @@ repository](https://github.com/Spacecraft-Software/Standard), newest
 entry first. It is kept out of this document so the standard reads as
 the rules *in force* rather than the record of how they got there.
 
-This document is **version 1.46**, updated 2026-08-08 (§14: UTC, ISO
+This document is **version 1.48**, updated 2026-08-16 (§14: UTC, ISO
 8601). The skill encoding of the standard keeps a parallel history in
 `spacecraft-standard-constitution/references/CHANGELOG.md` in the
 [Construct
@@ -2057,22 +2057,65 @@ implementation status of key milestones.
 
 ## §17.1 — Progress Reporting Format
 
-Every progress report must include the percentage of completion for
-individual milestones, the overall progress of the Minimum Viable
-Product (MVP), and the total progress of the PRD.
+A progress report is a block of labelled rows, one row per tracked
+track. Every row carries its own 20-cell bar and its own percentage, so
+each figure is legible on its own line rather than compressed into a
+shared summary line.
 
 **Format template:**
 
-    [Progress: ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱] 70%
-    Milestones: M0: 100% | M1: 100% | M2: 70% | M3: 0% | M4: 0%
-    Product Status: MVP: 90% | PRD: 70%
+    M0:   [████████████░░░░░░░░]  60%
+    M1:   [████████████░░░░░░░░]  60%
+    M2:   [████████████░░░░░░░░]  60%
+    M3:   [████████████░░░░░░░░]  60%
+    M4:   [████████████░░░░░░░░]  60%
+    MVP:  [██████████████░░░░░░]  70%
+    TODO: [████████████░░░░░░░░]  60%
+    PLAN: [████████████░░░░░░░░]  60%
+    PRD:  [████████████░░░░░░░░]  60%
+
+**Row order** is fixed: milestone rows `M0`…`Mn` in ascending order,
+then `MVP`, then `TODO`, then `PLAN`, then `PRD`.
+
+**Only applicable rows are emitted.** The milestone rows match the
+milestones the plan actually defines — there is no fixed count, and
+`M0`–`M4` in the template above is an illustration, not a required set.
+`TODO`, `PLAN`, and `PRD` each appear only when the task is driven by
+such an artifact. `MVP` is always present. A row is never padded in at
+0% to fill out the block: a fabricated track reports progress against
+nothing and misrepresents the work.
 
 ## §17.2 — Progress Bar Style
 
-The progress bar must use high-visibility Unicode block characters
-(e.g., `▰` for filled and `▱` for empty) to form a clean, static,
-20-character visual representation of total PRD completion. Do not use
-legacy ASCII characters like `#` or `-` for the progress bar.
+Every bar is a static, 20-cell, high-visibility Unicode bar. Legacy
+ASCII characters — `#`, `-`, `=` — are forbidden in any bar.
+
+A single cell style applies to every row — milestones, `MVP`, `TODO`,
+`PLAN`, and `PRD` alike: filled cells are `█` (U+2588), empty cells are
+`░` (U+2591), and the brackets are tight, with no space inside either
+bracket.
+
+**Column alignment is normative.** With one style shared by every row,
+alignment follows from three rules:
+
+- On every row, the label and its colon are left-aligned in a
+  six-character field, followed immediately by `[`.
+
+- That places the first bar cell in column 8, so every bar occupies
+  columns 8 through 27 and the closing bracket lands in column 28.
+
+- The percentage is right-aligned in a five-character field immediately
+  after the closing bracket, so its `%` sign lands in column 33 whether
+  the value is one, two, or three digits. The separator never drops
+  below one space — at exactly 100% the number consumes one of the two
+  separator spaces — and the block stays aligned at every value.
+
+**Cell count.** The number of filled cells is the percentage scaled to
+twenty cells and rounded to the nearest cell. Two saturation rules
+override the rounding: a bar shows twenty filled cells **only** at
+exactly 100%, and zero filled cells **only** at exactly 0%. Rounding 99%
+up to a visually complete bar reports work as finished that is not,
+which is the drift this chapter exists to catch.
 
 ## §17.3 — Reporting Cadence
 
@@ -2462,9 +2505,10 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
   `references/ATTRIBUTION.md` present where reference content is adapted
   from external sources
 
-- [ ] **§17** Development progress tracked and reported continuously
-  with milestone percentages, MVP, total PRD completion, and a Unicode
-  progress bar
+- [ ] **§17** Development progress tracked and reported continuously as
+  the §17.1 labelled-row block — one 20-cell bar per track, milestone
+  rows then MVP then TODO/PLAN/PRD, only the rows that apply; every row
+  set in `█`/`░` with tight brackets, columns aligned, no ASCII bars
 
 - [ ] **§18** Accessible mode implemented and off by default; §18.1
   toggle honored with correct precedence; status never color-only; no
