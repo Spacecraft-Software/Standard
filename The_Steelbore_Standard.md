@@ -29,7 +29,7 @@ repository](https://github.com/Spacecraft-Software/Standard), newest
 entry first. It is kept out of this document so the standard reads as
 the rules *in force* rather than the record of how they got there.
 
-This document is **version 1.47**, updated 2026-08-09 (§14: UTC, ISO
+This document is **version 1.48**, updated 2026-08-16 (§14: UTC, ISO
 8601). The skill encoding of the standard keeps a parallel history in
 `spacecraft-standard-constitution/references/CHANGELOG.md` in the
 [Construct
@@ -2069,7 +2069,7 @@ shared summary line.
     M2:   [████████████░░░░░░░░]  60%
     M3:   [████████████░░░░░░░░]  60%
     M4:   [████████████░░░░░░░░]  60%
-    MVP: [ ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ ] 70%
+    MVP:  [██████████████░░░░░░]  70%
     TODO: [████████████░░░░░░░░]  60%
     PLAN: [████████████░░░░░░░░]  60%
     PRD:  [████████████░░░░░░░░]  60%
@@ -2090,41 +2090,25 @@ nothing and misrepresents the work.
 Every bar is a static, 20-cell, high-visibility Unicode bar. Legacy
 ASCII characters — `#`, `-`, `=` — are forbidden in any bar.
 
-Two cell styles are in use, and the distinction is normative:
+A single cell style applies to every row — milestones, `MVP`, `TODO`,
+`PLAN`, and `PRD` alike: filled cells are `█` (U+2588), empty cells are
+`░` (U+2591), and the brackets are tight, with no space inside either
+bracket.
 
-| Rows | Filled | Empty | Brackets |
-|----|----|----|----|
-| Milestones, `TODO`, `PLAN`, `PRD` | `█` (U+2588) | `░` (U+2591) | Tight — no space inside either bracket |
-| `MVP` | `▰` (U+25B0) | `▱` (U+25B1) | Padded — exactly one space inside each bracket |
+**Column alignment is normative.** With one style shared by every row,
+alignment follows from three rules:
 
-The MVP row is deliberately set apart: it is the headline figure, and
-the tracks above and below it are the inputs that feed it. Its distinct
-glyph pair makes it findable at a glance in a stack of otherwise
-identical bars.
+- On every row, the label and its colon are left-aligned in a
+  six-character field, followed immediately by `[`.
 
-**Column alignment is normative.** The MVP row’s bracket padding exists
-to preserve it — the row is one character narrower in its label field
-and one character wider inside each bracket, so every bar cell and every
-percentage digit lands in the same column across the whole block.
+- That places the first bar cell in column 8, so every bar occupies
+  columns 8 through 27 and the closing bracket lands in column 28.
 
-- On every row other than `MVP`, the label and its colon are
-  left-aligned in a six-character field, followed immediately by `[`.
-
-- On the `MVP` row, `MVP:` is left-aligned in a five-character field,
-  followed by `[` and one space.
-
-- Both place the first bar cell in column 8, so every bar occupies
-  columns 8 through 27.
-
-- The percentage is right-aligned so its `%` sign lands in the same
-  column on every row — two spaces after the closing bracket on the
-  tight-bracket rows, one on the `MVP` row. That difference is exactly
-  what the padded brackets buy.
-
-- The separator never drops below one space. At 100% the `MVP` row keeps
-  its single space and its percentage therefore sits one column right —
-  the only value at which the two row types do not align, and preferable
-  to a bracket abutting a digit.
+- The percentage is right-aligned in a five-character field immediately
+  after the closing bracket, so its `%` sign lands in column 33 whether
+  the value is one, two, or three digits. The separator never drops
+  below one space — at exactly 100% the number consumes one of the two
+  separator spaces — and the block stays aligned at every value.
 
 **Cell count.** The number of filled cells is the percentage scaled to
 twenty cells and rounded to the nearest cell. Two saturation rules
@@ -2523,9 +2507,8 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
 
 - [ ] **§17** Development progress tracked and reported continuously as
   the §17.1 labelled-row block — one 20-cell bar per track, milestone
-  rows then MVP then TODO/PLAN/PRD, only the rows that apply; MVP set in
-  `▰`/`▱` with padded brackets and every other row in `█`/`░`, columns
-  aligned, no ASCII bars
+  rows then MVP then TODO/PLAN/PRD, only the rows that apply; every row
+  set in `█`/`░` with tight brackets, columns aligned, no ASCII bars
 
 - [ ] **§18** Accessible mode implemented and off by default; §18.1
   toggle honored with correct precedence; status never color-only; no
