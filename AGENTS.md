@@ -16,7 +16,7 @@ The umbrella was renamed from `Steelbore` to `Spacecraft Software` in v1.7 (2026
 ## Source-of-truth flow
 
 ```
-/spacecraft-software/construct/spacecraft-standard-constitution/SKILL.md         (upstream — the canonical skill)
+/spacecraft-software/construct/spacecraft-steelbore-standard/SKILL.md         (upstream — the canonical skill)
         │
         ▼  manual sync when the skill changes
 /spacecraft-software/standard/The_Steelbore_Standard.texi   (tracked — Texinfo source of truth)
@@ -62,7 +62,7 @@ There is **no document-build step in CI** — keep the local `makeinfo` check as
 
 ## External sources to sync against
 
-- `/spacecraft-software/construct/spacecraft-standard-constitution/SKILL.md` — the skill encoding of the Standard. Nominally upstream (skill → `.texi`), but in practice normative changes are often authored in the `.texi` here first and then back-synced to the skill. Either way both must end up consistent at the same version. A sync touches the SKILL.md masthead, the frontmatter `description`, the relevant section body, **and `references/CHANGELOG.md`** in the Construct repo.
+- `/spacecraft-software/construct/spacecraft-steelbore-standard/SKILL.md` — the skill encoding of the Standard. Nominally upstream (skill → `.texi`), but in practice normative changes are often authored in the `.texi` here first and then back-synced to the skill. Either way both must end up consistent at the same version. A sync touches the SKILL.md masthead, the frontmatter `description`, the relevant section body, **and `references/CHANGELOG.md`** in the Construct repo.
 - `/spacecraft-software/projects/PROJECTS.md` — hand-maintained tracker of every Spacecraft Software project. Drives **§2.1 codename registry** updates (new entries, status corrections like `Active`/`Reserved`/`Completed`/`Planning`/`Pending rename`) and **§15.1 subdomain table** updates (new project URLs). When the user asks to sync the "registry" or "project statuses," this is the source to compare against.
 
 ## Versioning policy
@@ -81,7 +81,7 @@ The skill's own metadata may lag; the published standard's version history is th
 ## Change workflow (both repos)
 
 - **Branch + PR, never push to `main`.** Every change — even a one-line version bump — goes through a feature branch → PR → squash-merge → delete branch, in both the Standard and Construct repos. Use signed commits (§6.3); rebases/amends must preserve signatures.
-- **A normative change is a two-repo, two-PR job.** The rule lives in `The_Steelbore_Standard.texi` (here) *and* in `spacecraft-standard-constitution/SKILL.md` + `references/CHANGELOG.md` (Construct). Land them as separate PRs — typically Standard first, Construct second — at the same version.
+- **A normative change is a two-repo, two-PR job.** The rule lives in `The_Steelbore_Standard.texi` (here) *and* in `spacecraft-steelbore-standard/SKILL.md` + `references/CHANGELOG.md` (Construct). Land them as separate PRs — typically Standard first, Construct second — at the same version.
 
 ## Self-applies
 

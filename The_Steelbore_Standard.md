@@ -29,9 +29,9 @@ repository](https://github.com/Spacecraft-Software/Standard), newest
 entry first. It is kept out of this document so the standard reads as
 the rules *in force* rather than the record of how they got there.
 
-This document is **version 1.48**, updated 2026-08-16 (§14: UTC, ISO
+This document is **version 1.49**, updated 2026-08-16 (§14: UTC, ISO
 8601). The skill encoding of the standard keeps a parallel history in
-`spacecraft-standard-constitution/references/CHANGELOG.md` in the
+`spacecraft-steelbore-standard/references/CHANGELOG.md` in the
 [Construct
 repository](https://github.com/Spacecraft-Software/Construct); both are
 synced to the same version and date.
@@ -131,7 +131,7 @@ commit.
 ## §2.2 — Skill IDs are functional, not codenamed
 
 Skill directory names and `SKILL.md` `name` fields are **functional
-identifiers** (e.g., `spacecraft-standard-constitution`,
+identifiers** (e.g., `spacecraft-steelbore-standard`,
 `spacecraft-document-format`) and are not subject to the §2 codename
 convention. §2 reserves codenames for
 projects/modules/utilities/releases, not for skill identifiers.
@@ -359,8 +359,8 @@ Skills are **software-class** → `GPL-3.0-or-later` (no skill is
 network-facing, so AGPL does not apply). Note the deliberate split for
 the Standard itself: the **published Standard document** is
 `CC-BY-SA-4.0` (it is a document), while its
-`spacecraft-standard-constitution` **skill** encoding is
-`GPL-3.0-or-later` (it is a skill).
+`spacecraft-steelbore-standard` **skill** encoding is `GPL-3.0-or-later`
+(it is a skill).
 
 ## §4.2 — Upstream License Compliance (preserve what you build on)
 
@@ -2552,6 +2552,6 @@ skipping it.
 | Resolving or declaring the system theme (§11.6) | `steelbore-color-palette` |
 | Implementing or auditing accessibility (§18) | `spacecraft-accessibility-support` |
 | Authoring `AGENTS.md` / `CLAUDE.md` (§5.7) | `spacecraft-agentic-cli` |
-| All other Spacecraft Software work | `spacecraft-standard-constitution` |
+| All other Spacecraft Software work | `spacecraft-steelbore-standard` |
 
 # Concept Index
