@@ -99,7 +99,7 @@ The standard governs itself. Most-pertinent rules for work in this repo:
 | `The_Steelbore_Standard.texi` | Tracked | **Source of truth** — the standard in Texinfo |
 | `The_Steelbore_Standard.md` | Tracked | Generated GFM companion (from `make md`) — for GitHub rendering |
 | `CHANGELOG.md` | Tracked | **Hand-maintained** version history of the standard (extracted from §1 in v1.37). Not generated — do not overwrite it from the `.texi` |
-| `LICENSE` | Tracked | Symlink → `LICENSES/CC-BY-SA-4.0.txt` (§4.3: GitHub license detection + REUSE, one source of truth) |
+| `LICENSE` | Tracked | **Regular file** holding the canonical CC-BY-SA-4.0 text. `LICENSES/CC-BY-SA-4.0.txt` is a symlink back to it (§4.3, as corrected in v1.38) — never the reverse: GitHub's license detector reads git blobs, and a symlink's blob is the target *path*, so a symlinked root `LICENSE` reports `NOASSERTION` |
 | `spacecraft.css` | Tracked | Spacecraft HTML theme for `texi2any --html` output |
 | `Makefile` | Tracked | Build targets: `info`, `html`, `md`, `pdf`, `docx`, `clean` |
 | `The_Steelbore_Standard.info` | Gitignored | Generated — Info reader format |
@@ -108,7 +108,7 @@ The standard governs itself. Most-pertinent rules for work in this repo:
 | `The_Steelbore_Standard.docx` | Gitignored | Generated on request (`make docx`) |
 | `The_Steelbore_Standard.odt`  | Gitignored | Not produced by default pipeline |
 | `REUSE.toml` | Tracked | REUSE override for files containing example SPDX headers (`.texi`, `.md`, dotfiles, `.github/**`) |
-| `LICENSES/` | Tracked | REUSE license texts — `CC-BY-SA-4.0.txt` (document) and `GPL-3.0-or-later.txt` (tooling) |
+| `LICENSES/` | Tracked | REUSE license texts — `CC-BY-SA-4.0.txt` (document) is a symlink to the root `LICENSE`; `GPL-3.0-or-later.txt` (tooling) is a regular file, since §4.3 links only the primary license |
 | `.github/workflows/ci.yml` | Tracked | CI: `reuse lint` + config validation on every PR and push to `main` |
 | `.github/validate-configs.py` | Tracked | Config parser invoked by CI — JSON/JSONC/TOML/YAML, auto-discovers files |
 | `.gitignore` | Tracked | Excludes generated outputs, TeX aux files, agent-local files |
