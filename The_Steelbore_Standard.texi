@@ -5,11 +5,11 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 1.49
+@settitle The Steelbore Standard 1.50
 @c %**end of header
 
-@set VERSION 1.49
-@set UPDATED 2026-08-16
+@set VERSION 1.50
+@set UPDATED 2026-08-18
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
 @copying
@@ -68,7 +68,7 @@ Maintained by Mohamed Hammad
 * Typography::                  §12 — FOSS-licensed font requirements.
 * UI/UX Design System::         §13 — Declared component system & visual design.
 * Date Time Units::             §14 — ISO 8601, UTC Z, metric units.
-* Attribution::                 §15 — Maintainer, project pages, credits.
+* Attribution::                 §15 — Maintainer, project pages, credits, authorship.
 * Development Progress Tracking:: §17 — Development progress tracking and reporting.
 * Accessibility::               §18 — Accessible mode for CLI, TUI & GUI.
 * Compliance Checklist::        §16 — Audit gate checklist.
@@ -3449,6 +3449,7 @@ Software | @strong{License:} CC-BY-SA-4.0
 * Project Pages::
 * Required Attribution::
 * Third-Party Attribution::
+* Authoring Model Attribution::
 @end menu
 
 @node Project Pages
@@ -3715,6 +3716,147 @@ canonical and should link down to any such deeper file.
 SPDX headers (§4) cover license compliance mechanically;
 @code{CREDITS.md} is the human-readable narrative --- who, what, and how
 the upstream work shaped the Spacecraft Software artifact.
+
+@node Authoring Model Attribution
+@section §15.4 — Authoring Model Attribution
+
+§15.2 records who maintains a Spacecraft Software artifact and §15.3
+records whose work it stands on.  Neither records @emph{what produced it}.
+When a language model drafts a requirements document, an implementation
+plan, or a task list --- or codes a project outright --- that fact stays
+legible for about as long as the session lasts.  A year later the question
+that matters --- which model, at what reasoning level, served by which
+provider, driven by which harness --- has no answer anywhere in the
+repository.
+
+Commit trailers do not answer it.  A @code{Co-Authored-By} line marks every
+individual edit, which is activity rather than provenance; it is lost to
+squash-merges and to the history rewrites §6.3 permits; and it names a
+product without naming the reasoning level, the inference provider, or the
+harness.  This section requires the opposite shape --- @strong{one
+signature per artifact, written once}.
+
+@strong{Triggers} (any one obligates a signature):
+
+@itemize
+@item
+A Product Requirements Document (PRD).
+
+@item
+An implementation plan.
+
+@item
+A TODO or task list that drives implementation.
+
+@item
+A project whose initial implementation was substantially produced by a
+model.
+@end itemize
+
+@strong{Not triggered by:}
+
+@itemize
+@item
+Individual commits, single-file edits, bug fixes, refactors, or reviews.
+These are per-edit events, and §6.3 already governs them.
+
+@item
+Chat answers, scratch output, and anything that is not committed.
+
+@item
+A model that only reviewed, critiqued, or reformatted an artifact it did
+not author.
+@end itemize
+
+@strong{Required content per authoring model:}
+
+@multitable {Provider} {When known} {PRD, plan, and initial implementation}
+@headitem
+Field
+ @tab Required
+ @tab Example
+@item
+Model
+ @tab Yes
+ @tab @code{glm-5.3-high}
+@item
+Provider
+ @tab Yes
+ @tab @code{zAI}
+@item
+Harness
+ @tab When known
+ @tab @code{OpenCode}
+@item
+Date
+ @tab Yes
+ @tab @code{2026-08-18} (ISO 8601, §14)
+@item
+Scope
+ @tab Yes
+ @tab @code{PRD, plan, and initial implementation}
+@end multitable
+
+@strong{Where the signature goes.}  A @strong{document artifact} --- a PRD,
+an implementation plan, a task list --- carries the block as its final
+section, headed @code{Authoring Model}: an @code{@@unnumbered Authoring
+Model} node before @code{@@bye} in a Texinfo source, a closing
+@code{## Authoring Model} heading in a GFM document.  A @strong{project}
+carries it in an @code{AUTHORS.md} at its root, alongside the §5.2 posture
+files.
+
+@code{AUTHORS.md} is the provenance counterpart to §15.3's
+@code{CREDITS.md}: @code{CREDITS.md} records whose work the project stands
+on, @code{AUTHORS.md} records what produced the project's own text.  Like
+@code{CREDITS.md} it is required only when a trigger above fires --- a
+hand-written project ships no @code{AUTHORS.md}.
+
+@strong{Canonical block:}
+
+@example
+## Authoring Model
+
+| Model           | Provider  | Harness     | Date       | Scope                      |
+|-----------------|-----------|-------------|------------|----------------------------|
+| `glm-5.3-high`  | zAI       | OpenCode    | 2026-08-18 | PRD, plan, initial impl.   |
+| `claude-opus-5` | Anthropic | Claude Code | 2026-09-02 | Handoff; §4 rewrite onward |
+@end example
+
+@strong{Written once.}  One signature per artifact, not one per change.  An
+agent that re-signs on every edit has misread this section: the record is
+of authorship, not of activity, and a table that grows a row per commit is
+the commit log with extra steps.
+
+@strong{The reasoning level belongs in the Model cell}, written the way the
+vendor writes it --- @code{glm-5.3-high},
+@code{claude-opus-5 (effort: high)},
+@code{gpt-5.2-codex (reasoning: xhigh)}.  Where a model exposes a thinking
+or effort setting, the bare identifier is incomplete: the same weights at a
+different level produce materially different work.  Where a model exposes
+no such setting, the bare identifier is the whole cell.
+
+@strong{Provider and harness are independent, and both are recorded.}  The
+@strong{provider} is the service that served the inference ---
+@code{Anthropic}, @code{zAI}, @code{Ollama Cloud}, @code{OpenRouter},
+@code{OpenCode Zen}, or a local @code{Ollama}.  The @strong{harness} is the
+agent client that drove it --- @code{Claude Code}, @code{OpenCode},
+@code{Codex}, @code{Orca}, @code{OpenClaude}, @code{ZCode},
+@code{Antigravity IDE}, @code{Antigravity CLI}.  The same model reaches a
+repository through many combinations of the two, and it is the combination,
+not the model alone, that makes a result reproducible.
+
+@strong{Handoff appends, never replaces.}  When a project or document moves
+from one model to another, a row is added below the existing rows and the
+earlier rows are left untouched.  The table is a chronological record, and
+overwriting it destroys the one fact it exists to preserve.  Each row's
+@code{Scope} cell says what that model was responsible for.
+
+@strong{A signature is not an authorship claim.}  The copyright holder and
+maintainer remain as §15.2 states, and the artifact's license is unchanged.
+§15.4 records a production fact, not legal authorship: it MUST NOT appear
+in an @code{SPDX-FileCopyrightText} tag, in a @code{# Maintainer:} line, or
+in @code{--version} output, and it never displaces the §15.2 attribution
+block.
 
 @iftex
 @bigskip@hrule@bigskip
@@ -4260,6 +4402,15 @@ for inherently local-time-bound data; ISO 8601 durations; metric units
 project/skill root when triggers apply; deeper
 @code{references/ATTRIBUTION.md} present where reference content is
 adapted from external sources
+@item
+☐ @strong{§15.4} Where a model drafted a PRD, an implementation plan, or
+a task list, or substantially produced a project's initial implementation,
+one @code{Authoring Model} block is present --- as the artifact's final
+section for a document, in @code{AUTHORS.md} at the root for a project ---
+naming model (with reasoning level), provider, harness where known, date,
+and scope; a handoff appends a row rather than replacing one; the block
+never appears in an SPDX tag, a @code{# Maintainer:} line, or
+@code{--version} output --- N/A for hand-written artifacts
 @item
 ☐ @strong{§17} Development progress tracked and reported continuously as
 the §17.1 labelled-row block — one 20-cell bar per track, milestone rows
