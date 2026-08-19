@@ -3543,6 +3543,9 @@ Docs
 @item
 Loran Pages
  @tab @url{https://Loran-Pages.SpacecraftSoftware.org/}
+@item
+Nebuchadnezzar
+ @tab @url{https://Nebuchadnezzar.SpacecraftSoftware.org/}
 @end multitable
 
 When a new project is created, add its subdomain to this table

@@ -1901,35 +1901,36 @@ pattern `https://<ProjectName>.SpacecraftSoftware.org/`. Use the
 project-specific URL in all project-level outputs; use
 `https://SpacecraftSoftware.org/` only for umbrella references.
 
-| Project                    | URL                                           |
-|----------------------------|-----------------------------------------------|
-| Spacecraft Software (main) | <https://SpacecraftSoftware.org/>             |
-| The Steelbore Standard     | <https://Standard.SpacecraftSoftware.org/>    |
-| Aetheric                   | <https://Aetheric.SpacecraftSoftware.org/>    |
-| Gitway                     | <https://Gitway.SpacecraftSoftware.org/>      |
-| Ferrocast                  | <https://Ferrocast.SpacecraftSoftware.org/>   |
-| Caliper                    | <https://Caliper.SpacecraftSoftware.org/>     |
-| Craton                     | <https://Craton.SpacecraftSoftware.org/>      |
-| Ironway                    | <https://Ironway.SpacecraftSoftware.org/>     |
-| Zamak                      | <https://Zamak.SpacecraftSoftware.org/>       |
-| Bravais                    | <https://Bravais.SpacecraftSoftware.org/>     |
-| Mawaqit                    | <https://Mawaqit.SpacecraftSoftware.org/>     |
-| Flux                       | <https://Flux.SpacecraftSoftware.org/>        |
-| Anvil                      | <https://Anvil.SpacecraftSoftware.org/>       |
-| Construct                  | <https://Construct.SpacecraftSoftware.org/>   |
-| Ferrite_OS                 | <https://Ferrite.SpacecraftSoftware.org/>     |
-| Forge                      | <https://Forge.SpacecraftSoftware.org/>       |
-| Ginx                       | <https://Ginx.SpacecraftSoftware.org/>        |
-| Loran                      | <https://Loran.SpacecraftSoftware.org/>       |
-| Pearlite                   | <https://Pearlite.SpacecraftSoftware.org/>    |
-| MCP Servers                | <https://MCP-Servers.SpacecraftSoftware.org/> |
-| Lode                       | <https://Lode.SpacecraftSoftware.org/>        |
-| Scrubber                   | <https://Scrubber.SpacecraftSoftware.org/>    |
-| Sonde                      | <https://Sonde.SpacecraftSoftware.org/>       |
-| Vacuum                     | <https://Vacuum.SpacecraftSoftware.org/>      |
-| Vault                      | <https://Vault.SpacecraftSoftware.org/>       |
-| Docs                       | <https://Docs.SpacecraftSoftware.org/>        |
-| Loran Pages                | <https://Loran-Pages.SpacecraftSoftware.org/> |
+| Project | URL |
+|----|----|
+| Spacecraft Software (main) | <https://SpacecraftSoftware.org/> |
+| The Steelbore Standard | <https://Standard.SpacecraftSoftware.org/> |
+| Aetheric | <https://Aetheric.SpacecraftSoftware.org/> |
+| Gitway | <https://Gitway.SpacecraftSoftware.org/> |
+| Ferrocast | <https://Ferrocast.SpacecraftSoftware.org/> |
+| Caliper | <https://Caliper.SpacecraftSoftware.org/> |
+| Craton | <https://Craton.SpacecraftSoftware.org/> |
+| Ironway | <https://Ironway.SpacecraftSoftware.org/> |
+| Zamak | <https://Zamak.SpacecraftSoftware.org/> |
+| Bravais | <https://Bravais.SpacecraftSoftware.org/> |
+| Mawaqit | <https://Mawaqit.SpacecraftSoftware.org/> |
+| Flux | <https://Flux.SpacecraftSoftware.org/> |
+| Anvil | <https://Anvil.SpacecraftSoftware.org/> |
+| Construct | <https://Construct.SpacecraftSoftware.org/> |
+| Ferrite_OS | <https://Ferrite.SpacecraftSoftware.org/> |
+| Forge | <https://Forge.SpacecraftSoftware.org/> |
+| Ginx | <https://Ginx.SpacecraftSoftware.org/> |
+| Loran | <https://Loran.SpacecraftSoftware.org/> |
+| Pearlite | <https://Pearlite.SpacecraftSoftware.org/> |
+| MCP Servers | <https://MCP-Servers.SpacecraftSoftware.org/> |
+| Lode | <https://Lode.SpacecraftSoftware.org/> |
+| Scrubber | <https://Scrubber.SpacecraftSoftware.org/> |
+| Sonde | <https://Sonde.SpacecraftSoftware.org/> |
+| Vacuum | <https://Vacuum.SpacecraftSoftware.org/> |
+| Vault | <https://Vault.SpacecraftSoftware.org/> |
+| Docs | <https://Docs.SpacecraftSoftware.org/> |
+| Loran Pages | <https://Loran-Pages.SpacecraftSoftware.org/> |
+| Nebuchadnezzar | <https://Nebuchadnezzar.SpacecraftSoftware.org/> |
 
 When a new project is created, add its subdomain to this table
 immediately.
