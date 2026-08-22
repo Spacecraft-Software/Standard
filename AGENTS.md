@@ -99,7 +99,7 @@ The standard governs itself. Most-pertinent rules for work in this repo:
 | `The_Steelbore_Standard.texi` | Tracked | **Source of truth** — the standard in Texinfo |
 | `The_Steelbore_Standard.md` | Tracked | Generated GFM companion (from `make md`) — for GitHub rendering |
 | `CHANGELOG.md` | Tracked | **Hand-maintained** version history of the standard (extracted from §1 in v1.37). Not generated — do not overwrite it from the `.texi` |
-| `LICENSE` | Tracked | Symlink → `LICENSES/CC-BY-SA-4.0.txt` (§4.3: GitHub license detection + REUSE, one source of truth) |
+| `LICENSE` | Tracked | **Regular file** holding the canonical CC-BY-SA-4.0 text; `LICENSES/CC-BY-SA-4.0.txt` is a symlink back to it. §4.3 requires this direction — GitHub reads git blobs, so a symlinked root `LICENSE` is a target path, not a license, and detection reports `NOASSERTION`. No extension: `LICENSE.md`/`LICENSE.txt` are non-compliant (§4.3, v1.50). |
 | `spacecraft.css` | Tracked | Spacecraft HTML theme for `texi2any --html` output |
 | `Makefile` | Tracked | Build targets: `info`, `html`, `md`, `pdf`, `docx`, `clean` |
 | `The_Steelbore_Standard.info` | Gitignored | Generated — Info reader format |

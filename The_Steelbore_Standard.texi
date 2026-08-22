@@ -5,11 +5,11 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 1.49
+@settitle The Steelbore Standard 1.50
 @c %**end of header
 
-@set VERSION 1.49
-@set UPDATED 2026-08-16
+@set VERSION 1.50
+@set UPDATED 2026-08-22
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
 @copying
@@ -721,6 +721,32 @@ Two independently maintained copies of the same license text are
 @strong{non-compliant}: they drift, and a stale root @code{LICENSE}
 misreports the project's license to every GitHub visitor.
 @item
+@strong{License file naming.} The canonical filename is @code{LICENSE}
+--- @strong{no extension}. @code{LICENSE.md} and @code{LICENSE.txt} are
+non-compliant. GitHub's detector ranks an extensionless @code{LICENSE}
+above every extended form, and a canonical plain-text copy matches on
+that detector's exact matcher rather than falling through to a fuzzy
+one; a Markdown-formatted copy is in any case already excluded by the
+verbatimness rule above.
+
+@code{COPYING} MAY additionally be provided at the project root, as a
+@strong{symbolic link} to @code{LICENSE}, by projects that want the GNU
+convention alongside the GitHub-detected name. It MUST NOT be a second
+regular copy of the text. It MUST NOT appear inside a distributable
+sub-unit: archivers dereference symbolic links by default, so a linked
+@code{COPYING} inside a bundle ships the whole license text a second
+time.
+
+@strong{More than one license.} Where an artifact is offered under more
+than one license --- a dual-licensed §4.2 upstream import, for example
+--- each license text gets its own file, named @code{LICENSE.<TAG>}
+(@code{LICENSE.GPL}, @code{LICENSE.MIT}), after GNU's
+@code{COPYING.LESSER} and @code{COPYING.RUNTIME} convention. License
+texts are never concatenated into one file. The authoritative statement
+of @emph{which} licenses apply, and of their exact versions, remains the
+SPDX expression in the file header or the repo-root @code{REUSE.toml};
+the filename tag is a human-facing label, not a version claim.
+@item
 @strong{CI gate:} @code{reuse lint} MUST pass before shipping.
 @end itemize
 
@@ -957,6 +983,45 @@ are opt-in per clone and cannot be relied on.
 Over-limit skills do not ship
  @tab A skill whose description exceeds the cap MUST NOT be packed,
 committed, or published. Trim the description; do not raise the cap.
+@end multitable
+
+@strong{License carriage.} A bundle is a distribution in its own right.
+Consumers install the @code{.zip} or @code{.skill} without ever seeing
+the source repository, so the repo-root @code{LICENSE} never reaches
+them. A copyleft license obliges the distributor to give every recipient
+a copy of the license along with the work; the bundle is where that
+obligation lands.
+
+@multitable {Regular file, never a link} {Each skill directory MUST contain a @code{LICENSE} file named per §4.3, and every bundle built from that directory MUST include it.}
+@headitem
+Rule
+ @tab Detail
+@item
+@code{LICENSE} in every skill
+ @tab Each skill directory MUST contain a @code{LICENSE} file named per
+§4.3, and every bundle built from that directory MUST include it. A
+bundle carrying no license text does not satisfy the distribution terms
+of any copyleft license the skill is under.
+@item
+Byte-identical to the root
+ @tab Where the skill and the repository name the same license, the
+skill's @code{LICENSE} MUST be byte-identical to the repo-root
+@code{LICENSE}, and an automated gate MUST verify it. §4.3 forbids two
+independently maintained copies of a license text; enforced equality is
+what keeps these one maintained text rather than two.
+@item
+Regular file, never a link
+ @tab The skill's @code{LICENSE} MUST be a regular file. A
+parent-relative symbolic link (@code{../LICENSE}) dangles the moment the
+directory is packaged on its own --- which is precisely what bundling
+and per-skill Nix packaging do --- and a within-directory link is
+dereferenced by the archiver, duplicating the payload instead of saving
+it.
+@item
+Multi-licensed skills
+ @tab A skill offered under more than one license carries one
+@code{LICENSE.<TAG>} file per license (§4.3) in place of a single
+@code{LICENSE}, and every one of them ships in the bundle.
 @end multitable
 
 @node Agent Context Files
@@ -4174,7 +4239,10 @@ shipped in @code{LICENSES/}
 every file (or @code{.license} sidecar / @code{REUSE.toml} entry);
 @code{LICENSES/} directory present; root @code{LICENSE} carries the
 canonical license text and @code{LICENSES/<SPDX-id>.txt} symlinks to it
-(never two independent copies); @code{reuse lint} passes
+(never two independent copies); license files named per §4.3
+(@code{LICENSE} with no extension, @code{LICENSE.<TAG>} per license when
+more than one applies, @code{COPYING} only ever a symlink);
+@code{reuse lint} passes
 @item
 ☐ @strong{§5} Project Posture: README/NOTICE/CONTRIBUTING present;
 default personal-hobby stance applied; general-use carve-outs declared
@@ -4188,7 +4256,9 @@ package manager's native format) before any release tag is pushed
 ☐ @strong{§5.6} Skill packaging: every @code{SKILL.md} @code{description}
 measures ≤ 1000 rendered characters (folded scalars counted as the loader
 sees them, not as raw lines); the cap is enforced by CI @emph{and} by the
-command that produces the bundle, not only by a local git hook --- N/A for
+command that produces the bundle, not only by a local git hook; every
+skill directory carries a @code{LICENSE} (§4.3 naming, byte-identical to
+the repo root, a regular file) and every bundle ships it --- N/A for
 projects that ship no skills
 @item
 ☐ @strong{§5.7} Agent context files: @code{AGENTS.md} and
