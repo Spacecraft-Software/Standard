@@ -1969,6 +1969,7 @@ project-specific URL in all project-level outputs; use
 | Docs | <https://Docs.SpacecraftSoftware.org/> |
 | Loran Pages | <https://Loran-Pages.SpacecraftSoftware.org/> |
 | Nebuchadnezzar | <https://Nebuchadnezzar.SpacecraftSoftware.org/> |
+| Pathfinder | <https://Pathfinder.SpacecraftSoftware.org/> |
 
 When a new project is created, add its subdomain to this table
 immediately.

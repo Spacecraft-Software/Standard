@@ -3611,6 +3611,9 @@ Loran Pages
 @item
 Nebuchadnezzar
  @tab @url{https://Nebuchadnezzar.SpacecraftSoftware.org/}
+@item
+Pathfinder
+ @tab @url{https://Pathfinder.SpacecraftSoftware.org/}
 @end multitable
 
 When a new project is created, add its subdomain to this table
