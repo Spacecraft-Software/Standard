@@ -30,6 +30,18 @@ jobs:
       - name: Validate JSON / JSONC / TOML / YAML
         run: python3 .github/validate-configs.py
 
+      # §6.5: .gitattributes and .editorconfig are advisory to the tools that
+      # read them, and neither stops a CR byte written by a tool that reads
+      # neither. git grep -I skips binaries and honors .gitattributes, so a
+      # pinned CRLF exception is invisible here and needs no exclusion list.
+      - name: Text file hygiene (LF line endings)
+        run: |
+          CR=$(printf '\r')
+          if git grep -Il "$CR" -- .; then
+            echo "::error::CR byte in a tracked text file — §6.5 requires LF line endings"
+            exit 1
+          fi
+
   # The Standard cites skills by id, but the catalogue lives in Construct, so
   # nothing here could tell whether a cited skill exists. It shipped for months
   # naming `spacecraft-accessibility` when the skill had always been

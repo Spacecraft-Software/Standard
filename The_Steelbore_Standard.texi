@@ -5,11 +5,11 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 1.50
+@settitle The Steelbore Standard 1.51
 @c %**end of header
 
-@set VERSION 1.50
-@set UPDATED 2026-08-22
+@set VERSION 1.51
+@set UPDATED 2026-08-29
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
 @copying
@@ -1125,6 +1125,7 @@ similar) follow the @code{CLAUDE.md} pattern: import or reference
 * Post-Quantum Cryptography::
 * Signed Commits::
 * Contribution Targets::
+* Text File Format::
 @end menu
 
 @node POSIX Compliance
@@ -1260,6 +1261,77 @@ Withdraw mistakes promptly
  @tab An outbound submission made without authorization MUST be closed
 or withdrawn as soon as it is discovered, and the incident recorded.
 @end multitable
+
+@node Text File Format
+@section §6.5 — Text File Format (LF, UTF-8, final newline)
+Every text file in a Spacecraft Software source tree is a @strong{POSIX
+text file}: UTF-8 encoded, LF-terminated, and ending with a newline.
+§6.1 requires POSIX compliance of the tools; this section requires it of
+the files those tools are written in.
+
+@strong{Mandatory rules --- violation blocks shipping:}
+
+@multitable {@code{.gitattributes} required} {Vendored upstream files keep their upstream line endings (§4.2 --- preserve what you build on). Windows-native scripts invoked by @code{cmd.exe} (@code{.bat}, @code{.cmd}) MAY use CRLF where the interpreter requires it. A format whose specification mandates CRLF keeps it. Every such exception is pinned explicitly in @code{.gitattributes} (@code{*.bat text eol=crlf}) rather than left to chance. Binary files are unaffected --- @code{text=auto} never touches them.}
+@headitem
+Rule
+ @tab Detail
+@item
+LF line endings
+ @tab Lines terminate with @strong{LF} (U+000A). CRLF and a lone CR are
+prohibited --- in source, configuration, scripts, documentation, and CI
+definitions alike.
+@item
+Final newline
+ @tab Every text file ends with a newline. A file whose last line is
+unterminated is not a POSIX text file, and it makes every diff that
+touches the last line carry a spurious
+@code{\ No newline at end of file}.
+@item
+UTF-8, no BOM
+ @tab Text files are encoded UTF-8. A byte-order mark is prohibited: it
+breaks shebang lines, @code{#}-comment parsing, and every config reader
+that expects the first byte of the file to be content.
+@item
+@code{.gitattributes} required
+ @tab Every repository MUST ship @code{.gitattributes} at its root
+containing @code{* text=auto eol=lf}. This is the only mechanism that
+holds regardless of a contributor's @code{core.autocrlf} setting ---
+which defaults to @code{true} on Windows and rewrites the working tree
+on checkout. Relying on per-clone Git configuration is not compliance.
+@item
+@code{.editorconfig} required
+ @tab Every repository MUST ship @code{.editorconfig} at its root with
+@code{root = true} and, under @code{[*]}, at minimum
+@code{charset = utf-8}, @code{end_of_line = lf}, and
+@code{insert_final_newline = true}. It carries the rule to editors that
+never consult Git.
+@item
+CI gate
+ @tab CI MUST fail when a tracked text file contains a CR byte. Both
+config files are advisory to the tools that read them; the gate is what
+makes the rule binding.
+@item
+Exceptions
+ @tab Vendored upstream files keep their upstream line endings (§4.2 ---
+preserve what you build on). Windows-native scripts invoked by
+@code{cmd.exe} (@code{.bat}, @code{.cmd}) MAY use CRLF where the
+interpreter requires it. A format whose specification mandates CRLF
+keeps it. Every such exception is pinned explicitly in
+@code{.gitattributes} (@code{*.bat text eol=crlf}) rather than left to
+chance. Binary files are unaffected --- @code{text=auto} never touches
+them.
+@end multitable
+
+@strong{Scope note.} This section governs @emph{files on disk}, not
+@emph{bytes on a socket}. The CRLF that HTTP, SMTP, and the other
+line-oriented wire protocols require in their framing is unaffected ---
+a protocol implementation emits what its specification demands.
+
+This is codification of existing practice rather than a new constraint:
+@code{anvil} and @code{bravais} already carry @code{* text=auto eol=lf},
+and @code{loran} and @code{caliper} already carry the three
+@code{.editorconfig} keys. What §6.5 adds is that the convention is now
+uniform and enforced rather than rediscovered one repository at a time.
 
 @iftex
 @bigskip@hrule@bigskip
@@ -4270,6 +4342,13 @@ filesystem paths in either; managed blocks rendered into @code{AGENTS.md}
 only
 @item
 ☐ @strong{§6.1} POSIX-compliant CLI/system tools
+@item
+☐ @strong{§6.5} Text files are LF-terminated, UTF-8 without BOM, and end
+with a newline; @code{.gitattributes} (@code{* text=auto eol=lf}) and
+@code{.editorconfig} (@code{charset}, @code{end_of_line},
+@code{insert_final_newline}) present at the repository root; CI fails on
+a CR byte in a tracked text file; CRLF exceptions (vendored upstream,
+@code{cmd.exe} scripts) pinned explicitly in @code{.gitattributes}
 @item
 ☐ @strong{§7} Shell scripts are POSIX-compatible; Nushell/Ion native
 variants provided where shell-native idioms are required; no Bashisms in
