@@ -29,7 +29,7 @@ repository](https://github.com/Spacecraft-Software/Standard), newest
 entry first. It is kept out of this document so the standard reads as
 the rules *in force* rather than the record of how they got there.
 
-This document is **version 1.50**, updated 2026-08-22 (§14: UTC, ISO
+This document is **version 1.51**, updated 2026-08-29 (§14: UTC, ISO
 8601). The skill encoding of the standard keeps a parallel history in
 `spacecraft-steelbore-standard/references/CHANGELOG.md` in the
 [Construct
@@ -737,6 +737,36 @@ anything anywhere else.
 | Prefer carrying the patch | When an upstream change is needed, carry the patch in-tree (§4.2 preserves upstream copyright, license texts, and notices) rather than upstreaming it, unless the maintainer authorizes upstreaming. |
 | GNU posture does not exempt | An artifact under the free-software/GNU posture (§1) still requires explicit maintainer authorization before anything is sent to GNU, the FSF, or Savannah. That posture yields this standard’s identity clauses (§2, §11–§12, §15); it does not yield this one. |
 | Withdraw mistakes promptly | An outbound submission made without authorization MUST be closed or withdrawn as soon as it is discovered, and the incident recorded. |
+
+## §6.5 — Text File Format (LF, UTF-8, final newline)
+
+Every text file in a Spacecraft Software source tree is a **POSIX text
+file**: UTF-8 encoded, LF-terminated, and ending with a newline. §6.1
+requires POSIX compliance of the tools; this section requires it of the
+files those tools are written in.
+
+**Mandatory rules — violation blocks shipping:**
+
+| Rule | Detail |
+|----|----|
+| LF line endings | Lines terminate with **LF** (U+000A). CRLF and a lone CR are prohibited — in source, configuration, scripts, documentation, and CI definitions alike. |
+| Final newline | Every text file ends with a newline. A file whose last line is unterminated is not a POSIX text file, and it makes every diff that touches the last line carry a spurious `\ No newline at end of file`. |
+| UTF-8, no BOM | Text files are encoded UTF-8. A byte-order mark is prohibited: it breaks shebang lines, `#`-comment parsing, and every config reader that expects the first byte of the file to be content. |
+| `.gitattributes` required | Every repository MUST ship `.gitattributes` at its root containing `* text=auto eol=lf`. This is the only mechanism that holds regardless of a contributor’s `core.autocrlf` setting — which defaults to `true` on Windows and rewrites the working tree on checkout. Relying on per-clone Git configuration is not compliance. |
+| `.editorconfig` required | Every repository MUST ship `.editorconfig` at its root with `root = true` and, under `[*]`, at minimum `charset = utf-8`, `end_of_line = lf`, and `insert_final_newline = true`. It carries the rule to editors that never consult Git. |
+| CI gate | CI MUST fail when a tracked text file contains a CR byte. Both config files are advisory to the tools that read them; the gate is what makes the rule binding. |
+| Exceptions | Vendored upstream files keep their upstream line endings (§4.2 — preserve what you build on). Windows-native scripts invoked by `cmd.exe` (`.bat`, `.cmd`) MAY use CRLF where the interpreter requires it. A format whose specification mandates CRLF keeps it. Every such exception is pinned explicitly in `.gitattributes` (`*.bat text eol=crlf`) rather than left to chance. Binary files are unaffected — `text=auto` never touches them. |
+
+**Scope note.** This section governs *files on disk*, not *bytes on a
+socket*. The CRLF that HTTP, SMTP, and the other line-oriented wire
+protocols require in their framing is unaffected — a protocol
+implementation emits what its specification demands.
+
+This is codification of existing practice rather than a new constraint:
+`anvil` and `bravais` already carry `* text=auto eol=lf`, and `loran`
+and `caliper` already carry the three `.editorconfig` keys. What §6.5
+adds is that the convention is now uniform and enforced rather than
+rediscovered one repository at a time.
 
 ————————————————————————
 
@@ -2486,6 +2516,13 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
   `AGENTS.md` only
 
 - [ ] **§6.1** POSIX-compliant CLI/system tools
+
+- [ ] **§6.5** Text files are LF-terminated, UTF-8 without BOM, and end
+  with a newline; `.gitattributes` (`* text=auto eol=lf`) and
+  `.editorconfig` (`charset`, `end_of_line`, `insert_final_newline`)
+  present at the repository root; CI fails on a CR byte in a tracked
+  text file; CRLF exceptions (vendored upstream, `cmd.exe` scripts)
+  pinned explicitly in `.gitattributes`
 
 - [ ] **§7** Shell scripts are POSIX-compatible; Nushell/Ion native
   variants provided where shell-native idioms are required; no Bashisms
