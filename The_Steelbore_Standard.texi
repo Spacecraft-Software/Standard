@@ -5,11 +5,11 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 1.51
+@settitle The Steelbore Standard 2.00
 @c %**end of header
 
-@set VERSION 1.51
-@set UPDATED 2026-08-29
+@set VERSION 2.00
+@set UPDATED 2026-09-08
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
 @copying
@@ -71,6 +71,14 @@ Maintained by Mohamed Hammad
 * Attribution::                 §15 — Maintainer, project pages, credits.
 * Development Progress Tracking:: §17 — Development progress tracking and reporting.
 * Accessibility::               §18 — Accessible mode for CLI, TUI & GUI.
+* Assurance Categories::        §19 — Assurance categories, tailoring & conformance.
+* Requirements Engineering::    §20 — Requirements engineering.
+* Verification and Validation:: §21 — Verification, validation & traceability.
+* Resource Budgets::            §22 — Resource budgets & margins.
+* Interface Control::           §23 — Interface control.
+* Reuse Qualification::         §24 — Reuse & third-party qualification.
+* Configuration and Releases::  §25 — Baselines, anomalies & release acceptance.
+* Operations and Maintenance::  §26 — Operations, maintenance & support.
 * Compliance Checklist::        §16 — Audit gate checklist.
 * Skill Cross-References::      Skill cross-reference table.
 * Concept Index::               Alphabetical concept index.
@@ -375,9 +383,13 @@ handled, never silently swallowed; no panics / @code{unwrap} /
 survive partial failure, degrade gracefully under load or dependency
 loss, and recover rather than crash.
 @item
-@strong{Verified by testing} --- stability properties must be backed by
-tests (unit, integration, and fuzz/property where applicable) gating CI,
-not asserted by inspection alone.
+@strong{Verified} --- stability properties must be backed by evidence
+under §21, at the level §21.2 requires for the project's assurance
+category (§19), gating CI and traced to the requirement it discharges
+(§21.3); tests (unit, integration, and fuzz/property where applicable)
+are the default method, never the only admissible one, and no property
+is asserted by inspection alone unless inspection is its declared
+method.
 @end itemize
 
 @menu
@@ -478,7 +490,9 @@ cross-compilation, or static-linking setups) MUST be disabled. Stability
 (Priority 1) outranks Performance (Priority 2) --- never ship a broken
 build for the sake of a flag.
 @item
-Benchmarking is @strong{mandatory} before and after any optimization
+Performance figures are measured against declared budgets and margins
+(§22), so that a benchmark answers whether the figure is acceptable and not
+only whether it moved. Benchmarking is @strong{mandatory} before and after any optimization
 work; regressions must be documented and justified --- and it is the
 evidence by which the concurrency-vs-serial trade-off above is decided.
 @end itemize
@@ -833,6 +847,10 @@ GPL/AGPL license (§4.1) for binding terms
 @code{CONTRIBUTING.md}
  @tab Contribution scope, PR-acceptance discretion, sign-off, security
 reporting, license-of-contributions
+@item
+@code{SECURITY.md}
+ @tab Private reporting channel, acknowledgement target, supported
+versions, and coordinated-disclosure terms (§26.1)
 @item
 @code{LICENSES/}
  @tab REUSE license directory (§4.3): verbatim text of every license
@@ -3890,6 +3908,15 @@ PRD:  [████████████░░░░░░░░]  60%
 
 @strong{Row order} is fixed: milestone rows @code{M0}…@code{Mn} in ascending order, then @code{MVP}, then @code{TODO}, then @code{PLAN}, then @code{PRD}.
 
+@strong{Percentages have a denominator.} Where the project maintains a
+requirement set (§20), each figure is the fraction of that milestone's
+baselined requirements whose status is @code{verified} (§20.3), read from the
+traceability matrix (§21.3) rather than estimated. Where no requirement set
+exists --- Category D work, or a project below the §19.3 threshold --- the
+figure is the maintainer's estimate and is understood as one. A percentage
+that cannot name what it is a fraction of is an impression, and impressions
+are what §17 exists to replace.
+
 @strong{Only applicable rows are emitted.} The milestone rows match the milestones the plan actually defines — there is no fixed count, and @code{M0}–@code{M4} in the template above is an illustration, not a required set. @code{TODO}, @code{PLAN}, and @code{PRD} each appear only when the task is driven by such an artifact. @code{MVP} is always present. A row is never padded in at 0% to fill out the block: a fabricated track reports progress against nothing and misrepresents the work.
 
 @section §17.2 — Progress Bar Style
@@ -4271,6 +4298,1492 @@ no feature to exist, and adds nothing to the exemption above.
 ------------------------------------------------------------------------
 @end ifnottex
 
+@node Assurance Categories
+@chapter §19 — Assurance Categories, Tailoring & Conformance
+
+§3 fixes the priority order for every artifact; it does not say how much
+@emph{evidence} a given artifact owes. A bootloader that leaves a machine
+unbootable and a colour-palette skill that renders a swatch wrong are both
+governed by this standard, and until now both were governed identically.
+Uniform obligation on unequal consequence produces one of two failures: the
+small artifact carries ceremony it does not need, or the critical one carries
+no more assurance than the small one. This chapter grades the obligation.
+
+@strong{Provenance.} This chapter and §20 through §26 are informed by
+ISO/IEC/IEEE 29148:2018 (requirements engineering) and ECSS-E-ST-40C (ESA/ECSS
+space software engineering), credited per §15.3. No text from either document is
+reproduced here; the categories, thresholds, gate structure, and wording are
+Spacecraft Software's own, and where the two sources assume a
+customer/supplier contract with a review board, this standard substitutes what
+a single maintainer can actually execute.
+
+@menu
+* Category Definitions::        §19.1 — The four assurance categories.
+* Category Declaration::        §19.2 — Declaring and changing a category.
+* Graded Obligations::          §19.3 — What each category owes.
+* Engineering Gates::           §19.4 — The three gates.
+* Tailoring Register::          §19.5 — Recorded tailoring.
+* Conformance Claim::           §19.6 — Claiming conformance.
+@end menu
+
+@node Category Definitions
+@section §19.1 — The Four Assurance Categories
+
+Category is assigned by @strong{consequence of failure}, never by effort,
+line count, or how interesting the project is.
+
+@multitable {@strong{C --- Standard}} {Failure destroys or corrupts data irrecoverably, prevents a machine from booting, or breaches a security or privacy boundary. Zamak, Pearlite, Cypher/Adit, Vault, and any crypto, bootloader, package-installation, or credential-handling path.}
+@headitem
+Category
+ @tab Failure consequence and typical projects
+@item
+@strong{A --- Critical}
+ @tab Failure destroys or corrupts data irrecoverably, prevents a machine
+from booting, or breaches a security or privacy boundary. Bootloaders,
+declarative system managers, credential stores, SSH and cryptographic
+transports, package installation paths.
+@item
+@strong{B --- Significant}
+ @tab Failure loses unsaved work, corrupts a user artifact recoverably, or
+silently produces a wrong answer the user relies on. Editors, package
+managers, conversion and tracing engines, and any tool whose output is
+consumed without inspection.
+@item
+@strong{C --- Standard}
+ @tab Failure is visible, contained, and recoverable by re-running the tool.
+Most CLIs, inspectors, and reporters.
+@item
+@strong{D --- Incidental}
+ @tab Failure has no consequence beyond the session. Skills, themes,
+documentation tooling, scratch utilities, and projects registered as games
+(§18.5).
+@end multitable
+
+@strong{Silent wrongness raises the category.} A tool whose wrong answer looks
+exactly like a right answer is Category B at minimum, whatever its size. A
+prayer-time calculator, a checksum reporter, and a specification extractor all
+qualify: nothing downstream can detect the error.
+
+@strong{One category per project, raised per subsystem.} A project declares one
+category. An individual subsystem MAY be raised above it --- a Category C
+application that ships a credential-handling module treats that module as
+Category A --- and MUST NOT be lowered below it. The raise is recorded with the
+declaration.
+
+@node Category Declaration
+@section §19.2 — Declaring and Changing a Category
+
+@multitable {Where declared} {@file{README.md} posture section (§5.2), @file{AGENTS.md} (§5.7), and the project registry in @file{PROJECTS.md}. All three carry the same value; the registry is authoritative in a conflict.}
+@headitem
+Rule
+ @tab Detail
+@item
+Where declared
+ @tab The @file{README.md} posture section (§5.2), @file{AGENTS.md} (§5.7), and
+the project registry in @file{PROJECTS.md}. All three carry the same value; the
+registry is authoritative in a conflict.
+@item
+Declared before code
+ @tab The category is declared at project creation, before the first gate
+(§19.4). An undeclared project is treated as Category C for audit purposes, and
+the missing declaration is itself a finding.
+@item
+Raising is free
+ @tab A category MAY be raised at any time by the maintainer, effective
+immediately.
+@item
+Lowering is gated
+ @tab A category MAY be lowered only with a dated justification in the
+tailoring register (§19.5) naming what changed about the consequence of
+failure. Shipping pressure is not such a change.
+@item
+Scope changes force review
+ @tab Adding a network listener, a credential path, a privileged operation, or
+a destructive default to a project requires the category to be re-evaluated in
+the same change.
+@end multitable
+
+@node Graded Obligations
+@section §19.3 — What Each Category Owes
+
+The chapters that follow are written once and applied by category. This table
+is the index; each chapter restates its own row normatively.
+
+@multitable {§21 Traceability matrix in CI} {Test + analysis + formal or exhaustive fuzzing} {Trust-path dependencies} {List in @file{AGENTS.md}} {Recommended}
+@headitem
+Obligation
+ @tab A @tab B @tab C @tab D
+@item
+§20 Requirements specification
+ @tab Texinfo SRS @tab Texinfo SRS @tab List in @file{AGENTS.md} @tab None
+@item
+§21 Traceability matrix in CI
+ @tab Required @tab Required @tab Recommended @tab None
+@item
+§21 Verification evidence
+ @tab Test + analysis + formal or exhaustive fuzzing @tab Test + analysis
+@tab Test @tab Smoke test
+@item
+§22 Budgets & margins
+ @tab Required @tab Required @tab Recommended @tab None
+@item
+§23 Interface control document
+ @tab Required @tab Required for public interfaces @tab Recommended @tab None
+@item
+§24 Dependency qualification
+ @tab Every direct dependency @tab Trust-path dependencies @tab Audit tooling
+only @tab Audit tooling only
+@item
+§24 SBOM per release
+ @tab Required @tab Required @tab Required @tab Recommended
+@item
+§25 Baselines & anomalies
+ @tab Full @tab Full @tab Release baseline only @tab None
+@item
+§26 @file{SECURITY.md} & support window
+ @tab Required @tab Required @tab Required @tab Required
+@end multitable
+
+Every obligation marked @emph{Recommended} that is not implemented is recorded
+in the tailoring register (§19.5). @emph{None} needs no record.
+
+@node Engineering Gates
+@section §19.4 — The Three Gates
+
+ECSS separates a project into staged reviews with defined entry evidence. That
+structure is sound and the staffing behind it is not available here, so this
+standard compresses it to three gates, each of which is a @strong{checklist a
+maintainer runs alone}, not a meeting.
+
+@multitable {@strong{G2 --- Design gate}} {Entry evidence: requirement set passes the §20.4 characteristics gate; each requirement carries an ID, a rationale, and a verification method; the assurance category is declared. Exit: the requirement set is baselined (§25.1).}
+@headitem
+Gate
+ @tab Evidence required to pass
+@item
+@strong{G1 --- Requirements gate}
+ @tab The requirement set passes the §20.4 characteristics gate; every
+requirement carries an ID, a rationale, and a declared verification method
+(§21.1); the assurance category is declared (§19.2). Exit: the requirement set
+is baselined (§25.1).
+@item
+@strong{G2 --- Design gate}
+ @tab Architecture recorded; concurrency decisions and their trade-offs
+documented (§3.2); resource budgets declared with initial margins (§22);
+interfaces identified and their ICD drafted (§23); dependencies qualified
+(§24). Exit: the design and budget baseline.
+@item
+@strong{G3 --- Release gate}
+ @tab Traceability matrix complete with no orphans (§21.3); budget margins
+measured and within threshold (§22.3); no open anomaly above the category's
+blocking severity (§25.2); release manifest assembled (§25.3); §16 checklist
+run. Exit: the release baseline and a signed tag (§6.3).
+@end multitable
+
+Gates are per release, not per project lifetime: a project that ships
+quarterly passes G1--G3 quarterly, and a change that adds no requirements
+re-enters at G2.
+
+@node Tailoring Register
+@section §19.5 — Recorded Tailoring
+
+§16 currently permits marking a check @emph{N/A} in the moment of the audit,
+which leaves no record and cannot be reviewed later. Tailoring is instead
+@strong{written down once and read every time}.
+
+@multitable {Where it lives} {Category A and B projects ship @file{COMPLIANCE.md} at the repository root. Category C and D projects MAY instead carry it as a Compliance section of @file{README.md}.}
+@headitem
+Rule
+ @tab Detail
+@item
+Where it lives
+ @tab Category A and B projects ship @file{COMPLIANCE.md} at the repository
+root. Category C and D projects MAY instead carry the register as a
+``Compliance'' section of @file{README.md}.
+@item
+What it records
+ @tab One row per tailored clause: the clause, the status
+(@code{applied} / @code{tailored} / @code{not-applicable}), a one-line
+justification, and an ISO 8601 date (§14).
+@item
+Silence means applied
+ @tab A clause absent from the register is applied in full. The register never
+lists what is merely being followed.
+@item
+Not a waiver mechanism
+ @tab Tailoring adjusts @emph{how} a clause is satisfied or records that its
+subject does not exist in this project. It never sets aside §3's priority
+order, §4 licensing, §6.3 signing, or §6.4 contribution targets.
+@item
+Reviewed at G3
+ @tab Every register entry is re-read at the release gate. An entry whose
+justification has expired is removed and the clause applied.
+@end multitable
+
+@node Conformance Claim
+@section §19.6 — Claiming Conformance
+
+A project claims conformance in @file{README.md}, in one line, naming the
+standard version, the category, and whether the claim is full or tailored:
+
+@example
+Conforms to The Steelbore Standard v@value{VERSION} --- Category B, tailored
+(§22, §23; see COMPLIANCE.md).
+@end example
+
+@strong{Full conformance} means every applicable clause is applied and the
+register is empty. @strong{Tailored conformance} means the register is
+non-empty and current. A claim naming a standard version older than the one in
+force is honest and permitted; an absent claim is not a conformance failure,
+but an inaccurate one is.
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Requirements Engineering
+@chapter §20 — Requirements Engineering
+
+Code cannot be verified against an intention that was never written down. §17
+already assumes a PRD or plan exists and tracks progress against it, but this
+standard has never said what such a document contains, how a requirement is
+worded, or how one is identified. This chapter supplies that, scaled by
+assurance category (§19.3) so that a Category D skill owes nothing and a
+Category A bootloader owes a specification.
+
+@menu
+* Requirement Information Items::  §20.1 — What is written, and where.
+* Verbal Forms::                   §20.2 — shall, should, may, will.
+* Requirement Identity::           §20.3 — Identifiers and attributes.
+* Characteristics Gate::           §20.4 — The quality gate for requirements.
+* Requirement Language::           §20.5 — Wording rules.
+* Requirement Pattern::            §20.6 — The house sentence pattern.
+@end menu
+
+@node Requirement Information Items
+@section §20.1 — What Is Written, and Where
+
+Two documents, distinguished by whose question they answer. Keeping them apart
+is what makes validation (§21.5) possible: needs are what the software is
+@emph{for}, requirements are what it @emph{does}.
+
+@multitable {@strong{Requirements (SRS)}} {What the software shall do, in verifiable statements, each traceable to a need. Written by the maintainer as implementer. Lives in @file{doc/<project>.texi} under a @code{Requirements} node.}
+@headitem
+Item
+ @tab Content and location
+@item
+@strong{Needs}
+ @tab Why the software exists, who uses it, the operating environment, and the
+constraints the maintainer is unwilling to trade away. Written by the
+maintainer as user. Two paragraphs is a legitimate length. Lives in
+@file{doc/<project>.texi} under a @code{Needs} node, or in @file{README.md} for
+Category C.
+@item
+@strong{Requirements (SRS)}
+ @tab What the software shall do, in individually verifiable statements, each
+traceable to a need. Written by the maintainer as implementer. Lives in
+@file{doc/<project>.texi} under a @code{Requirements} node.
+@end multitable
+
+Requirements are authored in Texinfo (§8), not in a parallel Markdown or
+office file: they then build to @code{.info}, @code{.html}, and @code{.pdf}
+with the rest of the manual, ship in the packages (§8.6), and cannot drift
+from the documentation the user reads. Category C projects MAY keep the
+requirement list in @file{AGENTS.md} instead, where the agent that implements
+against it will actually load it.
+
+@strong{Requirements are not the plan.} @file{TODO}, @file{PLAN}, and the
+milestone rows of §17 sequence the work; the requirement set states the
+obligation. A requirement is not deleted because it slipped a milestone.
+
+@node Verbal Forms
+@section §20.2 — Verbal Forms
+
+Normative weight is carried by the verb, and one verb has exactly one meaning
+throughout this standard, every project specification, and every requirement:
+
+@multitable {@code{shall not}} {A binding prohibition. Verifiable, and its violation is a defect.}
+@headitem
+Form
+ @tab Meaning
+@item
+@code{shall}
+ @tab A binding requirement. Verifiable, and its violation is a defect.
+@item
+@code{shall not}
+ @tab A binding prohibition.
+@item
+@code{should}
+ @tab A recommendation. Departure is permitted and is recorded in the
+tailoring register (§19.5).
+@item
+@code{may}
+ @tab Permission. Neither obligation nor recommendation.
+@item
+@code{will}
+ @tab A statement of fact or of intent about something outside the
+specification's control (the platform, the toolchain, a future release). Never
+a requirement.
+@end multitable
+
+@strong{@code{must} is retired from normative text.} It reads as obligation but
+carries no agreed weight, and this standard has used @code{must},
+@code{MUST}, and @code{shall} interchangeably. New and revised normative text
+uses the forms above. Existing occurrences are migrated as their sections are
+next revised; until then @code{must} and @code{MUST} in this standard are read
+as @code{shall}. Capitalisation is not significant: @code{shall} and
+@code{SHALL} are the same obligation, and emphasis is carried by
+@code{@@strong@{@}} where needed.
+
+@node Requirement Identity
+@section §20.3 — Identifiers and Attributes
+
+@strong{Identifier.} @code{<PREFIX>-<TYPE>-<NNN>}, where @code{<PREFIX>} is the
+project's short code as registered in @file{PROJECTS.md}, @code{<TYPE>} is
+@code{NEED} or @code{SRS}, and @code{<NNN>} is a zero-padded serial:
+@code{ZMK-SRS-014}. Identifiers are @strong{permanent and never reused}. A
+withdrawn requirement keeps its identifier and is marked withdrawn; reissuing
+@code{ZMK-SRS-014} for a different obligation silently invalidates every trace,
+commit message, and test that cited it.
+
+@strong{Attributes.} Every requirement carries these, and a requirement missing
+any of them does not pass G1:
+
+@multitable {Verification method} {One of the four methods in §21.1, chosen when the requirement is written --- not after the code exists and the easiest evidence is obvious.}
+@headitem
+Attribute
+ @tab Content
+@item
+Rationale
+ @tab Why this is required. One sentence. A requirement whose rationale cannot
+be written is a design decision in disguise and belongs in the design record.
+@item
+Source
+ @tab The need it satisfies, an upstream standard, a platform constraint, or a
+clause of this standard.
+@item
+Priority
+ @tab @code{mandatory} / @code{expected} / @code{optional}. Drives what MVP
+means in §17.
+@item
+Verification method
+ @tab One of the four methods in §21.1, chosen when the requirement is written,
+not after the code exists and the cheapest evidence is obvious.
+@item
+Status
+ @tab @code{draft} / @code{baselined} / @code{implemented} / @code{verified} /
+@code{withdrawn}. The denominator of the §17 progress figures.
+@end multitable
+
+@node Characteristics Gate
+@section §20.4 — The Characteristics Gate
+
+Run at G1, against each requirement and then against the set. The nine
+individual and five set characteristics are those of ISO/IEC/IEEE 29148:2018;
+the definitions below are this standard's own wording.
+
+@multitable {@strong{Conforming}} {States a single obligation. Two obligations joined by @code{and} are two requirements, because they can be separately met and separately failed.}
+@headitem
+Each requirement is
+ @tab Meaning
+@item
+@strong{Necessary}
+ @tab Removing it leaves a real gap. If nothing breaks when it is deleted, it
+was documentation of an implementation choice.
+@item
+@strong{Appropriate}
+ @tab Pitched at this project's level --- it constrains what the software does,
+not how a function is written.
+@item
+@strong{Unambiguous}
+ @tab Admits one reading. If two readings survive, two people implement two
+things.
+@item
+@strong{Complete}
+ @tab Stands alone, without a to-be-decided, a trailing @code{etc.}, or an
+appeal to context that lives only in the maintainer's head.
+@item
+@strong{Singular}
+ @tab States one obligation. Two obligations joined by @code{and} are two
+requirements: they can be separately met and separately failed.
+@item
+@strong{Feasible}
+ @tab Achievable within the known constraints --- platform, toolchain,
+budgets (§22), and the maintainer's actual time.
+@item
+@strong{Verifiable}
+ @tab A declared method (§21.1) can produce a pass or a fail. If no method can,
+the requirement is unmeasurable prose.
+@item
+@strong{Correct}
+ @tab An accurate statement of the need it traces to.
+@item
+@strong{Conforming}
+ @tab Uses the §20.2 verbal forms and the §20.6 pattern.
+@end multitable
+
+@multitable {@strong{Able to be validated}} {The set as a whole can be shown to satisfy the needs --- there is no need with nothing tracing to it.}
+@headitem
+The set is
+ @tab Meaning
+@item
+@strong{Complete}
+ @tab Covers every stated need, including error, degraded, and shutdown
+behaviour, which is where hobby specifications habitually stop.
+@item
+@strong{Consistent}
+ @tab No requirement contradicts another, and one term means one thing
+throughout.
+@item
+@strong{Feasible}
+ @tab Satisfiable together, not merely one at a time --- the §3 priority order
+is the tie-break when two requirements pull apart.
+@item
+@strong{Comprehensible}
+ @tab Readable in order by someone who was not in the room, which for this
+organization means the maintainer in a year and every coding agent that loads
+it.
+@item
+@strong{Able to be validated}
+ @tab Every need has at least one requirement tracing to it, so the set can be
+shown to serve its purpose.
+@end multitable
+
+@node Requirement Language
+@section §20.5 — Wording Rules
+
+@itemize
+@item
+@strong{No unmeasurable adjectives.} @code{fast}, @code{robust},
+@code{efficient}, @code{user-friendly}, @code{secure}, @code{modern},
+@code{seamless}. Replace each with a figure and a method: not ``startup shall
+be fast'' but ``cold start shall complete within 50 ms on the reference
+machine, measured per §22.4''.
+@item
+@strong{No open-ended clauses.} @code{etc.}, @code{and so on},
+@code{as appropriate}, @code{including but not limited to}. Each hides an
+unbounded obligation nobody can verify.
+@item
+@strong{No escape hatches.} @code{where possible}, @code{if practical},
+@code{as far as reasonable}. Either the obligation binds --- use @code{shall}
+--- or it is a recommendation --- use @code{should}.
+@item
+@strong{No comparatives without a baseline.} @code{faster}, @code{smaller},
+@code{better} require a named reference point and a measurement.
+@item
+@strong{No implementation in a requirement.} Name the observable behaviour, not
+the crate, the data structure, or the algorithm. Those belong to the design
+record and change without the obligation changing.
+@item
+@strong{Active voice, named subject.} ``The system shall reject'' --- not ``the
+input shall be rejected'', which leaves nobody responsible.
+@item
+@strong{Positive statement where possible.} A prohibition is verifiable only if
+the prohibited condition is observable; prefer stating the required behaviour.
+@item
+@strong{No rationale inside the requirement.} The rationale is an attribute
+(§20.3). Prose reasoning inside a requirement sentence becomes accidentally
+binding.
+@end itemize
+
+@node Requirement Pattern
+@section §20.6 — The House Sentence Pattern
+
+One pattern, so that requirements can be read and diffed quickly:
+
+@example
+[<condition>,] the <subject> shall <action> <object> [<constraint>].
+@end example
+
+@multitable {@strong{Constrained}} {@code{When NO_COLOR is set in the environment, the resolver shall select the steelbore-mono variant.}}
+@headitem
+Shape
+ @tab Example
+@item
+@strong{Plain}
+ @tab @code{The resolver shall report the resolved theme and the deciding source under --verbose.}
+@item
+@strong{Conditional}
+ @tab @code{When NO_COLOR is set in the environment, the resolver shall select the steelbore-mono variant.}
+@item
+@strong{Constrained}
+ @tab @code{The tracer shall convert a 4000 x 4000 pixel raster within 2 s on
+the reference machine.}
+@item
+@strong{Prohibition}
+ @tab @code{The application shall not write to a path outside the directories
+named in §9.}
+@end multitable
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Verification and Validation
+@chapter §21 — Verification, Validation & Traceability
+
+§3.1 requires stability to be ``verified by testing''. That is one method of
+four, and it says nothing about what evidence is enough, or about the link
+between a requirement and the test that discharges it. This chapter separates
+verification (was it built right) from validation (was the right thing built),
+names the admissible methods, and makes the link between requirement and
+evidence machine-checkable.
+
+@menu
+* Verification Methods::        §21.1 — The four admissible methods.
+* Verification Evidence::       §21.2 — Evidence by category.
+* Traceability::                §21.3 — The matrix and its gate.
+* Independence Surrogates::     §21.4 — Independence without a second engineer.
+* Validation::                  §21.5 — Validating against needs.
+@end menu
+
+@node Verification Methods
+@section §21.1 — The Four Admissible Methods
+
+Every requirement declares exactly one primary method at G1 (§20.3). Naming the
+method up front prevents the familiar retrofit in which whatever evidence
+happened to be cheap is declared sufficient.
+
+@multitable {@strong{Review of design}} {Reasoning over the artifact rather than execution: static analysis, model checking, proof, complexity or worst-case bounds, exhaustive enumeration of a small state space.}
+@headitem
+Method
+ @tab What it is, and when it is the right choice
+@item
+@strong{Test}
+ @tab Executing the software against defined inputs and comparing to expected
+results. The default for behavioural requirements.
+@item
+@strong{Analysis}
+ @tab Reasoning over the artifact rather than running it: static analysis,
+model checking, proof, worst-case bounds, exhaustive enumeration of a small
+state space. The right method for concurrency invariants and resource bounds,
+which tests sample but do not establish.
+@item
+@strong{Inspection}
+ @tab Direct examination of the artifact for a property visible without
+execution: an SPDX header (§4.3), a compiler flag (§3.2.1), a file's line
+endings (§6.5), the presence of a required file.
+@item
+@strong{Review of design}
+ @tab Structured reading of the design against the requirement, for properties
+that exist only at design level --- privilege separation, failure containment,
+the absence of a global lock on a hot path.
+@end multitable
+
+A requirement may cite a secondary method as supporting evidence. It may not
+cite ``manual check'' as a method: manual checking is inspection, and it is
+recorded as such, with what was inspected and when.
+
+@node Verification Evidence
+@section §21.2 — Evidence by Category
+
+Coverage figures are a floor for the paths that matter, not a target to farm.
+Percentages are line coverage of the crate's own code, excluding generated and
+vendored sources.
+
+@multitable {@strong{A --- Critical}} {Everything in B, plus formal verification (Kani, Creusot, or SPARK) or exhaustive fuzzing of every parser and every trust boundary; property tests on all invariants; a documented worst-case bound for every unbounded loop and allocation.}
+@headitem
+Category
+ @tab Minimum evidence at G3
+@item
+@strong{A --- Critical}
+ @tab Everything required of B, plus formal verification (Kani, Creusot, or
+SPARK for an Ada component) or exhaustive fuzzing of every parser and trust
+boundary; property-based tests over stated invariants; a documented worst-case
+bound for every unbounded loop and every allocation on a critical path; zero
+@code{unsafe} without a written safety argument at each site.
+@item
+@strong{B --- Significant}
+ @tab Unit and integration tests with at least 80% line coverage; fuzzing of
+every input parser; a mutation-testing run (@code{cargo-mutants}) whose
+surviving mutants are triaged and either killed or justified; every anomaly
+closed by a regression test (§25.2).
+@item
+@strong{C --- Standard}
+ @tab Unit tests over the public surface, integration coverage of the primary
+CLI paths, and a CI run that gates merge.
+@item
+@strong{D --- Incidental}
+ @tab A smoke test proving the artifact loads, parses, or renders.
+@end multitable
+
+@strong{Coverage is not evidence of verification.} It shows which lines ran,
+not which requirements were discharged; the traceability matrix is what shows
+that. Mutation score is the honest companion figure for Category A and B, since
+it measures whether the tests would notice a defect at all.
+
+@node Traceability
+@section §21.3 — Traceability
+
+Traceability shall be @strong{bidirectional} and @strong{mechanically
+generated}: forward from each requirement to the design element, the code, and
+the evidence that discharges it; backward from each test to the requirement it
+exists for. A matrix maintained by hand is a matrix that is accurate on the day
+it is written.
+
+@strong{Markers.} Requirements are cited in source by identifier, in a form the
+language's own tooling preserves:
+
+@verbatim
+/// Resolve the active theme from the §11.6 precedence chain.
+///
+/// Verifies: SBT-SRS-031, SBT-SRS-032
+pub fn resolve_theme(env: &Env) -> Theme { /* ... */ }
+
+#[test]
+fn mono_variant_wins_when_no_color_set() {
+    // Verifies: SBT-SRS-032
+}
+@end verbatim
+
+@strong{Generation and gate.} A project script --- Nushell is the house shell
+(§7) and its structured output suits this directly --- collects the markers,
+joins them against the requirement set, and emits the matrix as a build
+artifact:
+
+@verbatim
+# tools/trace.nu — emit the traceability matrix, fail on orphans
+def main [] {
+  let reqs = (open doc/requirements.toml | get requirement)
+  let marks = (
+    rg --json '(?:Verifies|Implements): ([A-Z]+-SRS-[0-9]+)' src tests
+    | lines | each { |l| $l | from json } | where type == "match"
+  )
+  let covered = ($marks | get data.submatches.0.match.text | uniq)
+  let orphan_reqs = ($reqs | where id not-in $covered | get id)
+  let unknown_ids = ($covered | where $it not-in ($reqs | get id))
+
+  if ($orphan_reqs | is-not-empty) or ($unknown_ids | is-not-empty) {
+    print $"unverified: ($orphan_reqs)  unknown: ($unknown_ids)"
+    exit 1
+  }
+}
+@end verbatim
+
+@multitable {Orphans block release} {A baselined requirement with no evidence marker, or a marker citing an identifier that is not in the requirement set, fails CI. These are the two failure modes traceability exists to catch: work that was specified and never done, and work that cites a requirement that was withdrawn or mistyped.}
+@headitem
+Rule
+ @tab Detail
+@item
+Generated, never hand-maintained
+ @tab The matrix is produced by tooling from the source and the requirement
+set, on every CI run.
+@item
+Orphans block release
+ @tab A baselined requirement with no evidence marker, or a marker citing an
+identifier absent from the requirement set, fails CI. These are the two failure
+modes traceability exists to catch: work that was specified and never done, and
+evidence citing a requirement that was withdrawn or mistyped.
+@item
+Shipped as an artifact
+ @tab The matrix accompanies the release (§25.3), so the state of verification
+at that version is recoverable later without rebuilding.
+@item
+Feeds §17
+ @tab The verified fraction of the baselined requirement set is the
+denominator-backed figure behind the §17.1 progress bars.
+@end multitable
+
+@node Independence Surrogates
+@section §21.4 — Independence Without a Second Engineer
+
+Space software practice requires verification to be performed independently of
+the people who wrote the code, in proportion to criticality. A single
+maintainer cannot staff that, and pretending otherwise would make the clause
+decorative. Independence is therefore obtained from a @strong{different
+mechanism}, not a different person, for Category A and B:
+
+@itemize
+@item
+@strong{A different tool decides.} Formal verification, a model checker, or a
+sanitizer run reaches its verdict without sharing the author's assumptions.
+@item
+@strong{A different implementation decides.} Differential testing against a
+reference implementation, an oracle, or the tool being replaced ---
+particularly available to Ironway, Caliper, and any rewrite, where the original
+is the oracle.
+@item
+@strong{Generated inputs decide.} Property-based tests and fuzzing explore the
+input space the author did not think of, which is the specific failure
+independent review is meant to catch.
+@item
+@strong{A different reader decides.} A review pass by a coding agent that has
+not seen the implementation session, prompted from the requirement text alone,
+is a legitimate inspection --- recorded, like any inspection, with what was
+reviewed and when.
+@end itemize
+
+Mutation testing is the meta-check on all of the above: it measures whether the
+verification would have noticed.
+
+@node Validation
+@section §21.5 — Validation Against Needs
+
+Verification asks whether the software meets its requirements. Validation asks
+whether the requirements were the right ones, and is answered against the needs
+(§20.1), by using the software as the user for whom it was written --- which,
+under §5.1, is usually the maintainer.
+
+@multitable {Validation is per release} {Performed at G3, against the release candidate, in the real environment (Steelbore OS Bravais for OS-facing work), not in the development tree with the developer's configuration.}
+@headitem
+Rule
+ @tab Detail
+@item
+Against needs, not requirements
+ @tab Each stated need is exercised end to end. A need with no requirement
+tracing to it is a §20.4 set-completeness failure found late.
+@item
+In the real environment
+ @tab Performed at G3 against the release candidate on the target platform,
+installed from the packaging of §5.5 --- not from the development tree with the
+developer's configuration.
+@item
+Recorded
+ @tab A short validation note in the release manifest (§25.3): what was
+exercised, on what, and what was found.
+@item
+Failure is a requirements defect
+ @tab Software that passes verification and fails validation has correct code
+and wrong requirements. The fix begins in the requirement set, not the source.
+@end multitable
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Resource Budgets
+@chapter §22 — Resource Budgets & Margins
+
+§3.2 requires benchmarking before and after optimization work. A before/after
+delta detects a regression against the previous build; it cannot detect a build
+that has been slowly getting worse for a year, and it never answers whether the
+current figure is acceptable. A budget supplies the absolute line, and a margin
+says how much room is left before it is crossed.
+
+@menu
+* Budgeted Resources::          §22.1 — What is budgeted.
+* Declaring Budgets::           §22.2 — Declaration and re-baselining.
+* Margin Thresholds::           §22.3 — Green, amber, red.
+* Budget Measurement::          §22.4 — The reference machine.
+@end menu
+
+@node Budgeted Resources
+@section §22.1 — What Is Budgeted
+
+At G2, a Category A or B project declares a ceiling for each resource that
+applies to it. Category C should declare at least the first two.
+
+@multitable {Cold-start latency} {Time from process start to the first useful output or interactive prompt, measured with @code{hyperfine} on a warm page cache.}
+@headitem
+Resource
+ @tab Definition
+@item
+Binary size
+ @tab Size of the stripped release artifact as shipped by §5.5 packaging.
+@item
+Cold-start latency
+ @tab Time from process start to first useful output or interactive prompt,
+measured on a warm page cache.
+@item
+Peak resident memory
+ @tab Maximum RSS over the declared reference workload.
+@item
+Throughput or frame time
+ @tab The project's primary work rate: pixels per second, packets per second,
+frames per second, requests per second.
+@item
+Startup allocations
+ @tab Allocation count before first output, for Category A --- an allocation on
+a path that must not fail is a failure mode.
+@item
+Hard platform limits
+ @tab Where the target imposes one --- a boot sector, a flash partition, a
+stack size --- the limit is the ceiling and is not negotiable. Zamak is the
+standing example.
+@end multitable
+
+@node Declaring Budgets
+@section §22.2 — Declaration and Re-Baselining
+
+@itemize
+@item
+Budgets are declared in the requirement set (§20.1) as ordinary requirements
+with figures, so they are verified and traced like any other.
+@item
+A budget is declared @strong{before} the code that consumes it, at G2. A
+ceiling set after measurement is a description, not a budget.
+@item
+A ceiling MAY be re-baselined. Re-baselining requires a dated entry recording
+the old ceiling, the new one, and what changed to justify it --- a new feature,
+a platform change, a deliberate trade. Re-baselining to accommodate an
+unexplained regression is prohibited: find the regression first.
+@item
+Every budget names the reference machine and the reference workload (§22.4). A
+figure without both is not reproducible and cannot be compared across releases.
+@end itemize
+
+@node Margin Thresholds
+@section §22.3 — Margin Thresholds
+
+Margin is the headroom remaining: @code{(ceiling - measured) / ceiling}.
+
+@multitable {@strong{Amber --- 10% to 25%}} {Recorded in the release manifest with a one-line note. The project is close enough to the ceiling that the next feature will cross it, and that is now visible rather than discovered at the crossing.}
+@headitem
+Band
+ @tab Consequence
+@item
+@strong{Green --- above 25%}
+ @tab Normal. Reported, no action.
+@item
+@strong{Amber --- 10% to 25%}
+ @tab Recorded in the release manifest with a one-line note: the next feature
+will cross the ceiling, and that is now visible rather than discovered at the
+crossing.
+@item
+@strong{Red --- below 10%}
+ @tab Blocks the release gate for Category A and B. Clear it by reducing
+consumption or by re-baselining the ceiling under §22.2, never by suppressing
+the measurement.
+@item
+@strong{Exceeded --- negative}
+ @tab A defect, filed as an anomaly (§25.2) at the severity the resource
+warrants. For a hard platform limit it is always S1.
+@end multitable
+
+@strong{Margins are reported, not just measured.} Where a project reports
+progress under §17, the margin band accompanies it, so that erosion is visible
+in the same block as completion:
+
+@example
+BUDGET: binary 3.4 MiB / 4.0 MiB (15% margin, amber)
+@end example
+
+@node Budget Measurement
+@section §22.4 — The Reference Machine and Workload
+
+@multitable {Reference workload} {A fixed, committed input --- a specific raster for Caliper, a specific save file for Ironway, a specific configuration for Pearlite --- versioned with the project so that a figure from one release is comparable with the next.}
+@headitem
+Element
+ @tab Requirement
+@item
+Reference machine
+ @tab Named in the requirement set: CPU model, core count, memory, storage
+class, and OS. Where CI is the reference, the runner class is named and pinned.
+@item
+Reference workload
+ @tab A fixed, committed input --- a specific raster for Caliper, a specific
+save for Ironway, a specific configuration for Pearlite --- versioned with the
+project so a figure from one release is comparable with the next.
+@item
+Automated
+ @tab Measurement runs in CI on every release build. A budget checked by hand
+is a budget checked once.
+@item
+Tools
+ @tab @code{criterion} for throughput, @code{hyperfine} for wall-clock start,
+@code{cargo bloat} and the stripped artifact size for binary budgets,
+@code{/usr/bin/time -v} or an in-process allocator hook for peak RSS.
+@item
+Noise discipline
+ @tab Report the median and the spread, not a single run, and treat a change
+inside the spread as no change.
+@end multitable
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Interface Control
+@chapter §23 — Interface Control
+
+Everything this standard says about compatibility today is implicit: §5.3 asks
+general-use projects for semantic versioning, and semantic versioning is a
+promise about an interface nobody has written down. An interface that was never
+enumerated cannot be versioned, deprecated, or kept --- it is discovered by the
+consumer at the moment it breaks. This chapter enumerates it.
+
+@menu
+* What Is an Interface::        §23.1 — The interface inventory.
+* Interface Control Document:: §23.2 — The ICD.
+* Compatibility Policy::       §23.3 — Changing an interface.
+@end menu
+
+@node What Is an Interface
+@section §23.1 — The Interface Inventory
+
+Every project maintains an inventory of the interfaces it exposes. The
+inventory is short and it is exhaustive; an interface omitted from it is an
+interface that will be broken by accident.
+
+@multitable {Environment variables} {Names the project reads or sets --- @code{SPACECRAFT_THEME}, @code{NO_COLOR}, @code{SPACECRAFT_A11Y}. Reading a variable is a contract with whoever sets it.}
+@headitem
+Interface class
+ @tab What is controlled
+@item
+Library API
+ @tab Public items of a crate or shared library: types, functions, traits,
+public fields, and the error types they return.
+@item
+Command-line surface
+ @tab Subcommand and option names, argument order, exit codes, and the shape of
+@code{--json} or @code{--format} output. Governed in detail by the Dual-Mode
+Self-Documenting CLI Standard; enumerated here because it is an interface.
+@item
+Machine-readable output
+ @tab Any output another program parses. It carries a schema and a schema
+version, and the schema is committed.
+@item
+On-disk and configuration formats
+ @tab File formats the project reads or writes, including
+@file{/etc/steelbore/theme.toml} (§11.6.4), state files, caches with a stable
+location, and save formats.
+@item
+Wire and IPC protocols
+ @tab Sockets, pipes, message formats, and their framing.
+@item
+Environment variables
+ @tab Names the project reads or sets --- @code{SPACECRAFT_THEME},
+@code{NO_COLOR}, @code{SPACECRAFT_A11Y}. Reading a variable is a contract with
+whoever sets it.
+@item
+Filesystem layout
+ @tab Paths the project creates, requires, or documents, and the XDG bases it
+resolves them against (§9).
+@end multitable
+
+@node Interface Control Document
+@section §23.2 — The Interface Control Document
+
+Category A and B projects ship an ICD; Category C should. It lives as a
+@code{@@node Interfaces} chapter of @file{doc/<project>.texi} (§8) rather than
+as a separate file, so it builds and ships with the manual.
+
+@multitable {Machine-readable schema} {Where the interface is data --- JSON output, a TOML configuration, a wire message --- a machine-readable schema is committed alongside the prose and is the artifact the tests validate against.}
+@headitem
+The ICD records
+ @tab Detail
+@item
+Identity and version
+ @tab Each interface has a name and its own version, which need not track the
+project version. An interface version changes only when the interface does.
+@item
+Contract
+ @tab Names, types, ranges, units (§14 metric), encodings (§6.5 UTF-8), and
+required ordering.
+@item
+Error behaviour
+ @tab What the interface does with invalid input, and what the consumer may
+rely on: exit codes, error types, partial-write guarantees.
+@item
+Stability class
+ @tab @code{stable} / @code{unstable} / @code{internal}. Unstable and internal
+interfaces are documented as such at the point of use; an interface with no
+declared class is stable by default, which is the safe assumption for the
+consumer and the expensive one for the maintainer.
+@item
+Machine-readable schema
+ @tab Where the interface is data --- JSON output, a TOML configuration, a wire
+message --- a schema is committed alongside the prose and is what the tests
+validate against.
+@item
+Consumers
+ @tab Known first-party consumers, so the blast radius of a change is visible
+before the change.
+@end multitable
+
+@node Compatibility Policy
+@section §23.3 — Changing an Interface
+
+@multitable {Deprecate before removing} {A stable interface element is marked deprecated for at least one minor release before removal, warns at run time once per invocation, and names its replacement. Removal without a deprecation period is a breaking change even if the element was unused.}
+@headitem
+Rule
+ @tab Detail
+@item
+Additive changes are minor
+ @tab A new subcommand, a new optional field, a new variant behind an
+exhaustive-match guard.
+@item
+Breaking changes are major
+ @tab Removing or renaming an element, tightening accepted input, changing a
+default, changing an exit code, or changing the meaning of an existing field.
+Changing a default is the one most often mistaken for a minor change.
+@item
+Deprecate before removing
+ @tab A stable element is marked deprecated for at least one minor release
+before removal, warns once per invocation at run time, and names its
+replacement (§26.3).
+@item
+Frozen at G3
+ @tab The ICD is baselined at the release gate (§25.1). An interface change
+after the freeze re-enters at G2.
+@item
+Recorded in @file{CHANGELOG.md}
+ @tab Every interface change appears in the changelog under the version that
+made it, in the consumer's terms rather than the implementation's.
+@end multitable
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Reuse Qualification
+@chapter §24 — Reuse & Third-Party Qualification
+
+§4.2 and §4.3 settle the @emph{legal} question about code this organization did
+not write: preserve the notices, ship the licence, tag the file. They say
+nothing about the @emph{engineering} question, which is whether the dependency
+is fit to be trusted with the stability, performance, and security priorities of
+§3. A crate that is perfectly licensed and unmaintained is compliant today and a
+Priority 1 defect next year.
+
+@menu
+* Qualification Record::        §24.1 — What is recorded per dependency.
+* Qualification Gates::         §24.2 — When a dependency may be adopted.
+* Software Bill of Materials::  §24.3 — SBOM per release.
+@end menu
+
+@node Qualification Record
+@section §24.1 — The Qualification Record
+
+Recorded in @file{DEPENDENCIES.md} at the repository root, or as a
+@code{@@node Dependencies} chapter of the manual. Category A records every
+direct dependency; Category B records those in the trust path --- anything
+parsing untrusted input, handling credentials, touching the filesystem with
+privilege, or on a critical path; Category C and D rely on the tooling of
+§24.2 alone.
+
+@multitable {Unsafe posture} {Volume and location of @code{unsafe} in the dependency (@code{cargo geiger}), and whether the crate's own soundness is load-bearing for ours.}
+@headitem
+Field
+ @tab Content
+@item
+Purpose
+ @tab What it does for this project, in one line, and what would have to be
+written by hand without it.
+@item
+Provenance
+ @tab Upstream repository, maintainer or organization, and the licence as
+recorded under §4.2.
+@item
+Maintenance
+ @tab Last release date, release cadence, open-issue posture, and whether the
+project is archived or has a stated successor.
+@item
+Security history
+ @tab Past advisories (RUSTSEC or equivalent), and how upstream handled them.
+@item
+Unsafe posture
+ @tab Volume and location of @code{unsafe} (@code{cargo geiger}), and whether
+the dependency's soundness is load-bearing for ours.
+@item
+Transitive weight
+ @tab Count of transitive dependencies pulled in, and any duplicate versions
+introduced (@code{cargo tree --duplicates}).
+@item
+Alternatives considered
+ @tab What else was available, and why this one.
+@item
+Exit plan
+ @tab What happens if it is abandoned: vendor it under §4.2, replace it, or
+absorb the functionality. Written before adoption, when the answer is cheap.
+@end multitable
+
+@node Qualification Gates
+@section §24.2 — Adopting a Dependency
+
+@multitable {Unqualified in Category A} {Software that cannot be qualified --- closed source, no source archive, no licence, or unauditable --- shall not appear in a Category A path, and shall not be introduced into a Category B path without a tailoring-register entry (§19.5).}
+@headitem
+Rule
+ @tab Detail
+@item
+Audit before adoption
+ @tab @code{cargo audit} and @code{cargo deny} (licence, advisory, source, and
+duplicate policy) run before the dependency enters the lockfile, and in CI
+thereafter --- extending the §3.3 rule from a one-time check to a standing gate.
+@item
+Pinned and locked
+ @tab The lockfile is committed, and the toolchain is pinned
+(@file{rust-toolchain.toml}, @file{flake.lock}) so that a build is reproducible
+from the baseline (§25.1).
+@item
+Vendoring is a first-class option
+ @tab Where upstream is unmaintained or the patch is small, carrying it
+in-tree under §4.2 is preferred to depending on a repository nobody is
+watching, and to the §6.4 outbound submission that upstreaming would require.
+@item
+Unqualified software in Category A
+ @tab Software that cannot be qualified --- unavailable source, no licence,
+unauditable, or unbuildable from source --- shall not appear in a Category A
+path, and shall not enter a Category B path without a tailoring-register entry
+(§19.5).
+@item
+Re-qualified at G3
+ @tab The record is re-read at each release gate. A dependency that has gone
+quiet since the last release is a finding, not a footnote.
+@end multitable
+
+@node Software Bill of Materials
+@section §24.3 — Software Bill of Materials
+
+Every release of a Category A, B, or C project ships an SBOM.
+
+@itemize
+@item
+Format: CycloneDX or SPDX, generated by tooling (@code{cargo cyclonedx},
+@code{cargo sbom}) --- never assembled by hand.
+@item
+Generated from the same locked inputs as the release artifacts, in the same CI
+run, so the two cannot disagree.
+@item
+Shipped as a release asset with a SHA-256 checksum, listed in the release
+manifest (§25.3), and covered by the §5.5 packaging where the format permits.
+@item
+An advisory published under §26.2 cites the affected releases by SBOM, so
+consumers can answer whether they are affected without reading a diff.
+@end itemize
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Configuration and Releases
+@chapter §25 — Baselines, Anomalies & Release Acceptance
+
+A release is currently defined in this standard by what accompanies it --- three
+package definitions (§5.5), signed commits (§6.3), a manual (§8). This chapter
+defines what a release @emph{is}: a frozen configuration, a known defect state,
+and an assembled manifest that a future maintainer can reconstruct.
+
+@menu
+* Baselines::                   §25.1 — What a baseline freezes.
+* Anomalies::                   §25.2 — Classification and closure.
+* Release Manifest::            §25.3 — Acceptance contents.
+@end menu
+
+@node Baselines
+@section §25.1 — Baselines
+
+A baseline is a named, frozen set of artifacts taken at a gate (§19.4). It is
+what ``the same build'' means six months later.
+
+@multitable {Toolchain and environment} {Compiler and toolchain pins (@file{rust-toolchain.toml}), the flake or channel revision (@file{flake.lock}), and the build flags applied and disabled per §3.2.1.}
+@headitem
+A baseline freezes
+ @tab Detail
+@item
+Source
+ @tab The commit identifier, signed per §6.3 and tagged at the release
+baseline.
+@item
+Dependencies
+ @tab The committed lockfile and the SBOM generated from it (§24.3).
+@item
+Toolchain and environment
+ @tab Toolchain pins (@file{rust-toolchain.toml}), the flake or channel
+revision (@file{flake.lock}), and the build flags applied and disabled per
+§3.2.1.
+@item
+Requirements
+ @tab The requirement set at its baselined status (§20.3), and the
+traceability matrix generated against it (§21.3).
+@item
+Budgets
+ @tab Declared ceilings and measured margins (§22).
+@item
+Interfaces
+ @tab The ICD and its committed schemas (§23.2).
+@end multitable
+
+Three baselines exist per release, one per gate: requirements (G1), design and
+budgets (G2), release (G3). Nothing is re-cut silently: changing a baselined
+artifact means re-entering at that gate.
+
+@node Anomalies
+@section §25.2 — Anomalies
+
+An anomaly is any observed departure from a requirement, a budget, an
+interface contract, or documented behaviour --- including one found by the
+maintainer before anyone else sees it. Anomalies are recorded in the project's
+issue tracker under the authorized namespaces of §6.4, never in a private note.
+
+@multitable {@strong{S2 --- Major}} {A requirement is not met, an interface contract is violated, or a budget ceiling is exceeded, with a workaround available. Blocks release for Category A and B unless recorded with a dated justification.}
+@headitem
+Severity
+ @tab Definition and release consequence
+@item
+@strong{S1 --- Critical}
+ @tab Data loss or corruption, a security or privacy breach, an unbootable or
+unusable system, or a wrong answer that cannot be detected downstream.
+@strong{Blocks release in every category.}
+@item
+@strong{S2 --- Major}
+ @tab A requirement is not met, an interface contract is violated, or a budget
+ceiling is exceeded, with a workaround available. Blocks release for Category A
+and B unless carried with a dated justification in the manifest.
+@item
+@strong{S3 --- Minor}
+ @tab Incorrect behaviour with a straightforward workaround, or a cosmetic
+defect in a documented surface. Carried in known issues.
+@item
+@strong{S4 --- Cosmetic}
+ @tab No functional effect. Carried indefinitely without ceremony.
+@end multitable
+
+@multitable {Closed by a regression test} {An S1 or S2 anomaly is closed only when a test that fails on the defective build and passes on the fix is committed, cited by anomaly identifier. Closing by inspection permits the same defect to return unnoticed.}
+@headitem
+Rule
+ @tab Detail
+@item
+Severity is assigned by consequence
+ @tab Not by how hard the fix is, and not by how embarrassing the defect is.
+@item
+Closed by a regression test
+ @tab An S1 or S2 is closed only when a test that fails on the defective build
+and passes on the fix is committed, citing the anomaly identifier. Closing by
+inspection permits the same defect to return unnoticed.
+@item
+Traced to a requirement
+ @tab Where an anomaly reveals that no requirement covered the behaviour, the
+requirement set is amended (§20) --- the anomaly found a specification gap, not
+only a bug.
+@item
+Known issues ship
+ @tab Open S2--S4 anomalies are listed in the release manifest and in the
+release notes. A defect the maintainer knows about and the user discovers is a
+trust failure, not a support event.
+@end multitable
+
+@node Release Manifest
+@section §25.3 — Release Acceptance and the Manifest
+
+A release is accepted when the G3 evidence exists and the manifest is
+assembled. The manifest is committed at the release tag and published with the
+release.
+
+@multitable {Verification summary} {Requirements baselined, verified, and withdrawn; the traceability matrix (§21.3); coverage and, for Category A and B, mutation score.}
+@headitem
+Manifest section
+ @tab Contents
+@item
+Identity
+ @tab Project, version, ISO 8601 UTC release timestamp (§14), signed tag and
+commit (§6.3), and the assurance category (§19.2).
+@item
+Artifacts
+ @tab Every shipped file with its SHA-256, matching the checksums carried in
+the three package definitions (§5.5).
+@item
+Provenance
+ @tab The SBOM (§24.3), toolchain pins, and a reproducibility statement: how
+to rebuild, and whether the build is bit-reproducible.
+@item
+Verification summary
+ @tab Requirements baselined, verified, and withdrawn; the traceability matrix
+(§21.3); coverage and, for Category A and B, mutation score.
+@item
+Validation note
+ @tab What was exercised at G3, on what platform, and what was found (§21.5).
+@item
+Budgets
+ @tab Each ceiling, its measured value, and its margin band (§22.3).
+@item
+Known issues
+ @tab Open anomalies by severity, with identifiers (§25.2).
+@item
+Conformance
+ @tab The §19.6 claim and the tailoring register state at release.
+@end multitable
+
+@strong{Installation is verified, not assumed.} Before the tag is pushed, the
+release is installed from each of the three package definitions of §5.5 into a
+clean environment, run once, and uninstalled. A package that builds is not a
+package that installs.
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
+@node Operations and Maintenance
+@chapter §26 — Operations, Maintenance & Support
+
+This standard governs software up to the moment it ships and then stops. Every
+project it governs, however, has a life after the tag: vulnerabilities are
+reported, interfaces are retired, and projects end. §5.1 is honest that the
+posture is hobby pace with no service-level commitment, and that honesty is
+precisely why the terms have to be written down --- a user cannot calibrate
+against an unstated expectation.
+
+@menu
+* Security Response::           §26.1 — SECURITY.md and reporting.
+* Advisories::                  §26.2 — Publishing.
+* Deprecation::                 §26.3 — Retiring an interface.
+* Support and End of Life::     §26.4 — Windows and archival.
+@end menu
+
+@node Security Response
+@section §26.1 — @file{SECURITY.md}
+
+§3.3 requires security by design and §5.2 lists the files every project ships,
+but no file tells a finder how to report what they found. Every project ships
+@file{SECURITY.md} at its root, added to the §5.2 required set.
+
+@multitable {Acknowledgement target} {An honest figure, stated in days and consistent with hobby pace (§5.1). A modest target that is met beats an ambitious one that is not.}
+@headitem
+@file{SECURITY.md} states
+ @tab Detail
+@item
+Reporting channel
+ @tab The private channel: the platform's private vulnerability reporting where
+available, otherwise @code{Mohamed.Hammad@@SpacecraftSoftware.org} (§15), with a
+public key where one is offered. Never a public issue tracker.
+@item
+Acknowledgement target
+ @tab An honest figure, stated in days and consistent with hobby pace (§5.1).
+A modest target that is met beats an ambitious one that is not.
+@item
+Scope
+ @tab Which projects and which versions are in scope, and what is out of scope.
+@item
+Supported versions
+ @tab Which versions receive fixes (§26.4), so a reporter knows whether their
+version is covered before they invest the effort.
+@item
+Coordinated disclosure
+ @tab The embargo the maintainer will honour, and the point at which the
+finding is published regardless of fix status.
+@item
+Credit
+ @tab Whether the reporter is credited, and where (§15.3).
+@end multitable
+
+Security anomalies are S1 by default under §25.2, and their severity is lowered
+only with a written argument.
+
+@node Advisories
+@section §26.2 — Advisories
+
+@itemize
+@item
+A fixed vulnerability is published as an advisory on the hosting platform and,
+for a published crate, to the ecosystem's advisory database.
+@item
+The advisory names affected versions, the fixed version, the impact, and the
+workaround --- and cites the SBOM (§24.3) so consumers can determine exposure
+without reading the diff.
+@item
+The fix ships as a release under §25.3 like any other, with the anomaly closed
+by a regression test (§25.2).
+@item
+Where the vulnerability came from a dependency, the qualification record
+(§24.1) is updated with the incident and upstream's handling of it. That record
+is what informs the next adoption decision.
+@end itemize
+
+@node Deprecation
+@section §26.3 — Deprecation
+
+§5.3 requires general-use projects to have a deprecation policy without saying
+what one contains. This is that policy, and it applies to every project that
+declares a stable interface (§23.2), general-use or not.
+
+@multitable {Minimum notice period} {One minor release for a Category C or D project; two minor releases or six months, whichever is longer, for Category A and B, whose consumers may be pinned.}
+@headitem
+Rule
+ @tab Detail
+@item
+Announced in three places
+ @tab @file{CHANGELOG.md}, the ICD entry's stability class, and a run-time
+warning at the point of use --- once per invocation, on stderr, never
+suppressing the operation.
+@item
+Minimum notice period
+ @tab One minor release for Category C and D; two minor releases or six
+months, whichever is longer, for Category A and B, whose consumers may be
+pinned.
+@item
+Replacement named
+ @tab A deprecation notice that does not say what to use instead is an
+abandonment notice.
+@item
+Removal is major
+ @tab Removal lands in a major version (§23.3) and is listed in the release
+notes under a breaking-changes heading.
+@item
+Security exception
+ @tab A deprecation forced by a vulnerability may skip the notice period. The
+release notes state that it did, and why.
+@end multitable
+
+@node Support and End of Life
+@section §26.4 — Support Windows and End of Life
+
+@multitable {General-use projects (§5.3)} {The current major version is supported for security fixes for a stated window --- twelve months from the release of its successor is the default --- and the window is stated in @file{README.md} and @file{SECURITY.md}.}
+@headitem
+Posture
+ @tab Support commitment
+@item
+Personal (§5.1 default)
+ @tab Best effort on the latest release only. Stated plainly in
+@file{README.md}: no window, no backports, forking encouraged.
+@item
+General-use (§5.3)
+ @tab The current major version receives security fixes for a stated window
+--- twelve months from the release of its successor is the default --- stated
+in both @file{README.md} and @file{SECURITY.md}.
+@end multitable
+
+@strong{End of life is an event with a procedure}, not a repository that stops
+receiving commits:
+
+@enumerate
+@item
+A final release is cut under §25.3, even if it contains no changes, so the last
+state is baselined and reproducible.
+@item
+An EOL notice goes at the top of @file{README.md} with the ISO 8601 date (§14),
+the reason, the last supported version, and a successor or fork
+recommendation where one exists.
+@item
+@file{SECURITY.md} is updated to state that no further fixes will be issued.
+@item
+The §5.5 packaging definitions and the manual stay in the repository: a
+downstream packager rebuilding an archived release needs them more than a live
+project does.
+@item
+@file{PROJECTS.md} and the §15.1 subdomain table are updated in the same change,
+and the repository is archived on the hosting platform.
+@item
+Where the project held a reserved codename (§2.1), the registry entry records
+the retirement. Codenames are not recycled.
+@end enumerate
+
+@iftex
+@bigskip@hrule@bigskip
+@end iftex
+@ifnottex
+------------------------------------------------------------------------
+@end ifnottex
+
 @node Compliance Checklist
 @chapter §16 — Compliance Checklist (Audit Gate)
 Before finalising @strong{any} Spacecraft Software artifact, mentally
@@ -4440,6 +5953,66 @@ publication sent to a namespace outside @code{Spacecraft-Software} /
 @code{UnbreakableMJ} without explicit per-contribution maintainer
 authorization; automation, CI, and assistant-driven work never initiate an
 outbound contribution
+@item
+☐ @strong{§19} Assurance category (A/B/C/D) declared in @file{README.md},
+@file{AGENTS.md}, and @file{PROJECTS.md}, with any raised subsystem named;
+every @emph{Recommended} obligation of §19.3 that is not implemented carries a
+dated tailoring-register entry (§19.5) in @file{COMPLIANCE.md} for Category A
+and B, or in @file{README.md} for C and D; the three gates of §19.4 passed with
+their evidence; the §19.6 conformance claim in @file{README.md} names the
+standard version, the category, and whether the claim is full or tailored
+@item
+☐ @strong{§20} Requirements written at the level §19.3 requires (Texinfo
+@code{Requirements} node for A and B, @file{AGENTS.md} list for C); each carries
+a permanent identifier, rationale, source, priority, verification method, and
+status; §20.2 verbal forms used, with @code{shall} carrying obligation; the
+§20.4 characteristics gate run over each requirement and over the set; no
+unmeasurable adjective, open-ended clause, or escape hatch in requirement text
+(§20.5) --- N/A for Category D
+@item
+☐ @strong{§21} Every requirement declares one of the four §21.1 methods;
+verification evidence meets the §21.2 floor for the category; the traceability
+matrix is generated by tooling on every CI run, fails on an unverified
+requirement or an unknown identifier, and ships with the release; independence
+obtained from a §21.4 mechanism for Category A and B; validation performed at
+G3 against the needs, on the target platform, from installed packaging, and
+recorded (§21.5)
+@item
+☐ @strong{§22} Budget ceilings declared at G2 for every applicable resource,
+each naming its reference machine and workload; measurement automated in CI;
+margins reported with their band; no red band at the release gate for Category A
+or B, and no ceiling re-baselined without a dated justification --- N/A for
+Category D
+@item
+☐ @strong{§23} Interface inventory complete across all seven classes; ICD
+present as an @code{Interfaces} node with identity, version, contract, error
+behaviour, stability class, committed schema, and known consumers; breaking
+changes carried in a major version after a deprecation period (§26.3); the ICD
+baselined at G3 --- N/A for a project exposing no interface
+@item
+☐ @strong{§24} Dependencies qualified at the depth §19.3 requires, with
+purpose, provenance, maintenance, security history, unsafe posture, transitive
+weight, alternatives, and exit plan recorded; @code{cargo audit} and
+@code{cargo deny} gate CI, not just adoption; lockfile and toolchain pinned; no
+unqualified software on a Category A path; an SBOM generated from the locked
+inputs in the release CI run and shipped with a checksum
+@item
+☐ @strong{§25} Baselines cut at all three gates covering source, dependencies,
+toolchain, requirements, budgets, and interfaces; anomalies classified S1--S4 by
+consequence, S1 and S2 closed only by a committed regression test citing the
+anomaly, and open anomalies listed in the release notes; release manifest
+assembled with identity, artifacts and checksums, provenance, verification and
+validation summaries, budgets, known issues, and the conformance claim;
+installation verified from each of the three §5.5 package definitions in a clean
+environment before the tag is pushed
+@item
+☐ @strong{§26} @file{SECURITY.md} present with reporting channel,
+acknowledgement target, scope, supported versions, disclosure terms, and credit
+policy; advisories published for fixed vulnerabilities and citing the SBOM;
+deprecations announced in @file{CHANGELOG.md}, the ICD, and at run time, with
+the notice period the category requires and a named replacement; support window
+stated for the project's posture; an ended project taken through the §26.4 EOL
+procedure rather than left silent
 @end itemize
 
 If any item is not applicable to the current artifact type (e.g., color

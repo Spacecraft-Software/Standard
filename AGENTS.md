@@ -90,7 +90,7 @@ The standard governs itself. Most-pertinent rules for work in this repo:
 - **§6.3 — Signed & Verified Commits.** Every commit MUST be cryptographically signed and show "Verified" on GitHub. This is non-negotiable, applies to programmatic/assistant-driven commits too, and rewrites (rebase/amend/cherry-pick) must preserve signatures.
 - **§8 — Documentation (Texinfo).** This repo IS the §8-compliant Texinfo manual for The Steelbore Standard: `.texi` source with `info`/`html`/`md`/`pdf`/`docx` Makefile targets. It is *published* as HTML at `Standard.SpacecraftSoftware.org` rather than shipped as an installed Info package, so the `Makefile` has no `install-info` target (unlike a packaged library manual would).
 - **§14 — UTC + ISO 8601** for any timestamp anywhere in the document (changelog entries, `@set UPDATED` date).
-- **§15.3 — Third-Party Attribution.** A `CREDITS.md` is required at root if external work is substantially built upon. Currently none — this is original work.
+- **§15.3 — Third-Party Attribution.** A `CREDITS.md` is required at root if external work is substantially built upon. Triggered as of v2.00: §19–§26 are informed by **ISO/IEC/IEEE 29148:2018** and **ECSS-E-ST-40C**, which §15.3's second trigger covers (a specification forming a substantial conceptual basis). Both are credited in `CREDITS.md`; no text is reproduced from either — both are copyrighted and this document is CC-BY-SA-4.0, so every clause is in the standard's own words. Add an entry there whenever a new section imports principles from an outside specification.
 
 ## Files
 
@@ -99,6 +99,7 @@ The standard governs itself. Most-pertinent rules for work in this repo:
 | `The_Steelbore_Standard.texi` | Tracked | **Source of truth** — the standard in Texinfo |
 | `The_Steelbore_Standard.md` | Tracked | Generated GFM companion (from `make md`) — for GitHub rendering |
 | `CHANGELOG.md` | Tracked | **Hand-maintained** version history of the standard (extracted from §1 in v1.37). Not generated — do not overwrite it from the `.texi` |
+| `CREDITS.md` | Tracked | **Hand-maintained** §15.3 attribution — the outside specifications §19–§26 import principles from (ISO/IEC/IEEE 29148:2018, ECSS-E-ST-40C). Added v2.00 |
 | `LICENSE` | Tracked | **Regular file** holding the canonical CC-BY-SA-4.0 text; `LICENSES/CC-BY-SA-4.0.txt` is a symlink back to it. §4.3 requires this direction — GitHub reads git blobs, so a symlinked root `LICENSE` is a target path, not a license, and detection reports `NOASSERTION`. No extension: `LICENSE.md`/`LICENSE.txt` are non-compliant (§4.3, v1.50). |
 | `spacecraft.css` | Tracked | Spacecraft HTML theme for `texi2any --html` output |
 | `Makefile` | Tracked | Build targets: `info`, `html`, `md`, `pdf`, `docx`, `clean` |
