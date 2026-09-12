@@ -1330,7 +1330,9 @@ Both config files are advisory to the tools that read them; the gate is
 what makes the rule binding. The gate reads the index, not the working
 tree --- @code{git ls-files --eol} reports the stored line ending as
 @code{i/lf}, @code{i/crlf} or @code{i/mixed}, and any @code{i/crlf} or
-@code{i/mixed} is a violation. Grepping the working tree for a CR byte
+@code{i/mixed} is a violation. A path pinned @code{-text} is declared
+binary and is not a text file at all, so it is skipped and its blob
+keeps whatever bytes it has. Grepping the working tree for a CR byte
 is @strong{not} a correct implementation: a file pinned @code{eol=crlf}
 is stored LF and checked out CRLF by design, so a working-tree grep
 fails the very exception this section grants.
