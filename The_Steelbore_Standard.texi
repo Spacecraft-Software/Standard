@@ -5,10 +5,10 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 2.01
+@settitle The Steelbore Standard 2.02
 @c %**end of header
 
-@set VERSION 2.01
+@set VERSION 2.02
 @set UPDATED 2026-09-12
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
@@ -1325,9 +1325,15 @@ on checkout. Relying on per-clone Git configuration is not compliance.
 never consult Git.
 @item
 CI gate
- @tab CI MUST fail when a tracked text file contains a CR byte. Both
-config files are advisory to the tools that read them; the gate is what
-makes the rule binding.
+ @tab CI MUST fail when a tracked text file is @strong{stored} with CRLF.
+Both config files are advisory to the tools that read them; the gate is
+what makes the rule binding. The gate reads the index, not the working
+tree --- @code{git ls-files --eol} reports the stored line ending as
+@code{i/lf}, @code{i/crlf} or @code{i/mixed}, and any @code{i/crlf} or
+@code{i/mixed} is a violation. Grepping the working tree for a CR byte
+is @strong{not} a correct implementation: a file pinned @code{eol=crlf}
+is stored LF and checked out CRLF by design, so a working-tree grep
+fails the very exception this section grants.
 @item
 Exceptions
  @tab Vendored upstream files keep their upstream line endings (§4.2 ---
