@@ -29,7 +29,7 @@ repository](https://github.com/Spacecraft-Software/Standard), newest
 entry first. It is kept out of this document so the standard reads as
 the rules *in force* rather than the record of how they got there.
 
-This document is **version 2.00**, updated 2026-09-08 (§14: UTC, ISO
+This document is **version 2.01**, updated 2026-09-12 (§14: UTC, ISO
 8601). The skill encoding of the standard keeps a parallel history in
 `spacecraft-steelbore-standard/references/CHANGELOG.md` in the
 [Construct
@@ -2213,6 +2213,54 @@ Progress must be reported:
 
 - When summarizing the work done at the end of a turn/message
 
+## §17.4 — Closing TL;DR
+
+§17.1 through §17.3 govern the report a reader consults when they want
+the numbers. This section governs the two lines a reader gets when they
+want nothing else.
+
+**Every turn that hands control back to the user ends with a TL;DR
+block** — work finished, work stopped part-way, or a question that
+blocks further progress. The block is the last thing in the turn, after
+the prose and after any §17.1 progress block, and it is **exactly two
+lines** opening with the marker `TL;DR:`.
+
+**Two closing shapes, and the distinction is normative:**
+
+| Outcome | Closing line |
+|----|----|
+| Work complete | The second line ends with a plain statement that the work is finished — `Job is done.` or an equivalent in the same register. No question mark, because nothing is being asked. |
+| Input required | The second line ends with a **question mark**, and the question is the actual decision the user has to make — named, answerable, and specific enough to answer in one word or one sentence. "Let me know how you want to proceed?" names nothing and does not satisfy this. A turn that stops without a question mark is asserting that nothing is blocked on the user, so a turn that needs an answer and ends in a period will simply not get one. |
+
+**Simplified English is a requirement, not a preference.** The two lines
+use short, common words and short sentences. Project jargon, unexplained
+abbreviations, section numbers, identifiers, and file paths stay in the
+prose above; a reader who skipped the entire turn must still understand
+what happened from the TL;DR alone. It is a summary for a person who is
+not reading closely, which is the condition under which most end-of-turn
+text is actually read.
+
+**`Job is done` is a claim about the work, not a closing pleasantry.**
+It is written only when the work is genuinely finished and verified —
+the same honesty rule §17.2 applies to a saturated bar, which shows
+twenty filled cells only at exactly 100%. Work that is partly done says
+so and says what remains. A TL;DR that reports completion the prose
+above it does not support is worse than no TL;DR at all, because it is
+the part the reader trusts.
+
+**Format template:**
+
+    TL;DR: The build is fixed and all tests pass.
+    Job is done.
+
+    TL;DR: I can rename the module, but two projects still import the old name.
+    Should I update those imports too?
+
+**The TL;DR never replaces what it summarizes.** It is added to the
+turn, never substituted for the detail, the file list, the caveats, or
+the §17.1 progress block. Two lines cannot carry a hand-off, and a turn
+that answers with a TL;DR alone has reported nothing.
+
 ————————————————————————
 
 # §18 — Accessibility (Opt-In Mode Layer)
@@ -2573,7 +2621,7 @@ A project claims conformance in `README.md`, in one line, naming the
 standard version, the category, and whether the claim is full or
 tailored:
 
-    Conforms to The Steelbore Standard v2.00 --- Category B, tailored
+    Conforms to The Steelbore Standard v2.01 --- Category B, tailored
     (§22, §23; see COMPLIANCE.md).
 
 **Full conformance** means every applicable clause is applied and the
@@ -3359,6 +3407,12 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
   the §17.1 labelled-row block — one 20-cell bar per track, milestone
   rows then MVP then TODO/PLAN/PRD, only the rows that apply; every row
   set in `█`/`░` with tight brackets, columns aligned, no ASCII bars
+
+- [ ] **§17.4** Every turn that hands control back to the user ends with
+  a two-line `TL;DR:` block in simplified English, placed last: a plain
+  statement of completion when the work is finished and verified, or a
+  question mark naming the actual decision when the user’s input is
+  required; never substituted for the detail or the §17.1 block
 
 - [ ] **§18** Accessible mode implemented and off by default; §18.1
   toggle honored with correct precedence; status never color-only; no
