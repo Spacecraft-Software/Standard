@@ -29,7 +29,7 @@ repository](https://github.com/Spacecraft-Software/Standard), newest
 entry first. It is kept out of this document so the standard reads as
 the rules *in force* rather than the record of how they got there.
 
-This document is **version 2.01**, updated 2026-09-12 (§14: UTC, ISO
+This document is **version 2.02**, updated 2026-09-12 (§14: UTC, ISO
 8601). The skill encoding of the standard keeps a parallel history in
 `spacecraft-steelbore-standard/references/CHANGELOG.md` in the
 [Construct
@@ -761,7 +761,7 @@ files those tools are written in.
 | UTF-8, no BOM | Text files are encoded UTF-8. A byte-order mark is prohibited: it breaks shebang lines, `#`-comment parsing, and every config reader that expects the first byte of the file to be content. |
 | `.gitattributes` required | Every repository MUST ship `.gitattributes` at its root containing `* text=auto eol=lf`. This is the only mechanism that holds regardless of a contributor’s `core.autocrlf` setting — which defaults to `true` on Windows and rewrites the working tree on checkout. Relying on per-clone Git configuration is not compliance. |
 | `.editorconfig` required | Every repository MUST ship `.editorconfig` at its root with `root = true` and, under `[*]`, at minimum `charset = utf-8`, `end_of_line = lf`, and `insert_final_newline = true`. It carries the rule to editors that never consult Git. |
-| CI gate | CI MUST fail when a tracked text file contains a CR byte. Both config files are advisory to the tools that read them; the gate is what makes the rule binding. |
+| CI gate | CI MUST fail when a tracked text file is **stored** with CRLF. Both config files are advisory to the tools that read them; the gate is what makes the rule binding. The gate reads the index, not the working tree — `git ls-files --eol` reports the stored line ending as `i/lf`, `i/crlf` or `i/mixed`, and any `i/crlf` or `i/mixed` is a violation. A path pinned `-text` is declared binary and is not a text file at all, so it is skipped and its blob keeps whatever bytes it has. Grepping the working tree for a CR byte is **not** a correct implementation: a file pinned `eol=crlf` is stored LF and checked out CRLF by design, so a working-tree grep fails the very exception this section grants. |
 | Exceptions | Vendored upstream files keep their upstream line endings (§4.2 — preserve what you build on). Windows-native scripts invoked by `cmd.exe` (`.bat`, `.cmd`) MAY use CRLF where the interpreter requires it. A format whose specification mandates CRLF keeps it. Every such exception is pinned explicitly in `.gitattributes` (`*.bat text eol=crlf`) rather than left to chance. Binary files are unaffected — `text=auto` never touches them. |
 
 **Scope note.** This section governs *files on disk*, not *bytes on a
@@ -2621,7 +2621,7 @@ A project claims conformance in `README.md`, in one line, naming the
 standard version, the category, and whether the claim is full or
 tailored:
 
-    Conforms to The Steelbore Standard v2.01 --- Category B, tailored
+    Conforms to The Steelbore Standard v2.02 --- Category B, tailored
     (§22, §23; see COMPLIANCE.md).
 
 **Full conformance** means every applicable clause is applied and the
