@@ -5,11 +5,11 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 2.02
+@settitle The Steelbore Standard 2.03
 @c %**end of header
 
-@set VERSION 2.02
-@set UPDATED 2026-09-12
+@set VERSION 2.03
+@set UPDATED 2026-09-14
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
 @copying
@@ -1659,7 +1659,7 @@ Every artifact uses Modern unless its project explicitly declares an
 alternate under §11.4. The remainder of §11 defines Modern; §11.2 and
 §11.3 define the alternates.
 
-@multitable {@code{steelbore-blackpinkpanther}} {Steelbore BlackPinkPanther} {@code{#0C1A2B}} {Polarity} {Default --- all artifacts unless declared}
+@multitable {@code{steelbore-blackpinkpanther}} {Steelbore BlackPinkPanther} {Circuit Navy} {Polarity} {Default --- all artifacts unless declared}
 @headitem
 Theme slug
  @tab Palette
@@ -1669,43 +1669,43 @@ Theme slug
 @item
 @code{steelbore}
  @tab Steelbore Modern
- @tab @code{#000027}
+ @tab @code{Void Navy}
  @tab Dark
  @tab @strong{Default} --- all artifacts unless declared
 @item
 @code{steelbore-classic}
  @tab Steelbore Classic
- @tab @code{#000027}
+ @tab @code{Void Navy}
  @tab Dark
  @tab Legacy contract (§11.2)
 @item
 @code{steelbore-blue}
  @tab Steelbore Blue
- @tab @code{#0A1024}
+ @tab @code{Orbit Navy}
  @tab Dark
  @tab Alternate (§11.3)
 @item
 @code{steelbore-blackpinkpanther}
  @tab Steelbore BlackPinkPanther
- @tab @code{#141418}
+ @tab @code{Core Black}
  @tab Dark
  @tab Alternate (§11.3)
 @item
 @code{steelbore-matrixgreen}
  @tab Steelbore MatrixGreen
- @tab @code{#0C1A2B}
+ @tab @code{Circuit Navy}
  @tab Dark
  @tab Alternate (§11.3)
 @item
 @code{steelbore-navywhite}
  @tab Steelbore NavyWhite
- @tab @code{#E7E5E0}
+ @tab @code{Pearl Silver}
  @tab @strong{Light}
  @tab Alternate (§11.3) --- the family's only light canvas
 @item
 @code{tokyonight}
  @tab Tokyo Night
- @tab @code{#1A1B26}
+ @tab @code{Night}
  @tab Dark
  @tab Alternate (§11.3)
 @end multitable
@@ -1720,70 +1720,50 @@ member is dark-canvas except @code{steelbore-navywhite}.
 The permitted colors for Steelbore Modern (the @strong{Steelbore 2}
 generation):
 
-@multitable {Plasma Magenta} {@code{#D9DEE5}} {RGB(217, 222, 229)} {Foreground} {Primary accent / active readout}
+@multitable {Plasma Magenta} {Foreground} {Primary accent / active readout}
 @headitem
 Token
- @tab Hex
- @tab RGB
  @tab Class
  @tab Role
 @item
 Void Navy
- @tab @code{#000027}
- @tab RGB(0, 0, 39)
  @tab Canvas
  @tab @strong{Background --- all surfaces}
 @item
 Quantum Blue
- @tab @code{#0E2A47}
- @tab RGB(14, 42, 71)
  @tab Surface
  @tab Elevated panels / cards
 @item
 Deep Matrix
- @tab @code{#0B1A12}
- @tab RGB(11, 26, 18)
  @tab Surface
  @tab Code blocks / terminal wells
 @item
 Platinum Mist
- @tab @code{#D9DEE5}
- @tab RGB(217, 222, 229)
  @tab Foreground
  @tab Body text / default readout
 @item
 Plasma Orange
- @tab @code{#FF5E00}
- @tab RGB(255, 94, 0)
  @tab Foreground
  @tab Primary accent / active readout
 @item
 Pulse Violet
- @tab @code{#8A6CFF}
- @tab RGB(138, 108, 255)
  @tab Foreground
  @tab Structure / links / borders
 @item
 Acid Lime
- @tab @code{#B4FF00}
- @tab RGB(180, 255, 0)
  @tab Foreground
  @tab Success / safe status / focus
 @item
 Mars Red
- @tab @code{#FF3B3B}
- @tab RGB(255, 59, 59)
  @tab Foreground
  @tab Error status
 @item
 Plasma Magenta
- @tab @code{#E445FF}
- @tab RGB(228, 69, 255)
  @tab Foreground
  @tab Warning / attention
 @end multitable
 
-@strong{@code{#000027} (Void Navy) is the mandatory canvas for every
+@strong{Void Navy is the mandatory canvas for every
 surface under Steelbore Modern}, and Modern is the default palette, so
 Void Navy is the background of every Spacecraft Software artifact that
 has not declared an alternate under §11.4. Within a palette the canvas
@@ -1919,55 +1899,43 @@ contract works unchanged under any of them. (Classic is the one
 exception --- it keeps its legacy six-role contract, §11.2.) The
 canonical binding, and the default, is Steelbore Modern:
 
-@multitable {@code{surface-alt}} {Maps to palette token} {@code{#0B1A12}}
+@multitable {@code{surface-alt}} {Maps to palette token}
 @headitem
 Theme token
  @tab Maps to palette token
- @tab Hex
 @item
 @code{background}
  @tab Void Navy
- @tab @code{#000027}
 @item
 @code{surface}
  @tab Quantum Blue
- @tab @code{#0E2A47}
 @item
 @code{surface-alt}
  @tab Deep Matrix
- @tab @code{#0B1A12}
 @item
 @code{foreground}
  @tab Platinum Mist
- @tab @code{#D9DEE5}
 @item
 @code{accent}
  @tab Plasma Orange
- @tab @code{#FF5E00}
 @item
 @code{structure}
  @tab Pulse Violet
- @tab @code{#8A6CFF}
 @item
 @code{success}
  @tab Acid Lime
- @tab @code{#B4FF00}
 @item
 @code{error}
  @tab Mars Red
- @tab @code{#FF3B3B}
 @item
 @code{warning}
  @tab Plasma Magenta
- @tab @code{#E445FF}
 @item
 @code{focus}
  @tab Acid Lime
- @tab @code{#B4FF00}
 @item
 @code{border}
  @tab Pulse Violet
- @tab @code{#8A6CFF}
 @end multitable
 
 @strong{Rationale:} isolating palette references behind the
@@ -2028,56 +1996,56 @@ Variant
 need it}; tokens already at or above 7:1 carry over untouched, keeping
 the variant as close to the brand as accessibility permits:
 
-@multitable {@code{background}} {Platinum Mist} {@strong{@code{#B3A1FF}}} {Contrast vs Void Navy}
+@multitable {@code{background}} {Platinum Mist} {@strong{Plasma Magenta Lift}} {Contrast vs Void Navy}
 @headitem
 Theme token
  @tab Base token
- @tab Variant hex
+ @tab Variant token
  @tab Contrast vs Void Navy
 @item
 @code{background}
  @tab Void Navy
- @tab @code{#000027}
+ @tab (unchanged)
  @tab (canvas)
 @item
 @code{foreground}
  @tab Platinum Mist
- @tab @code{#D9DEE5}
+ @tab (unchanged)
  @tab 15.09:1
 @item
 @code{accent}
  @tab Plasma Orange
- @tab @strong{@code{#FF8A3D}}
+ @tab @strong{Plasma Orange Lift}
  @tab 8.70:1
 @item
 @code{structure}
  @tab Pulse Violet
- @tab @strong{@code{#B3A1FF}}
+ @tab @strong{Pulse Violet Lift}
  @tab 9.19:1
 @item
 @code{success}
  @tab Acid Lime
- @tab @code{#B4FF00}
+ @tab (unchanged)
  @tab 16.75:1
 @item
 @code{error}
  @tab Mars Red
- @tab @strong{@code{#FF7A7A}}
+ @tab @strong{Mars Red Lift}
  @tab 8.08:1
 @item
 @code{warning}
  @tab Plasma Magenta
- @tab @strong{@code{#EE7BFF}}
+ @tab @strong{Plasma Magenta Lift}
  @tab 8.66:1
 @end multitable
 
 Only @code{accent}, @code{structure}, @code{error}, and @code{warning}
 shift; the other tokens are §11 values verbatim, with alias tokens
-following their bases (@code{focus} stays Acid Lime @code{#B4FF00};
-@code{border} follows @code{structure} to @code{#B3A1FF}, keeping every
+following their bases (@code{focus} stays Acid Lime;
+@code{border} follows @code{structure} to Pulse Violet Lift, keeping every
 foreground-class role token at or above 7:1). In the variant, all
 four lifted tokens also clear 4.5:1 on both surfaces (weakest pairing:
-@code{error} @code{#FF7A7A} on Quantum Blue, 5.77:1), so the §11.0.2 †
+@code{error} Mars Red Lift on Quantum Blue, 5.77:1), so the §11.0.2 †
 restrictions do not apply under high contrast. @strong{Void Navy remains
 the background in every variant} --- high contrast is achieved by
 lifting foregrounds, never by abandoning the canvas. The lifted hexes
@@ -2093,40 +2061,33 @@ named member of the palette family} --- not retired --- and remains
 available to any project that declares it under §11.4. It shares Void
 Navy with Modern.
 
-@multitable {Liquid Coolant} {@code{#D98E32}} {Primary text / active readout} {vs Void Navy}
+@multitable {Liquid Coolant} {Primary text / active readout} {vs Void Navy}
 @headitem
 Token
- @tab Hex
  @tab Role
  @tab vs Void Navy
 @item
 Void Navy
- @tab @code{#000027}
  @tab @strong{Background / canvas}
  @tab (canvas)
 @item
 Molten Amber
- @tab @code{#D98E32}
  @tab Primary text / active readout
  @tab 7.64:1
 @item
 Steel Blue
- @tab @code{#4B7EB0}
  @tab Primary accent / structural
  @tab 4.77:1
 @item
 Radium Green
- @tab @code{#50FA7B}
  @tab Success / safe status
  @tab 14.87:1
 @item
 Red Oxide
- @tab @code{#FF5C5C}
  @tab Warning / error status
  @tab 6.74:1
 @item
 Liquid Coolant
- @tab @code{#8BE9FD}
  @tab Info / links
  @tab 14.74:1
 @end multitable
@@ -2137,8 +2098,8 @@ Classic keeps its @strong{legacy six-role contract}
 It defines @strong{no surface class}, so §11.0.1 does not apply to it
 and every foreground is measured against Void Navy alone. Its
 high-contrast sibling @code{steelbore-classic-high-contrast} lifts
-@code{accent} to @code{#7FAEDC} (8.73:1) and @code{error} to
-@code{#FF8080} (8.41:1); the other four tokens are already ≥7:1 and
+@code{accent} to Steel Blue Lift (8.73:1) and @code{error} to
+Red Oxide Lift (8.41:1); the other four tokens are already ≥7:1 and
 carry over verbatim.
 
 Because Classic pairs its tokens against a single background, the
@@ -2156,7 +2117,7 @@ palette} (§11.4); tokens are never mixed across palettes.
 Ratios below are @emph{vs that palette's canvas}. The complete
 three-background matrices ship in the canonical @code{steelbore.toml}.
 Status hues not drawn from a palette's source design --- Ember Red
-@code{#FF6B6B}, Solar Amber @code{#FFC857}, Mint Signal @code{#5BE49B}
+, Solar Amber, Mint Signal
 --- are shared @code{error}/@code{warning}/@code{success} tones chosen
 to satisfy §11.1 role coverage where the source design defined none.
 Every @emph{foreground} token listed clears 4.5:1 on all three of its
@@ -2169,66 +2130,54 @@ foregrounds --- their low ratios against the canvas are expected, and
 
 Anchored on @strong{Orbit Navy} and @strong{Electric Blue}.
 
-@multitable {@code{surface-alt}} {Warm Thruster} {@code{#0A1024}} {vs canvas}
+@multitable {@code{surface-alt}} {Warm Thruster} {vs canvas}
 @headitem
 Role token
- @tab Color
- @tab Hex
+ @tab Token
  @tab vs canvas
 @item
 @code{background}
  @tab Orbit Navy
- @tab @code{#0A1024}
  @tab (canvas)
 @item
 @code{surface}
  @tab Deep Orbit
- @tab @code{#0F1728}
  @tab 1.05:1
 @item
 @code{surface-alt}
  @tab Orbit Divider
- @tab @code{#1B2436}
  @tab 1.22:1
 @item
 @code{foreground}
  @tab Ion White
- @tab @code{#E6F0FF}
  @tab 16.42:1
 @item
 @code{accent}
  @tab Electric Blue
- @tab @code{#0066FF}
  @tab @strong{3.91:1} †
 @item
 @code{structure}
  @tab Dawn Sky
- @tab @code{#3390FF}
  @tab 5.91:1
 @item
 @code{success}
  @tab Signal Green
- @tab @code{#28C76F}
  @tab 8.53:1
 @item
 @code{error}
  @tab Ember Red
- @tab @code{#FF6B6B}
  @tab 6.80:1
 @item
 @code{warning}
  @tab Solar Amber
- @tab @code{#FFC857}
  @tab 12.27:1
 @item
 @code{focus}
  @tab Warm Thruster
- @tab @code{#FF8A4B}
  @tab 8.08:1
 @item
 @code{border}
  @tab Dawn Sky
- @tab @code{#3390FF}
  @tab 5.91:1
 @end multitable
 
@@ -2241,8 +2190,7 @@ is set in Ion White or Dawn Sky, with Electric Blue as fill, border, or
 icon accent.
 
 @code{steelbore-blue-high-contrast} lifts @code{accent} to Azure Bright
-@code{#79B4FF} (8.80:1), @code{structure} and @code{border} to Azure
-Hue @code{#66A3FF} (7.41:1), and @code{error} to @code{#FF8F8F}
+ (8.80:1), @code{structure} and @code{border} to Azure Hue (7.41:1), and @code{error} to Ember Lift
 (8.61:1). All other tokens carry over verbatim, and the † restriction
 does not apply under high contrast.
 
@@ -2250,66 +2198,54 @@ does not apply under high contrast.
 
 Anchored on @strong{Core Black} and @strong{Plasma Magenta}.
 
-@multitable {@code{surface-alt}} {Panther White} {@code{#141418}} {vs canvas}
+@multitable {@code{surface-alt}} {Panther White} {vs canvas}
 @headitem
 Role token
- @tab Color
- @tab Hex
+ @tab Token
  @tab vs canvas
 @item
 @code{background}
  @tab Core Black
- @tab @code{#141418}
  @tab (canvas)
 @item
 @code{surface}
  @tab Panther Slate
- @tab @code{#1E1E22}
  @tab 1.11:1
 @item
 @code{surface-alt}
  @tab Dark Grey
- @tab @code{#28282D}
  @tab 1.25:1
 @item
 @code{foreground}
  @tab Panther White
- @tab @code{#FFFFFF}
  @tab 18.37:1
 @item
 @code{accent}
  @tab Plasma Magenta
- @tab @code{#E445FF}
  @tab 5.77:1
 @item
 @code{structure}
  @tab Pink Accent
- @tab @code{#FC8AFF}
  @tab 8.94:1
 @item
 @code{success}
  @tab Mint Signal
- @tab @code{#5BE49B}
  @tab 11.39:1
 @item
 @code{error}
  @tab Ember Red
- @tab @code{#FF6B6B}
  @tab 6.62:1
 @item
 @code{warning}
  @tab Solar Amber
- @tab @code{#FFC857}
  @tab 11.94:1
 @item
 @code{focus}
  @tab Soft Pink
- @tab @code{#FDBBFF}
  @tab 12.01:1
 @item
 @code{border}
  @tab Pink Accent
- @tab @code{#FC8AFF}
  @tab 8.94:1
 @end multitable
 
@@ -2320,85 +2256,73 @@ permitted because roles are palette-scoped, but the two palettes are
 never mixed (§11.4).
 
 @code{steelbore-blackpinkpanther-high-contrast} lifts @code{accent} to
-@code{#F07BFF} (7.86:1) and @code{error} to @code{#FF8F8F} (8.38:1);
+Magenta Lift (7.86:1) and @code{error} to Ember Lift (8.38:1);
 all other tokens carry over verbatim.
 
 @subsection §11.3.3 — Steelbore MatrixGreen
 
 Anchored on @strong{Circuit Navy} and @strong{Solar Lime}.
 
-@multitable {@code{surface-alt}} {Electric Cyan} {@code{#0C1A2B}} {vs canvas}
+@multitable {@code{surface-alt}} {Electric Cyan} {vs canvas}
 @headitem
 Role token
- @tab Color
- @tab Hex
+ @tab Token
  @tab vs canvas
 @item
 @code{background}
  @tab Circuit Navy
- @tab @code{#0C1A2B}
  @tab (canvas)
 @item
 @code{surface}
  @tab Slate Charcoal
- @tab @code{#1B2630}
  @tab 1.14:1
 @item
 @code{surface-alt}
  @tab Ambient Black
- @tab @code{#05070A}
  @tab 1.15:1
 @item
 @code{foreground}
  @tab Soft Silver
- @tab @code{#C7D2D9}
  @tab 11.39:1
 @item
 @code{accent}
  @tab Solar Lime
- @tab @code{#B6FF3B}
  @tab 14.48:1
 @item
 @code{structure}
  @tab Electric Cyan
- @tab @code{#00F0FF}
  @tab 12.44:1
 @item
 @code{success}
  @tab Matrix Teal
- @tab @code{#00B39A}
  @tab 6.61:1
 @item
 @code{error}
  @tab Ember Red
- @tab @code{#FF6B6B}
  @tab 6.32:1
 @item
 @code{warning}
  @tab Solar Amber
- @tab @code{#FFC857}
  @tab 11.39:1
 @item
 @code{focus}
  @tab Solar Lime
- @tab @code{#B6FF3B}
  @tab 14.48:1
 @item
 @code{border}
  @tab Electric Cyan
- @tab @code{#00F0FF}
  @tab 12.44:1
 @end multitable
 
 MatrixGreen is the one palette whose @code{surface-alt} is
 @emph{darker} than its canvas. That is permitted --- §11.0.1 requires
 only that surfaces be fills on the canvas with a measured boundary, not
-that they be lighter. Lime Shadow @code{#8AC22A} is reserved as the
+that they be lighter. Lime Shadow is reserved as the
 pressed/active state for Solar Lime and is not a role token. Every
 foreground token clears 4.5:1 on all three backgrounds.
 
 @code{steelbore-matrixgreen-high-contrast} lifts @code{success} to
-@code{#2FD3BB} (9.31:1) and @code{error} to @code{#FF8F8F} (7.99:1);
+Teal Lift (9.31:1) and @code{error} to Ember Lift (7.99:1);
 all other tokens are already ≥7:1 and carry over verbatim.
 
 @subsection §11.3.4 — Steelbore NavyWhite
@@ -2407,81 +2331,69 @@ Anchored on @strong{Pearl Silver} and @strong{Lunar Navy}. This is the
 family's only @strong{light-canvas} palette: the canvas is the light
 tone and the foreground is the dark one.
 
-@multitable {@code{surface-alt}} {Pearl Silver Light} {@code{#E7E5E0}} {vs canvas}
+@multitable {@code{surface-alt}} {Pearl Silver Light} {vs canvas}
 @headitem
 Role token
- @tab Color
- @tab Hex
+ @tab Token
  @tab vs canvas
 @item
 @code{background}
  @tab Pearl Silver
- @tab @code{#E7E5E0}
  @tab (canvas)
 @item
 @code{surface}
  @tab Pearl Silver Light
- @tab @code{#F4F3F1}
  @tab 1.14:1
 @item
 @code{surface-alt}
  @tab Pearl Silver Dark
- @tab @code{#D4D2CD}
  @tab 1.20:1
 @item
 @code{foreground}
  @tab Lunar Navy
- @tab @code{#111827}
  @tab 14.09:1
 @item
 @code{accent}
  @tab Cerulean Deep
- @tab @code{#2A5580}
  @tab 6.16:1
 @item
 @code{structure}
  @tab Lunar Navy Soft
- @tab @code{#1C2433}
  @tab 12.36:1
 @item
 @code{success}
  @tab Verdant Deep
- @tab @code{#2A6349}
  @tab 5.60:1
 @item
 @code{error}
  @tab Crimson Deep
- @tab @code{#93211F}
  @tab 6.73:1
 @item
 @code{warning}
  @tab Amber Deep
- @tab @code{#6F4E0C}
  @tab 6.02:1
 @item
 @code{focus}
  @tab Cerulean Deep
- @tab @code{#2A5580}
  @tab 6.16:1
 @item
 @code{border}
  @tab Lunar Navy Soft
- @tab @code{#1C2433}
  @tab 12.36:1
 @end multitable
 
 @strong{On a light canvas the accent and status hues must be deepened.}
-The lighter source tints --- Cerulean Edge @code{#3A6EA5} (4.22:1),
-Success Green @code{#4C8C6F} (3.15:1), Crimson Pulse @code{#B94A48}
-(4.03:1), Amber Signal @code{#D9A441} (1.79:1) --- do not reach 4.5:1
+The lighter source tints --- Cerulean Edge (tint) (4.22:1),
+Success Green (tint) (3.15:1), Crimson Pulse (tint)
+(4.03:1), Amber Signal (tint) (1.79:1) --- do not reach 4.5:1
 on Pearl Silver and are permitted only as @strong{non-text fills},
 never as text or as a meaningful boundary. Every foreground role token
 above clears 4.5:1 on all three backgrounds.
 
 @code{steelbore-navywhite-high-contrast} @emph{darkens} rather than
-lightens: @code{accent} and @code{focus} to @code{#1F4A73} (7.30:1),
-@code{success} to @code{#16452F} (8.66:1), @code{error} to
-@code{#7E1C1A} (8.07:1), and @code{warning} to @code{#5A3F09}
+lightens: @code{accent} and @code{focus} to Cerulean Lift (7.30:1),
+@code{success} to Verdant Lift (8.66:1), @code{error} to
+Crimson Lift (8.07:1), and @code{warning} to Amber Lift
 (7.76:1). @code{foreground} and @code{structure} are already ≥7:1 and
 carry over verbatim.
 
@@ -2496,77 +2408,65 @@ Ambient Black, the code well sits @emph{darker} than the canvas, which
 token clears 4.5:1 on all three backgrounds, so this palette is registered as a
 conforming alternate rather than a §11.5 fidelity palette.
 
-@multitable {@code{surface-alt}} {Lantern Yellow} {@code{#000000}} {vs canvas}
+@multitable {@code{surface-alt}} {Lantern Yellow} {vs canvas}
 @headitem
 Role token
- @tab Color
- @tab Hex
+ @tab Token
  @tab vs canvas
 @item
 @code{background}
  @tab Night
- @tab @code{#1A1B26}
  @tab (canvas)
 @item
 @code{surface}
  @tab Storm
- @tab @code{#24283B}
  @tab 1.17:1
 @item
 @code{surface-alt}
  @tab Night Deep
- @tab @code{#16161E}
  @tab 1.05:1
 @item
 @code{foreground}
  @tab Starlight
- @tab @code{#C0CAF5}
  @tab 10.59:1
 @item
 @code{accent}
  @tab Tokyo Blue
- @tab @code{#7AA2F7}
  @tab 6.79:1
 @item
 @code{structure}
  @tab Neon Purple
- @tab @code{#BB9AF7}
  @tab 7.39:1
 @item
 @code{success}
  @tab Signal Green
- @tab @code{#9ECE6A}
  @tab 9.35:1
 @item
 @code{error}
  @tab Sakura Red
- @tab @code{#F7768E}
  @tab 6.46:1
 @item
 @code{warning}
  @tab Lantern Yellow
- @tab @code{#E0AF68}
  @tab 8.55:1
 @item
 @code{focus}
  @tab Ice Cyan
- @tab @code{#7DCFFF}
  @tab 9.96:1
 @item
 @code{border}
  @tab Neon Purple
- @tab @code{#BB9AF7}
  @tab 7.39:1
 @end multitable
 
-The upstream comment tone @strong{Comment Slate} @code{#565F89} (2.76:1 on
+The upstream comment tone @strong{Comment Slate} Comment Slate (upstream) (2.76:1 on
 Night) is @strong{not bindable to a role token} --- it clears neither the
 4.5:1 text floor nor the 3:1 non-text floor. Boundaries are drawn in
 @code{structure} per §11.0.1.
 
 @code{tokyonight-high-contrast} lifts the two tokens that sit below 7:1 on the
-canvas: @code{accent} to @code{#97B6F9} (8.44:1)
-and @code{error} to @code{#F998AA} (8.22:1). The
+canvas: @code{accent} to Tokyo Blue Lift (8.44:1)
+and @code{error} to Sakura Lift (8.22:1). The
 other six carry over verbatim.
 
 @node Palette Selection
@@ -2604,13 +2504,29 @@ different background for a declared palette is non-compliant. The rule
 binds whichever palette is @emph{in force}: when §11.6.2 switches
 palettes, the new palette's canvas comes with it, unaltered.
 @item
-@strong{Values are read, never retyped.} The canonical machine-readable
-source for every palette, variant, and contrast matrix is
-@code{steelbore.toml}, shipped by the @code{steelbore-color-palette}
-skill. Where this document and that file disagree, this document
-governs and the file is corrected. A theme registry supplied by the
-operating system (§11.6.4) is advisory and never authoritative; the
-application's own copy governs.
+@strong{Values are read, never retyped.} The canonical source for every
+palette, variant, and contrast matrix is @code{steelbore.toml}, shipped by
+the @code{steelbore-color-palette} skill.
+
+@strong{That file governs every value; this section governs the contract
+around it.} §11 names the palettes, fixes the role each token plays, and
+says which palette a project may adopt — it no longer restates the values
+themselves. Before v2.03 it carried them in full and declared itself
+authoritative where the two disagreed; that clause existed because there
+were two copies of every colour and something had to break the tie. There
+is now one copy, so there is no tie to break: a value has exactly one
+definition, and changing a colour is a single edit rather than an edit plus
+a search for every place the old value was restated.
+
+The consequence is deliberate and worth stating plainly: §11 can no longer
+be implemented from this document alone. A reader needs
+@code{steelbore.toml} to obtain any colour. What this document still
+supplies, and what an implementor cannot get from the file by itself, is
+which roles exist, which are mandatory, what the contrast guarantee covers,
+and which palettes are adoptable.
+
+A theme registry supplied by the operating system (§11.6.4) is advisory and
+never authoritative; the application's own copy governs.
 @item
 Documents, editor themes, and terminal themes follow the project's
 declared palette. Where no project context exists (a standalone
@@ -2725,66 +2641,54 @@ dark mode: canvas @code{base03}, elevated tone @code{base02}, body text
 @code{base0}. Solarized defines a single elevated tone per mode, so
 @code{surface-alt} shares @code{surface}.
 
-@multitable {@code{surface-alt}} {base03} {@code{#000000}} {vs canvas}
+@multitable {@code{surface-alt}} {base03} {vs canvas}
 @headitem
 Role token
- @tab Color
- @tab Hex
+ @tab Token
  @tab vs canvas
 @item
 @code{background}
  @tab base03
- @tab @code{#002B36}
  @tab (canvas)
 @item
 @code{surface}
  @tab base02
- @tab @code{#073642}
  @tab 1.15:1
 @item
 @code{surface-alt}
  @tab base02
- @tab @code{#073642}
  @tab 1.15:1
 @item
 @code{foreground}
  @tab base0
- @tab @code{#839496}
  @tab @strong{4.75:1} †
 @item
 @code{accent}
  @tab blue
- @tab @code{#268BD2}
  @tab @strong{4.08:1} †
 @item
 @code{structure}
  @tab violet
- @tab @code{#6C71C4}
  @tab @strong{3.43:1} ‡
 @item
 @code{success}
  @tab green
- @tab @code{#859900}
  @tab @strong{4.69:1} †
 @item
 @code{error}
  @tab red
- @tab @code{#DC322F}
  @tab @strong{3.25:1} ‡
 @item
 @code{warning}
  @tab yellow
- @tab @code{#B58900}
  @tab @strong{4.68:1} †
 @item
 @code{focus}
  @tab cyan
- @tab @code{#2AA198}
  @tab @strong{4.75:1} †
 @item
 @code{border}
  @tab violet
- @tab @code{#6C71C4}
  @tab @strong{3.43:1} ‡
 @end multitable
 
@@ -2798,66 +2702,54 @@ text, icons, and non-text UI: @code{foreground} (4.11:1), @code{accent} (3.53:1)
 The same accent set on Solarized's light bases: canvas @code{base3}, elevated
 tone @code{base2}, body text @code{base00}.
 
-@multitable {@code{surface-alt}} {base00} {@code{#000000}} {vs canvas}
+@multitable {@code{surface-alt}} {base00} {vs canvas}
 @headitem
 Role token
- @tab Color
- @tab Hex
+ @tab Token
  @tab vs canvas
 @item
 @code{background}
  @tab base3
- @tab @code{#FDF6E3}
  @tab (canvas)
 @item
 @code{surface}
  @tab base2
- @tab @code{#EEE8D5}
  @tab 1.14:1
 @item
 @code{surface-alt}
  @tab base2
- @tab @code{#EEE8D5}
  @tab 1.14:1
 @item
 @code{foreground}
  @tab base00
- @tab @code{#657B83}
  @tab @strong{4.13:1} †
 @item
 @code{accent}
  @tab blue
- @tab @code{#268BD2}
  @tab @strong{3.41:1} †
 @item
 @code{structure}
  @tab violet
- @tab @code{#6C71C4}
  @tab @strong{4.06:1} †
 @item
 @code{success}
  @tab green
- @tab @code{#859900}
  @tab @strong{2.97:1} ‡
 @item
 @code{error}
  @tab red
- @tab @code{#DC322F}
  @tab @strong{4.29:1} †
 @item
 @code{warning}
  @tab yellow
- @tab @code{#B58900}
  @tab @strong{2.98:1} ‡
 @item
 @code{focus}
  @tab cyan
- @tab @code{#2AA198}
  @tab @strong{2.93:1} ‡
 @item
 @code{border}
  @tab violet
- @tab @code{#6C71C4}
  @tab @strong{4.06:1} †
 @end multitable
 
