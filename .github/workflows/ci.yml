@@ -84,3 +84,17 @@ jobs:
             --catalogue .construct \
             --no-version-check \
             The_Steelbore_Standard.texi The_Steelbore_Standard.md
+
+      # spacecraft.css is embedded verbatim into this repository's HTML output by
+      # `texi2any --css-include`, so a colour that drifts from the canonical palette
+      # is a wrong colour in the published document — with the build still passing
+      # and nothing reporting it. The checker and the palette both live in Construct,
+      # which is already checked out above; this copy is compared against the same
+      # steelbore.toml the skills use, and against Construct's own copy, which is
+      # byte-identical by design.
+      - name: spacecraft.css matches the canonical palette
+        run: |
+          python3 .construct/.github/check-palette-css.py \
+            --toml .construct/steelbore-color-palette/assets/steelbore.toml \
+            spacecraft.css \
+            .construct/steelbore-color-palette/assets/spacecraft.css
