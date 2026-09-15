@@ -5,10 +5,10 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 2.06
+@settitle The Steelbore Standard 2.07
 @c %**end of header
 
-@set VERSION 2.06
+@set VERSION 2.07
 @set UPDATED 2026-09-15
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
@@ -3660,12 +3660,24 @@ Software | @strong{License:} CC-BY-SA-4.0
 
 @node Project Pages
 @section §15.1 — Project Pages
-Each Spacecraft Software project has a dedicated subdomain following the
-pattern @code{https://<ProjectName>.SpacecraftSoftware.org/}. Use the
+Each @strong{published} Spacecraft Software project has a dedicated
+subdomain following the pattern
+@code{https://<ProjectName>.SpacecraftSoftware.org/}. Use the
 project-specific URL in all project-level outputs; use
 @code{https://SpacecraftSoftware.org/} only for umbrella references.
 
-@multitable {Spacecraft Software (main)} {@url{https://Loran-Pages.SpacecraftSoftware.org/}}
+@strong{Published} means the project has a repository under a namespace
+Spacecraft Software controls (§6.4). That qualifier is doing real work: a
+working directory is not a project. Vendored upstream forks carried under
+§4.2, scratch and experiment directories, symbolic links into other trees,
+and reference copies all appear in @file{PROJECTS.md} --- which tracks what
+is @emph{on disk} --- and none of them is published by us or has anything to
+serve at a subdomain. Read without the qualifier this section obliged
+sixty-seven entries, most of them for directories nobody could visit, which
+is how the table came to be measured as sixty-seven rows behind rather than
+as describing a different set.
+
+@multitable {Majestic (Fable/Rust Fable)} {@url{https://Majestic-Rust-Kimi.SpacecraftSoftware.org/}}
 @headitem
 Project
  @tab URL
@@ -3756,6 +3768,57 @@ Nebuchadnezzar
 @item
 Pathfinder
  @tab @url{https://Pathfinder.SpacecraftSoftware.org/}
+@item
+Achernar
+ @tab @url{https://Achernar.SpacecraftSoftware.org/}
+@item
+Adit
+ @tab @url{https://Adit.SpacecraftSoftware.org/}
+@item
+Antigravity 2
+ @tab @url{https://Antigravity2.SpacecraftSoftware.org/}
+@item
+Babel
+ @tab @url{https://Babel.SpacecraftSoftware.org/}
+@item
+Conduit
+ @tab @url{https://Conduit.SpacecraftSoftware.org/}
+@item
+Majestic
+ @tab @url{https://Majestic-PRD.SpacecraftSoftware.org/}
+@item
+Majestic (Fable/Rust Fable)
+ @tab @url{https://Majestic.SpacecraftSoftware.org/}
+@item
+Majestic (Guile Fable)
+ @tab @url{https://Majestic-Guile.SpacecraftSoftware.org/}
+@item
+Majestic (Rust Kimi)
+ @tab @url{https://Majestic-Rust-Kimi.SpacecraftSoftware.org/}
+@item
+Majestic (Rust Opus)
+ @tab @url{https://Majestic-Rust-Steel.SpacecraftSoftware.org/}
+@item
+Majestic 4
+ @tab @url{https://Majestic4.SpacecraftSoftware.org/}
+@item
+MajesticOS
+ @tab @url{https://MajesticOS.SpacecraftSoftware.org/}
+@item
+Packages
+ @tab @url{https://Packages.SpacecraftSoftware.org/}
+@item
+Projects
+ @tab @url{https://Projects.SpacecraftSoftware.org/}
+@item
+Reel
+ @tab @url{https://Reel.SpacecraftSoftware.org/}
+@item
+Specs
+ @tab @url{https://Specs.SpacecraftSoftware.org/}
+@item
+Theme
+ @tab @url{https://Theme.SpacecraftSoftware.org/}
 @end multitable
 
 When a new project is created, add its subdomain to this table
@@ -4581,16 +4644,31 @@ foreground-on-background, and record the ratios (§11).
 @strong{Keyboard:} complete every primary task without a pointing device.
 @end itemize
 
-@strong{Remediation for existing projects.} §18 applies to every project
-immediately on adoption of v1.33, which means projects predating it are
-non-compliant until retrofitted. This is stated plainly rather than softened
-into a recommendation. Until a project conforms, it MUST carry a
-@strong{dated remediation entry} in @code{PROJECTS.md} recording its current
-accessibility state and the intended remediation. An absent entry is a
-compliance failure in its own right --- a project may be unfinished, but it
-may not be silently unfinished. @strong{Projects registered as games (§18.5)
-are excluded} --- they owe no remediation entry, because they owe no
-conformance.
+@strong{Remediation for existing projects.} §18 applies to every project,
+and a project that does not yet conform is not thereby excused. What changed
+at v2.07 is @emph{when} the paper trail falls due.
+
+A project MUST carry a @strong{dated remediation entry} in
+@code{PROJECTS.md} --- recording its current accessibility state and the
+intended remediation --- from the moment it @strong{cuts a release tag or
+declares itself usable by anyone other than the maintainer}, and until it
+conforms. An absent entry at that point is a compliance failure in its own
+right: a shipped project may be unfinished, but it may not be silently
+unfinished.
+
+@strong{Before that point the entry is optional}, and the change is a
+correction rather than a relaxation. From v1.33 the obligation attached on
+adoption, so every pre-release experiment owed a dated assessment for
+existing at all. The predictable result was that the entries were not
+written: at v2.06 exactly one project carried one while roughly fourteen
+owed one, which is not a standard being enforced but a clause being ignored.
+A rule that is universally breached reports nothing about the projects that
+breach it, and it buries the one project that did the work. The obligation
+now attaches where a reader can actually be harmed --- when something is
+released for them to use --- and at that point it is strict.
+
+@strong{Projects registered as games (§18.5) are excluded} --- they owe no
+remediation entry, because they owe no conformance.
 
 @node Games Carve-Out
 @section §18.5 — Games Carve-Out
@@ -6338,9 +6416,11 @@ never substituted for the detail or the §17.1 block
 toggle honored with correct precedence; status never color-only; no
 animation or decorative art in accessible mode; TUI ships a linear mode and
 a non-interactive CLI path; GUI publishes accessible names and roles
-(AccessKit for Rust); verified with a real screen reader; existing projects
-carry a dated remediation entry in @code{PROJECTS.md} until they conform ---
-N/A for projects registered as games (§18.5), which are exempt in full
+(AccessKit for Rust); verified with a real screen reader; a project that has
+cut a release or declared itself usable carries a dated remediation entry in
+@code{PROJECTS.md} until it conforms, and a pre-release project owes none
+(§18.4) --- N/A for projects registered as games (§18.5), which are exempt
+in full
 @item
 ☐ @strong{§6.3} All commits to Spacecraft Software Git remotes
 cryptographically signed with the

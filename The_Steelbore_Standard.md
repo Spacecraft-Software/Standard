@@ -29,7 +29,7 @@ repository](https://github.com/Spacecraft-Software/Standard), newest
 entry first. It is kept out of this document so the standard reads as
 the rules *in force* rather than the record of how they got there.
 
-This document is **version 2.06**, updated 2026-09-15 (§14: UTC, ISO
+This document is **version 2.07**, updated 2026-09-15 (§14: UTC, ISO
 8601). The skill encoding of the standard keeps a parallel history in
 `spacecraft-steelbore-standard/references/CHANGELOG.md` in the
 [Construct
@@ -2091,10 +2091,21 @@ When writing Rust code that handles time:
 
 ## §15.1 — Project Pages
 
-Each Spacecraft Software project has a dedicated subdomain following the
-pattern `https://<ProjectName>.SpacecraftSoftware.org/`. Use the
-project-specific URL in all project-level outputs; use
+Each **published** Spacecraft Software project has a dedicated subdomain
+following the pattern `https://<ProjectName>.SpacecraftSoftware.org/`.
+Use the project-specific URL in all project-level outputs; use
 `https://SpacecraftSoftware.org/` only for umbrella references.
+
+**Published** means the project has a repository under a namespace
+Spacecraft Software controls (§6.4). That qualifier is doing real work:
+a working directory is not a project. Vendored upstream forks carried
+under §4.2, scratch and experiment directories, symbolic links into
+other trees, and reference copies all appear in `PROJECTS.md` — which
+tracks what is *on disk* — and none of them is published by us or has
+anything to serve at a subdomain. Read without the qualifier this
+section obliged sixty-seven entries, most of them for directories nobody
+could visit, which is how the table came to be measured as sixty-seven
+rows behind rather than as describing a different set.
 
 | Project | URL |
 |----|----|
@@ -2127,6 +2138,23 @@ project-specific URL in all project-level outputs; use
 | Loran Pages | <https://Loran-Pages.SpacecraftSoftware.org/> |
 | Nebuchadnezzar | <https://Nebuchadnezzar.SpacecraftSoftware.org/> |
 | Pathfinder | <https://Pathfinder.SpacecraftSoftware.org/> |
+| Achernar | <https://Achernar.SpacecraftSoftware.org/> |
+| Adit | <https://Adit.SpacecraftSoftware.org/> |
+| Antigravity 2 | <https://Antigravity2.SpacecraftSoftware.org/> |
+| Babel | <https://Babel.SpacecraftSoftware.org/> |
+| Conduit | <https://Conduit.SpacecraftSoftware.org/> |
+| Majestic | <https://Majestic-PRD.SpacecraftSoftware.org/> |
+| Majestic (Fable/Rust Fable) | <https://Majestic.SpacecraftSoftware.org/> |
+| Majestic (Guile Fable) | <https://Majestic-Guile.SpacecraftSoftware.org/> |
+| Majestic (Rust Kimi) | <https://Majestic-Rust-Kimi.SpacecraftSoftware.org/> |
+| Majestic (Rust Opus) | <https://Majestic-Rust-Steel.SpacecraftSoftware.org/> |
+| Majestic 4 | <https://Majestic4.SpacecraftSoftware.org/> |
+| MajesticOS | <https://MajesticOS.SpacecraftSoftware.org/> |
+| Packages | <https://Packages.SpacecraftSoftware.org/> |
+| Projects | <https://Projects.SpacecraftSoftware.org/> |
+| Reel | <https://Reel.SpacecraftSoftware.org/> |
+| Specs | <https://Specs.SpacecraftSoftware.org/> |
+| Theme | <https://Theme.SpacecraftSoftware.org/> |
 
 When a new project is created, add its subdomain to this table
 immediately.
@@ -2740,16 +2768,31 @@ Before a release:
 
 - **Keyboard:** complete every primary task without a pointing device.
 
-**Remediation for existing projects.** §18 applies to every project
-immediately on adoption of v1.33, which means projects predating it are
-non-compliant until retrofitted. This is stated plainly rather than
-softened into a recommendation. Until a project conforms, it MUST carry
-a **dated remediation entry** in `PROJECTS.md` recording its current
-accessibility state and the intended remediation. An absent entry is a
-compliance failure in its own right — a project may be unfinished, but
-it may not be silently unfinished. **Projects registered as games
-(§18.5) are excluded** — they owe no remediation entry, because they owe
-no conformance.
+**Remediation for existing projects.** §18 applies to every project, and
+a project that does not yet conform is not thereby excused. What changed
+at v2.07 is *when* the paper trail falls due.
+
+A project MUST carry a **dated remediation entry** in `PROJECTS.md` —
+recording its current accessibility state and the intended remediation —
+from the moment it **cuts a release tag or declares itself usable by
+anyone other than the maintainer**, and until it conforms. An absent
+entry at that point is a compliance failure in its own right: a shipped
+project may be unfinished, but it may not be silently unfinished.
+
+**Before that point the entry is optional**, and the change is a
+correction rather than a relaxation. From v1.33 the obligation attached
+on adoption, so every pre-release experiment owed a dated assessment for
+existing at all. The predictable result was that the entries were not
+written: at v2.06 exactly one project carried one while roughly fourteen
+owed one, which is not a standard being enforced but a clause being
+ignored. A rule that is universally breached reports nothing about the
+projects that breach it, and it buries the one project that did the
+work. The obligation now attaches where a reader can actually be harmed
+— when something is released for them to use — and at that point it is
+strict.
+
+**Projects registered as games (§18.5) are excluded** — they owe no
+remediation entry, because they owe no conformance.
 
 ## §18.5 — Games Carve-Out
 
@@ -2933,7 +2976,7 @@ A project claims conformance in `README.md`, in one line, naming the
 standard version, the category, and whether the claim is full or
 tailored:
 
-    Conforms to The Steelbore Standard v2.06 --- Category B, tailored
+    Conforms to The Steelbore Standard v2.07 --- Category B, tailored
     (§22, §23; see COMPLIANCE.md).
 
 **Full conformance** means every applicable clause is applied and the
@@ -3738,10 +3781,11 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
   toggle honored with correct precedence; status never color-only; no
   animation or decorative art in accessible mode; TUI ships a linear
   mode and a non-interactive CLI path; GUI publishes accessible names
-  and roles (AccessKit for Rust); verified with a real screen reader;
-  existing projects carry a dated remediation entry in `PROJECTS.md`
-  until they conform — N/A for projects registered as games (§18.5),
-  which are exempt in full
+  and roles (AccessKit for Rust); verified with a real screen reader; a
+  project that has cut a release or declared itself usable carries a
+  dated remediation entry in `PROJECTS.md` until it conforms, and a
+  pre-release project owes none (§18.4) — N/A for projects registered as
+  games (§18.5), which are exempt in full
 
 - [ ] **§6.3** All commits to Spacecraft Software Git remotes
   cryptographically signed with the
