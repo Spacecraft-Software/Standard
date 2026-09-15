@@ -29,7 +29,7 @@ repository](https://github.com/Spacecraft-Software/Standard), newest
 entry first. It is kept out of this document so the standard reads as
 the rules *in force* rather than the record of how they got there.
 
-This document is **version 2.05**, updated 2026-09-15 (§14: UTC, ISO
+This document is **version 2.06**, updated 2026-09-15 (§14: UTC, ISO
 8601). The skill encoding of the standard keeps a parallel history in
 `spacecraft-steelbore-standard/references/CHANGELOG.md` in the
 [Construct
@@ -879,6 +879,53 @@ requirements:
 When reviewing or designing any feature that touches data handling,
 permissions, or networking, verify all three PFA requirements are met.
 
+## §9.1 — No Third-Party Subresources
+
+The three requirements above are written for an **application**, and
+that scoping left a gap wide enough to drive a stylesheet through. A
+Spacecraft Software document is not an application, so nothing in §9
+reached the HTML this standard itself publishes — which loaded its two
+fonts from a third-party CDN, disclosing every reader’s IP address,
+User-Agent and Referer to that CDN on every page view, with no notice
+and no opt-in. No tracker was involved and no analytics SDK was shipped,
+so the letter of the first row was satisfied while its purpose was not.
+
+**The scope is therefore widened, and the rule is stated as an artifact
+property rather than an application property.** No Spacecraft Software
+artifact — application, library, document, stylesheet, diagram, slide,
+or generated page — may fetch a subresource from a host the project does
+not control at render time.
+
+- **Fonts are bundled, never fetched.** §12’s licence whitelist (OFL,
+  Apache-2.0, UFL, CC0) exists precisely so the files may be
+  redistributed. Ship the font next to the artifact and declare it with
+  `@font-face`, listing `local()` first so an installed copy is
+  preferred and no request is made at all. §12 names Google Fonts as a
+  place to *verify* a font is freely licensed; it has never mandated
+  that as a delivery channel, and an artifact that reads it as one has
+  misread it.
+
+- **Scripts, stylesheets, images and media follow the same rule.** A CDN
+  reference is a third-party subresource whatever it carries.
+
+- **Degrading is not complying.** A fallback that renders acceptably
+  when the fetch fails does not cure the fetch. The request is the
+  disclosure.
+
+- **Hyperlinks are unaffected.** A link a reader chooses to follow is
+  not a subresource; this section governs what an artifact loads on the
+  reader’s behalf, without being asked.
+
+- **The exception is narrow and must be declared.** Where an artifact
+  genuinely cannot function without a third-party fetch, the dependency
+  is documented in the artifact’s `README.md` in the same manner as a
+  §3.1 memory-safe-language exemption, naming the host, the data
+  disclosed, and why no bundled alternative exists.
+
+An artifact that is self-contained is also offline-capable,
+reproducible, and immune to an upstream host disappearing — so this
+section costs little beyond the bytes it bundles.
+
 ————————————————————————
 
 # §10 — Key Bindings
@@ -1186,7 +1233,7 @@ Anchored on **Orbit Navy** and **Electric Blue**.
 | `foreground`  | Ion White     | 16.42:1      |
 | `accent`      | Electric Blue | **3.91:1** † |
 | `structure`   | Dawn Sky      | 5.91:1       |
-| `success`     | Signal Green  | 8.53:1       |
+| `success`     | Aurora Green  | 8.53:1       |
 | `error`       | Ember Red     | 6.80:1       |
 | `warning`     | Solar Amber   | 12.27:1      |
 | `focus`       | Warm Thruster | 8.08:1       |
@@ -2881,7 +2928,7 @@ A project claims conformance in `README.md`, in one line, naming the
 standard version, the category, and whether the claim is full or
 tailored:
 
-    Conforms to The Steelbore Standard v2.05 --- Category B, tailored
+    Conforms to The Steelbore Standard v2.06 --- Category B, tailored
     (§22, §23; see COMPLIANCE.md).
 
 **Full conformance** means every applicable clause is applied and the
@@ -3610,7 +3657,10 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
   `install-info` hook present in all three package manifests (§5.5) —
   N/A for scripts and internal tooling
 
-- [ ] **§9** PFA: no tracking, minimal permissions, local storage
+- [ ] **§9** PFA: no tracking, minimal permissions, local storage; §9.1
+  no third-party subresources — fonts and other assets are bundled and
+  declared `local()`-first, never fetched from a host the project does
+  not control, with any unavoidable exception declared in `README.md`
   default
 
 - [ ] **§10** CUA + Vim-like key bindings planned/implemented; bindings

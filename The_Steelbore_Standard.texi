@@ -5,10 +5,10 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 2.05
+@settitle The Steelbore Standard 2.06
 @c %**end of header
 
-@set VERSION 2.05
+@set VERSION 2.06
 @set UPDATED 2026-09-15
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
@@ -1579,6 +1579,54 @@ encrypted
 When reviewing or designing any feature that touches data handling,
 permissions, or networking, verify all three PFA requirements are met.
 
+@section §9.1 — No Third-Party Subresources
+
+The three requirements above are written for an @strong{application}, and
+that scoping left a gap wide enough to drive a stylesheet through. A
+Spacecraft Software document is not an application, so nothing in §9
+reached the HTML this standard itself publishes --- which loaded its two
+fonts from a third-party CDN, disclosing every reader's IP address,
+User-Agent and Referer to that CDN on every page view, with no notice and
+no opt-in. No tracker was involved and no analytics SDK was shipped, so the
+letter of the first row was satisfied while its purpose was not.
+
+@strong{The scope is therefore widened, and the rule is stated as an
+artifact property rather than an application property.} No Spacecraft
+Software artifact --- application, library, document, stylesheet, diagram,
+slide, or generated page --- may fetch a subresource from a host the
+project does not control at render time.
+
+@itemize
+@item
+@strong{Fonts are bundled, never fetched.} §12's licence whitelist (OFL,
+Apache-2.0, UFL, CC0) exists precisely so the files may be redistributed.
+Ship the font next to the artifact and declare it with @code{@@font-face},
+listing @code{local()} first so an installed copy is preferred and no
+request is made at all. §12 names Google Fonts as a place to @emph{verify}
+a font is freely licensed; it has never mandated that as a delivery
+channel, and an artifact that reads it as one has misread it.
+@item
+@strong{Scripts, stylesheets, images and media follow the same rule.} A CDN
+reference is a third-party subresource whatever it carries.
+@item
+@strong{Degrading is not complying.} A fallback that renders acceptably
+when the fetch fails does not cure the fetch. The request is the disclosure.
+@item
+@strong{Hyperlinks are unaffected.} A link a reader chooses to follow is
+not a subresource; this section governs what an artifact loads on the
+reader's behalf, without being asked.
+@item
+@strong{The exception is narrow and must be declared.} Where an artifact
+genuinely cannot function without a third-party fetch, the dependency is
+documented in the artifact's @file{README.md} in the same manner as a §3.1
+memory-safe-language exemption, naming the host, the data disclosed, and
+why no bundled alternative exists.
+@end itemize
+
+An artifact that is self-contained is also offline-capable, reproducible,
+and immune to an upstream host disappearing --- so this section costs
+little beyond the bytes it bundles.
+
 @iftex
 @bigskip@hrule@bigskip
 @end iftex
@@ -2167,7 +2215,7 @@ Role token
  @tab 5.91:1
 @item
 @code{success}
- @tab Signal Green
+ @tab Aurora Green
  @tab 8.53:1
 @item
 @code{error}
@@ -6206,7 +6254,10 @@ shared scripts
 @code{.pdf}; @code{install-info} hook present in all three package
 manifests (§5.5) --- N/A for scripts and internal tooling
 @item
-☐ @strong{§9} PFA: no tracking, minimal permissions, local storage
+☐ @strong{§9} PFA: no tracking, minimal permissions, local storage;
+§9.1 no third-party subresources --- fonts and other assets are bundled and
+declared @code{local()}-first, never fetched from a host the project does
+not control, with any unavoidable exception declared in @file{README.md}
 default
 @item
 ☐ @strong{§10} CUA + Vim-like key bindings planned/implemented; bindings
