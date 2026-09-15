@@ -29,7 +29,7 @@ repository](https://github.com/Spacecraft-Software/Standard), newest
 entry first. It is kept out of this document so the standard reads as
 the rules *in force* rather than the record of how they got there.
 
-This document is **version 2.07**, updated 2026-09-15 (§14: UTC, ISO
+This document is **version 2.08**, updated 2026-09-15 (§14: UTC, ISO
 8601). The skill encoding of the standard keeps a parallel history in
 `spacecraft-steelbore-standard/references/CHANGELOG.md` in the
 [Construct
@@ -989,11 +989,14 @@ the alternates.
 | `steelbore` | Steelbore Modern | `Void Navy` | Dark | **Default** — all artifacts unless declared |
 | `steelbore-classic` | Steelbore Classic | `Void Navy` | Dark | Legacy contract (§11.2) |
 | `steelbore-blue` | Steelbore Blue | `Orbit Navy` | Dark | Alternate (§11.3) |
-| `steelbore-blackpinkpanther` | Steelbore BlackPinkPanther | `Core Black` | Dark | Alternate (§11.3) |
-| `steelbore-matrixgreen` | Steelbore MatrixGreen | `Circuit Navy` | Dark | Alternate (§11.3) |
+| `steelbore-magnetar` | Steelbore Magnetar | `Core Black` | Dark | Alternate (§11.3) |
+| `steelbore-biolume` | Steelbore Biolume | `Circuit Navy` | Dark | Alternate (§11.3) |
 | `steelbore-navywhite` | Steelbore NavyWhite | `Pearl Silver` | **Light** | Alternate (§11.3) — the family’s only light canvas |
 | `tokyonight` | Tokyo Night | `Night` | Dark | Alternate (§11.3) |
 | `steelbore-hanzosteel` | Steelbore Hanzo Steel | `Sumi Black` | Dark | Alternate (§11.3) |
+| `steelbore-blackpinkpanther` | Steelbore BlackPinkPanther | `Runway Black` | Dark | Alternate (§11.3) — slug reused at v2.08 |
+| `steelbore-green` | Steelbore Green | `Vampire Black` | Dark | Alternate (§11.3) |
+| `steelbore-greenalt` | Steelbore Green Alt | `Vampire Black` | Dark | Alternate (§11.3) |
 
 **Polarity** is the canvas’s light/dark class, and it is normative
 content: §11.6.2 pairs a dark palette with a light one so an application
@@ -1210,9 +1213,9 @@ Red Oxide is 1.13:1 and Radium Green on Liquid Coolant is 1.01:1.
 
 ## §11.3 — Alternate Palettes
 
-Six alternate palettes are registered. Each declares its own canvas, its
-own surfaces, and a full set of §11.1 role tokens verified against all
-three of its backgrounds. **A project adopts exactly one palette**
+Nine alternate palettes are registered. Each declares its own canvas,
+its own surfaces, and a full set of §11.1 role tokens verified against
+all three of its backgrounds. **A project adopts exactly one palette**
 (§11.4); tokens are never mixed across palettes.
 
 Ratios below are *vs that palette’s canvas*. The complete
@@ -1256,7 +1259,13 @@ with Electric Blue as fill, border, or icon accent.
 Lift (8.61:1). All other tokens carry over verbatim, and the †
 restriction does not apply under high contrast.
 
-### §11.3.2 — Steelbore BlackPinkPanther
+### §11.3.2 — Steelbore Magnetar
+
+**Renamed from BlackPinkPanther at v2.08.** The palette is anchored on
+Plasma Magenta — violet-magenta, not pink — so the old name described
+something it is not. `steelbore-blackpinkpanther` now names a different
+palette (§11.3.7); a consumer pinned to that slug renders different
+colours, and §11.3.7 records the break.
 
 Anchored on **Core Black** and **Plasma Magenta**.
 
@@ -1280,11 +1289,15 @@ where it carries the `warning` role; here it is the `accent`. That is
 permitted because roles are palette-scoped, but the two palettes are
 never mixed (§11.4).
 
-`steelbore-blackpinkpanther-high-contrast` lifts `accent` to Magenta
-Lift (7.86:1) and `error` to Ember Lift (8.38:1); all other tokens carry
-over verbatim.
+`steelbore-magnetar-high-contrast` lifts `accent` to Magenta Lift
+(7.86:1) and `error` to Ember Lift (8.38:1); all other tokens carry over
+verbatim.
 
-### §11.3.3 — Steelbore MatrixGreen
+### §11.3.3 — Steelbore Biolume
+
+**Renamed from MatrixGreen at v2.08.** Circuit Navy canvas, Solar Lime
+accent, Electric Cyan structure: navy and lime, hardly green, and with
+no connection to the franchise it named — which §11.3.8 now takes.
 
 Anchored on **Circuit Navy** and **Solar Lime**.
 
@@ -1296,7 +1309,7 @@ Anchored on **Circuit Navy** and **Solar Lime**.
 | `foreground`  | Soft Silver    | 11.39:1   |
 | `accent`      | Solar Lime     | 14.48:1   |
 | `structure`   | Electric Cyan  | 12.44:1   |
-| `success`     | Matrix Teal    | 6.61:1    |
+| `success`     | Biolume Teal   | 6.61:1    |
 | `error`       | Ember Red      | 6.32:1    |
 | `warning`     | Solar Amber    | 11.39:1   |
 | `focus`       | Solar Lime     | 14.48:1   |
@@ -1309,9 +1322,9 @@ Shadow is reserved as the pressed/active state for Solar Lime and is not
 a role token. Every foreground token clears 4.5:1 on all three
 backgrounds.
 
-`steelbore-matrixgreen-high-contrast` lifts `success` to Teal Lift
-(9.31:1) and `error` to Ember Lift (7.99:1); all other tokens are
-already ≥7:1 and carry over verbatim.
+`steelbore-biolume-high-contrast` lifts `success` to Teal Lift (9.31:1)
+and `error` to Ember Lift (7.99:1); all other tokens are already ≥7:1
+and carry over verbatim.
 
 ### §11.3.4 — Steelbore NavyWhite
 
@@ -1431,6 +1444,119 @@ palette carries its `[WARN]` or `[ERROR]` tag.
 (9.58:1); every other token already clears 7:1 on the canvas and carries
 over verbatim.
 
+### §11.3.7 — Steelbore BlackPinkPanther
+
+**This slug changed meaning at v2.08, and the change is silent.** Until
+v2.07 `steelbore-blackpinkpanther` named the violet palette now called
+Steelbore Magnetar (§11.3.2). A project pinned to the slug renders
+different colours and gets no error — the worst failure mode a rename
+has. It is accepted knowingly rather than hidden: the slug is embedded
+across roughly fifteen projects, migrating them is deferred, and this
+paragraph exists so no reader meets the change by accident.
+
+Anchored on **Runway Black** and **Hot Pink** — black, white and hot
+pink after the Victoria’s Secret main brand, neon and cool rather than
+the softer sub-brand pink.
+
+| Role token    | Token           | vs canvas |
+|---------------|-----------------|-----------|
+| `background`  | Runway Black    | (canvas)  |
+| `surface`     | Backlit Rose    | 1.14:1    |
+| `surface-alt` | Backstage Black | 1.05:1    |
+| `foreground`  | Runway White    | 21.00:1   |
+| `accent`      | Hot Pink        | 5.36:1    |
+| `structure`   | Flamingo Pink   | 6.71:1    |
+| `success`     | Mint Signal     | 13.02:1   |
+| `error`       | Ember Red       | 7.57:1    |
+| `warning`     | Solar Amber     | 13.65:1   |
+| `focus`       | Hot Pink        | 5.36:1    |
+| `border`      | Flamingo Pink   | 6.71:1    |
+
+Every foreground token clears 4.5:1 on all three backgrounds — no
+restricted pairings. The weakest pairing is `accent` on `surface` at
+4.72:1.
+
+**The surfaces are pink-tinted rather than neutral black, and that is
+the palette’s whole point.** In the storefronts it is drawn from,
+backlit pink is the dominant *field* and glossy black is the frame
+around it; a near-black panel inverts the relationship. Backlit Rose is
+the boldest surface the contrast floor permits — one step pinker drops
+`accent` to 4.47:1 and buys the palette its first restricted pairing.
+Glowing Pink is the pressed state and is not bindable to a role token.
+
+`steelbore-blackpinkpanther-high-contrast` lifts `accent` to Hot Pink
+Lift (7.65:1) and `structure`/`border` to Flamingo Lift (8.31:1).
+
+### §11.3.8 — Steelbore Green
+
+Anchored on **Vampire Black** and **Erin**. This is the Matrix palette,
+and it is the only conforming member whose brand hue is the **body
+text**: **Erin carries `foreground`, not `accent`**, because
+green-on-black terminal text is the thing being reproduced. Steelbore
+Classic set the precedent for a non-neutral foreground with Molten Amber
+(§11.2). Rain Head — the bright leading glyph of the digital rain —
+carries `accent` and `focus`.
+
+| Role token    | Token         | vs canvas |
+|---------------|---------------|-----------|
+| `background`  | Vampire Black | (canvas)  |
+| `surface`     | Rain Shadow   | 1.11:1    |
+| `surface-alt` | Royal Black   | 1.01:1    |
+| `foreground`  | Erin          | 14.94:1   |
+| `accent`      | Rain Head     | 19.42:1   |
+| `structure`   | Lucky Green   | 6.09:1    |
+| `success`     | Cascade Green | 6.79:1    |
+| `error`       | Ember Red     | 7.35:1    |
+| `warning`     | Solar Amber   | 13.26:1   |
+| `focus`       | Rain Head     | 19.42:1   |
+| `border`      | Lucky Green   | 6.09:1    |
+
+No restricted pairings; the weakest pairing is `structure` on `surface`
+at 5.47:1.
+
+**Cascade Green is a deepened hue, and three source greens are not role
+tokens at all.** Islam Green measures 4.80:1 on the canvas and 4.31:1 on
+the surface — under the floor exactly where status text would sit — so
+`success` ships deepened, for the same reason §11.3.4 deepens
+NavyWhite’s status hues. Dark Green (Traditional), Australia Green and
+Islam Green are carried as **non-role fills**: none reaches the text
+floor, and saying so here is cheaper than an implementor discovering it.
+
+**A consequence worth stating:** `foreground`, `structure` and `success`
+are all greens, so they are separated by luminance rather than hue.
+§18.2.1 already forbids colour as the sole carrier of meaning, and this
+palette is the clearest case for it — every coloured status here carries
+its `[OK]`, `[WARN]` or `[ERROR]` tag.
+
+`steelbore-green-high-contrast` lifts `structure`/`border` to Lucky Lift
+(7.87:1) and `success` to Cascade Lift (7.65:1).
+
+### §11.3.9 — Steelbore Green Alt
+
+The same colours as §11.3.8 with the two brightest roles exchanged:
+`foreground` is **Rain Wash**, a near-white with a green cast, and
+**Erin** becomes `accent` and `focus`. Long prose then reads in a
+neutral rather than in saturated green, and the Matrix green draws the
+eye instead of carrying every paragraph.
+
+| Role token    | Token         | vs canvas |
+|---------------|---------------|-----------|
+| `background`  | Vampire Black | (canvas)  |
+| `surface`     | Rain Shadow   | 1.11:1    |
+| `surface-alt` | Royal Black   | 1.01:1    |
+| `foreground`  | Rain Wash     | 17.51:1   |
+| `accent`      | Erin          | 14.94:1   |
+| `structure`   | Lucky Green   | 6.09:1    |
+| `success`     | Cascade Green | 6.79:1    |
+| `error`       | Ember Red     | 7.35:1    |
+| `warning`     | Solar Amber   | 13.26:1   |
+| `focus`       | Erin          | 14.94:1   |
+| `border`      | Lucky Green   | 6.09:1    |
+
+Canvas, surfaces, status tones, non-role fills and both high-contrast
+lifts are identical to §11.3.8. A project declares one or the other,
+never both (§11.4) — they are two readings of one set, not a pair.
+
 ## §11.4 — Palette Selection
 
 - **Modern is the default.** An artifact that declares nothing uses
@@ -1518,11 +1644,14 @@ of each `[palettes.<slug>]` table.
 | `steelbore`                  | `steelbore-color-palette`        |
 | `steelbore-classic`          | `steelboreclassic-color-palette` |
 | `steelbore-blue`             | `blue-color-palette`             |
-| `steelbore-blackpinkpanther` | `blackpinkpanther-color-palette` |
-| `steelbore-matrixgreen`      | `matrixgreen-color-palette`      |
+| `steelbore-magnetar`         | `magnetar-color-palette`         |
+| `steelbore-biolume`          | `biolume-color-palette`          |
 | `steelbore-navywhite`        | `navywhite-color-palette`        |
 | `tokyonight`                 | `tokyonight-color-palette`       |
 | `steelbore-hanzosteel`       | `hanzosteel-color-palette`       |
+| `steelbore-blackpinkpanther` | `blackpinkpanther-color-palette` |
+| `steelbore-green`            | `green-color-palette`            |
+| `steelbore-greenalt`         | `greenalt-color-palette`         |
 | `solarized-dark`             | `solarizeddark-color-palette`    |
 | `solarized-light`            | `solarizedlight-color-palette`   |
 
@@ -1647,19 +1776,19 @@ A project **authors** against one palette and **registers** several.
 These are different obligations, and §11.4’s one-palette rule governs
 only the first.
 
-The **registered set** is the fifteen themes that bind the §11.1
+The **registered set** is the twenty-one themes that bind the §11.1
 eleven-role contract:
 
 | Obligation | Themes | Why |
 |----|----|----|
-| **MUST register** | The seven conforming palettes — `steelbore`, `steelbore-blue`, `steelbore-blackpinkpanther`, `steelbore-matrixgreen`, `steelbore-navywhite`, `tokyonight`, `steelbore-hanzosteel` — each with its `-high-contrast` sibling, plus `steelbore-mono`. Fifteen themes | Every one binds the same eleven role tokens, so a theme layer that reads `steelbore.toml` registers them in a loop. A declaration can then always be answered |
+| **MUST register** | The ten conforming palettes — `steelbore`, `steelbore-blue`, `steelbore-magnetar`, `steelbore-biolume`, `steelbore-navywhite`, `tokyonight`, `steelbore-hanzosteel`, `steelbore-blackpinkpanther`, `steelbore-green`, `steelbore-greenalt` — each with its `-high-contrast` sibling, plus `steelbore-mono`. Twenty-one themes | Every one binds the same eleven role tokens, so a theme layer that reads `steelbore.toml` registers them in a loop. A declaration can then always be answered |
 | **MAY register** | `steelbore-classic` and `steelbore-classic-high-contrast` | Classic keeps the legacy six-role contract (§11.2) and defines no surface class, so it is registrable only by an application that implements that contract as well |
 | **MUST NOT register** | A §11.5 fidelity palette, other than as an explicitly user-selectable extra | §11.5 bars adoption, and this section is not a route around it |
 
-Three of the fifteen were already required — the project’s own palette
-by §11.4, its `-high-contrast` sibling by §11.1.1, and `steelbore-mono`
-by §11.1.1 — so this section adds twelve themes, all of them already
-written out in `steelbore.toml`.
+Three of the twenty-one were already required — the project’s own
+palette by §11.4, its `-high-contrast` sibling by §11.1.1, and
+`steelbore-mono` by §11.1.1 — so this section adds eighteen themes, all
+of them already written out in `steelbore.toml`.
 
 **Registering is not defaulting.** The default remains the project’s
 §11.4 palette (§11.6.3, source 5). Registering the family makes a
@@ -2976,7 +3105,7 @@ A project claims conformance in `README.md`, in one line, naming the
 standard version, the category, and whether the claim is full or
 tailored:
 
-    Conforms to The Steelbore Standard v2.07 --- Category B, tailored
+    Conforms to The Steelbore Standard v2.08 --- Category B, tailored
     (§22, §23; see COMPLIANCE.md).
 
 **Full conformance** means every applicable clause is applied and the
@@ -3729,15 +3858,15 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
   system declaration, then the platform color scheme, then the project’s
   §11.4 default), then variant overlay (a pinned variant, then
   `NO_COLOR` ⇒ `steelbore-mono`, then §18.1 accessible mode, then
-  platform high contrast); the registered set covers §11.6.1’s fifteen
-  eleven-role themes; an unknown or unregistered slug falls through
-  rather than failing; palette switches are atomic and whole-surface and
-  carry the new canvas; resolved theme and deciding source reported
-  under `--verbose`; no dependence on per-role environment variables —
-  Steelbore OS additionally renders `/etc/steelbore/theme.toml`, exports
-  `SPACECRAFT_THEME`, and keeps the platform color-scheme preference in
-  agreement with the declared polarity (§11.6.5) — N/A for artifacts
-  with no user-facing output
+  platform high contrast); the registered set covers §11.6.1’s
+  twenty-one eleven-role themes; an unknown or unregistered slug falls
+  through rather than failing; palette switches are atomic and
+  whole-surface and carry the new canvas; resolved theme and deciding
+  source reported under `--verbose`; no dependence on per-role
+  environment variables — Steelbore OS additionally renders
+  `/etc/steelbore/theme.toml`, exports `SPACECRAFT_THEME`, and keeps the
+  platform color-scheme preference in agreement with the declared
+  polarity (§11.6.5) — N/A for artifacts with no user-facing output
 
 - [ ] **§12** FOSS-licensed fonts only (Share Tech Mono / Inconsolata)
 
