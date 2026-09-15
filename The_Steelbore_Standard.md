@@ -896,14 +896,19 @@ artifact — application, library, document, stylesheet, diagram, slide,
 or generated page — may fetch a subresource from a host the project does
 not control at render time.
 
-- **Fonts are bundled, never fetched.** §12’s licence whitelist (OFL,
-  Apache-2.0, UFL, CC0) exists precisely so the files may be
-  redistributed. Ship the font next to the artifact and declare it with
-  `@font-face`, listing `local()` first so an installed copy is
-  preferred and no request is made at all. §12 names Google Fonts as a
-  place to *verify* a font is freely licensed; it has never mandated
-  that as a delivery channel, and an artifact that reads it as one has
-  misread it.
+- **Fonts are resolved locally or bundled — never fetched.** The
+  baseline is an `@font-face` rule whose `src` names `local()` only,
+  backed by the generic `monospace` fallback: an installed copy is used,
+  and where none exists the artifact degrades to a system font without
+  ever opening a connection. An artifact that needs the face to render
+  faithfully for every reader **may** additionally ship the font file
+  beside itself and list it after the `local()` entry — §12’s licence
+  whitelist (OFL, Apache-2.0, UFL, CC0) exists precisely so those files
+  may be redistributed. Bundling is a fidelity choice; what this section
+  forbids is the third-party fetch, which neither form makes. §12 names
+  Google Fonts as a place to *verify* a font is freely licensed; it has
+  never mandated that as a delivery channel, and an artifact that reads
+  it as one has misread it.
 
 - **Scripts, stylesheets, images and media follow the same rule.** A CDN
   reference is a third-party subresource whatever it carries.
@@ -3658,10 +3663,10 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
   N/A for scripts and internal tooling
 
 - [ ] **§9** PFA: no tracking, minimal permissions, local storage; §9.1
-  no third-party subresources — fonts and other assets are bundled and
-  declared `local()`-first, never fetched from a host the project does
-  not control, with any unavoidable exception declared in `README.md`
-  default
+  no third-party subresources — fonts declared `local()`-first and
+  bundled only if fidelity requires it, other assets shipped beside the
+  artifact, nothing fetched from a host the project does not control,
+  with any unavoidable exception declared in `README.md` default
 
 - [ ] **§10** CUA + Vim-like key bindings planned/implemented; bindings
   user-remappable; assistive-technology modifier chords
