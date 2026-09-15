@@ -29,7 +29,7 @@ repository](https://github.com/Spacecraft-Software/Standard), newest
 entry first. It is kept out of this document so the standard reads as
 the rules *in force* rather than the record of how they got there.
 
-This document is **version 2.04**, updated 2026-09-14 (§14: UTC, ISO
+This document is **version 2.05**, updated 2026-09-15 (§14: UTC, ISO
 8601). The skill encoding of the standard keeps a parallel history in
 `spacecraft-steelbore-standard/references/CHANGELOG.md` in the
 [Construct
@@ -941,6 +941,7 @@ the alternates.
 | `steelbore-matrixgreen` | Steelbore MatrixGreen | `Circuit Navy` | Dark | Alternate (§11.3) |
 | `steelbore-navywhite` | Steelbore NavyWhite | `Pearl Silver` | **Light** | Alternate (§11.3) — the family’s only light canvas |
 | `tokyonight` | Tokyo Night | `Night` | Dark | Alternate (§11.3) |
+| `steelbore-hanzosteel` | Steelbore Hanzo Steel | `Sumi Black` | Dark | Alternate (§11.3) |
 
 **Polarity** is the canvas’s light/dark class, and it is normative
 content: §11.6.2 pairs a dark palette with a light one so an application
@@ -1157,9 +1158,9 @@ Red Oxide is 1.13:1 and Radium Green on Liquid Coolant is 1.01:1.
 
 ## §11.3 — Alternate Palettes
 
-Five alternate palettes are registered. Each declares its own canvas,
-its own surfaces, and a full set of §11.1 role tokens verified against
-all three of its backgrounds. **A project adopts exactly one palette**
+Six alternate palettes are registered. Each declares its own canvas, its
+own surfaces, and a full set of §11.1 role tokens verified against all
+three of its backgrounds. **A project adopts exactly one palette**
 (§11.4); tokens are never mixed across palettes.
 
 Ratios below are *vs that palette’s canvas*. The complete
@@ -1328,6 +1329,56 @@ drawn in `structure` per §11.0.1.
 the canvas: `accent` to Tokyo Blue Lift (8.44:1) and `error` to Sakura
 Lift (8.22:1). The other six carry over verbatim.
 
+### §11.3.6 — Steelbore Hanzo Steel
+
+Anchored on **Sumi Black** and **Hanzo Gold**. The palette’s colors are
+drawn from the poster art for *Kill Bill Vol. 1*; the name is the
+standard’s own, so that a published specification does not carry a film
+title it has no licence to. Sumi Black is the family’s **only pure-black
+canvas** — every other member, light or dark, tints its ground.
+
+| Role token    | Token          | vs canvas |
+|---------------|----------------|-----------|
+| `background`  | Sumi Black     | (canvas)  |
+| `surface`     | Scabbard Slate | 1.19:1    |
+| `surface-alt` | Ink Well       | 1.06:1    |
+| `foreground`  | Bone White     | 18.49:1   |
+| `accent`      | Hanzo Gold     | 14.77:1   |
+| `structure`   | Tempered Gold  | 11.79:1   |
+| `success`     | Mint Signal    | 13.02:1   |
+| `error`       | Crimson Edge   | 5.77:1    |
+| `warning`     | Gold Leaf      | 14.01:1   |
+| `focus`       | Hanzo Gold     | 14.77:1   |
+| `border`      | Tempered Gold  | 11.79:1   |
+
+Every foreground token clears 4.5:1 on all three backgrounds — no
+restricted pairings. The weakest pairing in the palette is `error` on
+`surface` at 4.85:1.
+
+**Crimson Edge is a deepened hue, and the section says so rather than
+leaving a reader to wonder why the source red is not the shipped one.**
+The poster’s red measures 4.03:1 on Sumi Black and 3.39:1 on Scabbard
+Slate — below the 4.5:1 text floor on the canvas, and on the surface
+below it by enough that error prose would have been unreadable at normal
+size. It is deepened here for the same reason §11.3.4 deepens
+NavyWhite’s status hues: this is a conforming alternate, not a §11.5
+fidelity palette, so nothing obliges it to reproduce a source value that
+does not reach the floor. A palette that shipped the verbatim red would
+have bought fidelity to a film poster with a `error` token no
+application could set in body text.
+
+Three golds carry three distinct roles — `accent`, `warning`, and
+`structure` — and they are separated by luminance rather than by hue.
+That is legible, but it is not sufficient on its own: §18.2.1 already
+forbids color as the sole carrier of meaning, and a warning
+distinguished from an accent only by being one gold rather than another
+is exactly the case that rule exists for. Every colored status in this
+palette carries its `[WARN]` or `[ERROR]` tag.
+
+`steelbore-hanzosteel-high-contrast` lifts `error` alone, to Ember Lift
+(9.58:1); every other token already clears 7:1 on the canvas and carries
+over verbatim.
+
 ## §11.4 — Palette Selection
 
 - **Modern is the default.** An artifact that declares nothing uses
@@ -1419,6 +1470,7 @@ of each `[palettes.<slug>]` table.
 | `steelbore-matrixgreen`      | `matrixgreen-color-palette`      |
 | `steelbore-navywhite`        | `navywhite-color-palette`        |
 | `tokyonight`                 | `tokyonight-color-palette`       |
+| `steelbore-hanzosteel`       | `hanzosteel-color-palette`       |
 | `solarized-dark`             | `solarizeddark-color-palette`    |
 | `solarized-light`            | `solarizedlight-color-palette`   |
 
@@ -1543,18 +1595,18 @@ A project **authors** against one palette and **registers** several.
 These are different obligations, and §11.4’s one-palette rule governs
 only the first.
 
-The **registered set** is the thirteen themes that bind the §11.1
+The **registered set** is the fifteen themes that bind the §11.1
 eleven-role contract:
 
 | Obligation | Themes | Why |
 |----|----|----|
-| **MUST register** | The six conforming palettes — `steelbore`, `steelbore-blue`, `steelbore-blackpinkpanther`, `steelbore-matrixgreen`, `steelbore-navywhite`, `tokyonight` — each with its `-high-contrast` sibling, plus `steelbore-mono`. Thirteen themes | Every one binds the same eleven role tokens, so a theme layer that reads `steelbore.toml` registers them in a loop. A declaration can then always be answered |
+| **MUST register** | The seven conforming palettes — `steelbore`, `steelbore-blue`, `steelbore-blackpinkpanther`, `steelbore-matrixgreen`, `steelbore-navywhite`, `tokyonight`, `steelbore-hanzosteel` — each with its `-high-contrast` sibling, plus `steelbore-mono`. Fifteen themes | Every one binds the same eleven role tokens, so a theme layer that reads `steelbore.toml` registers them in a loop. A declaration can then always be answered |
 | **MAY register** | `steelbore-classic` and `steelbore-classic-high-contrast` | Classic keeps the legacy six-role contract (§11.2) and defines no surface class, so it is registrable only by an application that implements that contract as well |
 | **MUST NOT register** | A §11.5 fidelity palette, other than as an explicitly user-selectable extra | §11.5 bars adoption, and this section is not a route around it |
 
-Three of the thirteen were already required — the project’s own palette
+Three of the fifteen were already required — the project’s own palette
 by §11.4, its `-high-contrast` sibling by §11.1.1, and `steelbore-mono`
-by §11.1.1 — so this section adds ten themes, all of them already
+by §11.1.1 — so this section adds twelve themes, all of them already
 written out in `steelbore.toml`.
 
 **Registering is not defaulting.** The default remains the project’s
@@ -2829,7 +2881,7 @@ A project claims conformance in `README.md`, in one line, naming the
 standard version, the category, and whether the claim is full or
 tailored:
 
-    Conforms to The Steelbore Standard v2.04 --- Category B, tailored
+    Conforms to The Steelbore Standard v2.05 --- Category B, tailored
     (§22, §23; see COMPLIANCE.md).
 
 **Full conformance** means every applicable clause is applied and the
@@ -3579,7 +3631,7 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
   system declaration, then the platform color scheme, then the project’s
   §11.4 default), then variant overlay (a pinned variant, then
   `NO_COLOR` ⇒ `steelbore-mono`, then §18.1 accessible mode, then
-  platform high contrast); the registered set covers §11.6.1’s thirteen
+  platform high contrast); the registered set covers §11.6.1’s fifteen
   eleven-role themes; an unknown or unregistered slug falls through
   rather than failing; palette switches are atomic and whole-surface and
   carry the new canvas; resolved theme and deciding source reported
