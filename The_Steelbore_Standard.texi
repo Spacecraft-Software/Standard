@@ -5,10 +5,10 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 2.07
+@settitle The Steelbore Standard 2.08
 @c %**end of header
 
-@set VERSION 2.07
+@set VERSION 2.08
 @set UPDATED 2026-09-15
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
@@ -1713,7 +1713,7 @@ Every artifact uses Modern unless its project explicitly declares an
 alternate under §11.4. The remainder of §11 defines Modern; §11.2 and
 §11.3 define the alternates.
 
-@multitable {@code{steelbore-blackpinkpanther}} {Steelbore BlackPinkPanther} {Circuit Navy} {Polarity} {Default --- all artifacts unless declared}
+@multitable {@code{steelbore-magnetar}} {Steelbore Magnetar} {Circuit Navy} {Polarity} {Default --- all artifacts unless declared}
 @headitem
 Theme slug
  @tab Palette
@@ -1739,14 +1739,14 @@ Theme slug
  @tab Dark
  @tab Alternate (§11.3)
 @item
-@code{steelbore-blackpinkpanther}
- @tab Steelbore BlackPinkPanther
+@code{steelbore-magnetar}
+ @tab Steelbore Magnetar
  @tab @code{Core Black}
  @tab Dark
  @tab Alternate (§11.3)
 @item
-@code{steelbore-matrixgreen}
- @tab Steelbore MatrixGreen
+@code{steelbore-biolume}
+ @tab Steelbore Biolume
  @tab @code{Circuit Navy}
  @tab Dark
  @tab Alternate (§11.3)
@@ -1766,6 +1766,24 @@ Theme slug
 @code{steelbore-hanzosteel}
  @tab Steelbore Hanzo Steel
  @tab @code{Sumi Black}
+ @tab Dark
+ @tab Alternate (§11.3)
+@item
+@code{steelbore-blackpinkpanther}
+ @tab Steelbore BlackPinkPanther
+ @tab @code{Runway Black}
+ @tab Dark
+ @tab Alternate (§11.3) --- slug reused at v2.08
+@item
+@code{steelbore-green}
+ @tab Steelbore Green
+ @tab @code{Vampire Black}
+ @tab Dark
+ @tab Alternate (§11.3)
+@item
+@code{steelbore-greenalt}
+ @tab Steelbore Green Alt
+ @tab @code{Vampire Black}
  @tab Dark
  @tab Alternate (§11.3)
 @end multitable
@@ -2169,7 +2187,7 @@ on Red Oxide is 1.13:1 and Radium Green on Liquid Coolant is 1.01:1.
 @node Alternate Palettes
 @section §11.3 — Alternate Palettes
 
-Six alternate palettes are registered. Each declares its own canvas,
+Nine alternate palettes are registered. Each declares its own canvas,
 its own surfaces, and a full set of §11.1 role tokens verified against
 all three of its backgrounds. @strong{A project adopts exactly one
 palette} (§11.4); tokens are never mixed across palettes.
@@ -2254,7 +2272,13 @@ icon accent.
 (8.61:1). All other tokens carry over verbatim, and the † restriction
 does not apply under high contrast.
 
-@subsection §11.3.2 — Steelbore BlackPinkPanther
+@subsection §11.3.2 — Steelbore Magnetar
+
+@strong{Renamed from BlackPinkPanther at v2.08.} The palette is anchored on
+Plasma Magenta --- violet-magenta, not pink --- so the old name described
+something it is not. @code{steelbore-blackpinkpanther} now names a different
+palette (§11.3.7); a consumer pinned to that slug renders different colours,
+and §11.3.7 records the break.
 
 Anchored on @strong{Core Black} and @strong{Plasma Magenta}.
 
@@ -2315,11 +2339,15 @@ carries the @code{warning} role; here it is the @code{accent}. That is
 permitted because roles are palette-scoped, but the two palettes are
 never mixed (§11.4).
 
-@code{steelbore-blackpinkpanther-high-contrast} lifts @code{accent} to
+@code{steelbore-magnetar-high-contrast} lifts @code{accent} to
 Magenta Lift (7.86:1) and @code{error} to Ember Lift (8.38:1);
 all other tokens carry over verbatim.
 
-@subsection §11.3.3 — Steelbore MatrixGreen
+@subsection §11.3.3 — Steelbore Biolume
+
+@strong{Renamed from MatrixGreen at v2.08.} Circuit Navy canvas, Solar Lime
+accent, Electric Cyan structure: navy and lime, hardly green, and with no
+connection to the franchise it named --- which §11.3.8 now takes.
 
 Anchored on @strong{Circuit Navy} and @strong{Solar Lime}.
 
@@ -2354,7 +2382,7 @@ Role token
  @tab 12.44:1
 @item
 @code{success}
- @tab Matrix Teal
+ @tab Biolume Teal
  @tab 6.61:1
 @item
 @code{error}
@@ -2381,7 +2409,7 @@ that they be lighter. Lime Shadow is reserved as the
 pressed/active state for Solar Lime and is not a role token. Every
 foreground token clears 4.5:1 on all three backgrounds.
 
-@code{steelbore-matrixgreen-high-contrast} lifts @code{success} to
+@code{steelbore-biolume-high-contrast} lifts @code{success} to
 Teal Lift (9.31:1) and @code{error} to Ember Lift (7.99:1);
 all other tokens are already ≥7:1 and carry over verbatim.
 
@@ -2615,6 +2643,230 @@ case that rule exists for. Every colored status in this palette carries its
 Ember Lift (9.58:1); every other token already clears 7:1 on the canvas and
 carries over verbatim.
 
+@subsection §11.3.7 — Steelbore BlackPinkPanther
+
+@strong{This slug changed meaning at v2.08, and the change is silent.} Until
+v2.07 @code{steelbore-blackpinkpanther} named the violet palette now called
+Steelbore Magnetar (§11.3.2). A project pinned to the slug renders different
+colours and gets no error --- the worst failure mode a rename has. It is
+accepted knowingly rather than hidden: the slug is embedded across roughly
+fifteen projects, migrating them is deferred, and this paragraph exists so no
+reader meets the change by accident.
+
+Anchored on @strong{Runway Black} and @strong{Hot Pink} --- black, white and
+hot pink after the Victoria's Secret main brand, neon and cool rather than the
+softer sub-brand pink.
+
+@multitable {@code{surface-alt}} {Backstage Black} {vs canvas}
+@headitem
+Role token
+ @tab Token
+ @tab vs canvas
+@item
+@code{background}
+ @tab Runway Black
+ @tab (canvas)
+@item
+@code{surface}
+ @tab Backlit Rose
+ @tab 1.14:1
+@item
+@code{surface-alt}
+ @tab Backstage Black
+ @tab 1.05:1
+@item
+@code{foreground}
+ @tab Runway White
+ @tab 21.00:1
+@item
+@code{accent}
+ @tab Hot Pink
+ @tab 5.36:1
+@item
+@code{structure}
+ @tab Flamingo Pink
+ @tab 6.71:1
+@item
+@code{success}
+ @tab Mint Signal
+ @tab 13.02:1
+@item
+@code{error}
+ @tab Ember Red
+ @tab 7.57:1
+@item
+@code{warning}
+ @tab Solar Amber
+ @tab 13.65:1
+@item
+@code{focus}
+ @tab Hot Pink
+ @tab 5.36:1
+@item
+@code{border}
+ @tab Flamingo Pink
+ @tab 6.71:1
+@end multitable
+
+Every foreground token clears 4.5:1 on all three backgrounds --- no restricted
+pairings. The weakest pairing is @code{accent} on @code{surface} at 4.72:1.
+
+@strong{The surfaces are pink-tinted rather than neutral black, and that is the
+palette's whole point.} In the storefronts it is drawn from, backlit pink is
+the dominant @emph{field} and glossy black is the frame around it; a near-black
+panel inverts the relationship. Backlit Rose is the boldest surface the contrast
+floor permits --- one step pinker drops @code{accent} to 4.47:1 and buys the
+palette its first restricted pairing. Glowing Pink is the pressed state and is
+not bindable to a role token.
+
+@code{steelbore-blackpinkpanther-high-contrast} lifts @code{accent} to Hot
+Pink Lift (7.65:1) and @code{structure}/@code{border} to Flamingo Lift
+(8.31:1).
+
+@subsection §11.3.8 — Steelbore Green
+
+Anchored on @strong{Vampire Black} and @strong{Erin}. This is the Matrix
+palette, and it is the only conforming member whose brand hue is the
+@strong{body text}: @strong{Erin carries @code{foreground}, not
+@code{accent}}, because green-on-black terminal text is the thing being
+reproduced. Steelbore Classic set the precedent for a non-neutral foreground
+with Molten Amber (§11.2). Rain Head --- the bright leading glyph of the digital
+rain --- carries @code{accent} and @code{focus}.
+
+@multitable {@code{surface-alt}} {Cascade Green} {vs canvas}
+@headitem
+Role token
+ @tab Token
+ @tab vs canvas
+@item
+@code{background}
+ @tab Vampire Black
+ @tab (canvas)
+@item
+@code{surface}
+ @tab Rain Shadow
+ @tab 1.11:1
+@item
+@code{surface-alt}
+ @tab Royal Black
+ @tab 1.01:1
+@item
+@code{foreground}
+ @tab Erin
+ @tab 14.94:1
+@item
+@code{accent}
+ @tab Rain Head
+ @tab 19.42:1
+@item
+@code{structure}
+ @tab Lucky Green
+ @tab 6.09:1
+@item
+@code{success}
+ @tab Cascade Green
+ @tab 6.79:1
+@item
+@code{error}
+ @tab Ember Red
+ @tab 7.35:1
+@item
+@code{warning}
+ @tab Solar Amber
+ @tab 13.26:1
+@item
+@code{focus}
+ @tab Rain Head
+ @tab 19.42:1
+@item
+@code{border}
+ @tab Lucky Green
+ @tab 6.09:1
+@end multitable
+
+No restricted pairings; the weakest pairing is @code{structure} on
+@code{surface} at 5.47:1.
+
+@strong{Cascade Green is a deepened hue, and three source greens are not role
+tokens at all.} Islam Green measures 4.80:1 on the canvas and 4.31:1 on the
+surface --- under the floor exactly where status text would sit --- so
+@code{success} ships deepened, for the same reason §11.3.4 deepens NavyWhite's
+status hues. Dark Green (Traditional), Australia Green and Islam Green are
+carried as @strong{non-role fills}: none reaches the text floor, and saying so
+here is cheaper than an implementor discovering it.
+
+@strong{A consequence worth stating:} @code{foreground}, @code{structure}
+and @code{success} are all greens, so they are separated by luminance rather
+than hue. §18.2.1 already forbids colour as the sole carrier of meaning, and
+this palette is the clearest case for it --- every coloured status here carries
+its @code{[OK]}, @code{[WARN]} or @code{[ERROR]} tag.
+
+@code{steelbore-green-high-contrast} lifts @code{structure}/@code{border}
+to Lucky Lift (7.87:1) and @code{success} to Cascade Lift (7.65:1).
+
+@subsection §11.3.9 — Steelbore Green Alt
+
+The same colours as §11.3.8 with the two brightest roles exchanged:
+@code{foreground} is @strong{Rain Wash}, a near-white with a green cast, and
+@strong{Erin} becomes @code{accent} and @code{focus}. Long prose then
+reads in a neutral rather than in saturated green, and the Matrix green draws
+the eye instead of carrying every paragraph.
+
+@multitable {@code{surface-alt}} {Cascade Green} {vs canvas}
+@headitem
+Role token
+ @tab Token
+ @tab vs canvas
+@item
+@code{background}
+ @tab Vampire Black
+ @tab (canvas)
+@item
+@code{surface}
+ @tab Rain Shadow
+ @tab 1.11:1
+@item
+@code{surface-alt}
+ @tab Royal Black
+ @tab 1.01:1
+@item
+@code{foreground}
+ @tab Rain Wash
+ @tab 17.51:1
+@item
+@code{accent}
+ @tab Erin
+ @tab 14.94:1
+@item
+@code{structure}
+ @tab Lucky Green
+ @tab 6.09:1
+@item
+@code{success}
+ @tab Cascade Green
+ @tab 6.79:1
+@item
+@code{error}
+ @tab Ember Red
+ @tab 7.35:1
+@item
+@code{warning}
+ @tab Solar Amber
+ @tab 13.26:1
+@item
+@code{focus}
+ @tab Erin
+ @tab 14.94:1
+@item
+@code{border}
+ @tab Lucky Green
+ @tab 6.09:1
+@end multitable
+
+Canvas, surfaces, status tones, non-role fills and both high-contrast lifts are
+identical to §11.3.8. A project declares one or the other, never both (§11.4) ---
+they are two readings of one set, not a pair.
+
 @node Palette Selection
 @section §11.4 — Palette Selection
 
@@ -2701,7 +2953,7 @@ theme lookups use, and it is unchanged by this section. Both forms appear in
 the canonical file, the reference name as the @code{reference} key of each
 @code{[palettes.<slug>]} table.
 
-@multitable {@code{steelbore-blackpinkpanther}} {@code{blackpinkpanther-color-palette}}
+@multitable {@code{steelbore-magnetar}} {@code{magnetar-color-palette}}
 @headitem
 Slug (machine identifier)
  @tab Reference name
@@ -2715,11 +2967,11 @@ Slug (machine identifier)
 @code{steelbore-blue}
  @tab @code{blue-color-palette}
 @item
-@code{steelbore-blackpinkpanther}
- @tab @code{blackpinkpanther-color-palette}
+@code{steelbore-magnetar}
+ @tab @code{magnetar-color-palette}
 @item
-@code{steelbore-matrixgreen}
- @tab @code{matrixgreen-color-palette}
+@code{steelbore-biolume}
+ @tab @code{biolume-color-palette}
 @item
 @code{steelbore-navywhite}
  @tab @code{navywhite-color-palette}
@@ -2729,6 +2981,15 @@ Slug (machine identifier)
 @item
 @code{steelbore-hanzosteel}
  @tab @code{hanzosteel-color-palette}
+@item
+@code{steelbore-blackpinkpanther}
+ @tab @code{blackpinkpanther-color-palette}
+@item
+@code{steelbore-green}
+ @tab @code{green-color-palette}
+@item
+@code{steelbore-greenalt}
+ @tab @code{greenalt-color-palette}
 @item
 @code{solarized-dark}
  @tab @code{solarizeddark-color-palette}
@@ -2945,22 +3206,24 @@ A project @strong{authors} against one palette and @strong{registers}
 several. These are different obligations, and §11.4's one-palette rule
 governs only the first.
 
-The @strong{registered set} is the fifteen themes that bind the §11.1
+The @strong{registered set} is the twenty-one themes that bind the §11.1
 eleven-role contract:
 
-@multitable {@strong{MUST NOT register}} {The seven conforming palettes --- @code{steelbore}, @code{steelbore-blue}} {The smallest set that answers every §11.6.3 outcome without falling back}
+@multitable {@strong{MUST NOT register}} {The ten conforming palettes --- @code{steelbore}, @code{steelbore-blue}} {The smallest set that answers every §11.6.3 outcome without falling back}
 @headitem
 Obligation
  @tab Themes
  @tab Why
 @item
 @strong{MUST register}
- @tab The seven conforming palettes --- @code{steelbore},
-@code{steelbore-blue}, @code{steelbore-blackpinkpanther},
-@code{steelbore-matrixgreen}, @code{steelbore-navywhite},
-@code{tokyonight}, @code{steelbore-hanzosteel} --- each with its
+ @tab The ten conforming palettes --- @code{steelbore},
+@code{steelbore-blue}, @code{steelbore-magnetar},
+@code{steelbore-biolume}, @code{steelbore-navywhite},
+@code{tokyonight}, @code{steelbore-hanzosteel},
+@code{steelbore-blackpinkpanther}, @code{steelbore-green},
+@code{steelbore-greenalt} --- each with its
 @code{-high-contrast} sibling, plus
-@code{steelbore-mono}. Fifteen themes
+@code{steelbore-mono}. Twenty-one themes
  @tab Every one binds the same eleven role tokens, so a theme layer that
 reads @code{steelbore.toml} registers them in a loop. A declaration can
 then always be answered
@@ -2978,9 +3241,9 @@ user-selectable extra
  @tab §11.5 bars adoption, and this section is not a route around it
 @end multitable
 
-Three of the fifteen were already required --- the project's own palette
+Three of the twenty-one were already required --- the project's own palette
 by §11.4, its @code{-high-contrast} sibling by §11.1.1, and
-@code{steelbore-mono} by §11.1.1 --- so this section adds twelve themes, all
+@code{steelbore-mono} by §11.1.1 --- so this section adds eighteen themes, all
 of them already written out in @code{steelbore.toml}.
 
 @strong{Registering is not defaulting.} The default remains the project's
@@ -6363,7 +6626,7 @@ palette (in-app selection, then @code{SPACECRAFT_THEME}, then the §11.6.4
 system declaration, then the platform color scheme, then the project's
 §11.4 default), then variant overlay (a pinned variant, then
 @code{NO_COLOR} ⇒ @code{steelbore-mono}, then §18.1 accessible mode, then
-platform high contrast); the registered set covers §11.6.1's fifteen
+platform high contrast); the registered set covers §11.6.1's twenty-one
 eleven-role themes; an unknown or unregistered slug falls through rather
 than failing; palette switches are atomic and whole-surface and carry the
 new canvas; resolved theme and deciding source reported under
