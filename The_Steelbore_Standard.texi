@@ -5,11 +5,11 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 2.03
+@settitle The Steelbore Standard 2.05
 @c %**end of header
 
-@set VERSION 2.04
-@set UPDATED 2026-09-14
+@set VERSION 2.05
+@set UPDATED 2026-09-15
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
 @copying
@@ -1708,6 +1708,12 @@ Theme slug
  @tab @code{Night}
  @tab Dark
  @tab Alternate (§11.3)
+@item
+@code{steelbore-hanzosteel}
+ @tab Steelbore Hanzo Steel
+ @tab @code{Sumi Black}
+ @tab Dark
+ @tab Alternate (§11.3)
 @end multitable
 
 @strong{Polarity} is the canvas's light/dark class, and it is normative
@@ -2109,7 +2115,7 @@ on Red Oxide is 1.13:1 and Radium Green on Liquid Coolant is 1.01:1.
 @node Alternate Palettes
 @section §11.3 — Alternate Palettes
 
-Five alternate palettes are registered. Each declares its own canvas,
+Six alternate palettes are registered. Each declares its own canvas,
 its own surfaces, and a full set of §11.1 role tokens verified against
 all three of its backgrounds. @strong{A project adopts exactly one
 palette} (§11.4); tokens are never mixed across palettes.
@@ -2469,6 +2475,92 @@ canvas: @code{accent} to Tokyo Blue Lift (8.44:1)
 and @code{error} to Sakura Lift (8.22:1). The
 other six carry over verbatim.
 
+@subsection §11.3.6 — Steelbore Hanzo Steel
+
+Anchored on @strong{Sumi Black} and @strong{Hanzo Gold}. The palette's
+colors are drawn from the poster art for @emph{Kill Bill Vol. 1}; the name
+is the standard's own, so that a published specification does not carry a
+film title it has no licence to. Sumi Black is the family's @strong{only
+pure-black canvas} --- every other member, light or dark, tints its ground.
+
+@multitable {@code{surface-alt}} {Scabbard Slate} {vs canvas}
+@headitem
+Role token
+ @tab Token
+ @tab vs canvas
+@item
+@code{background}
+ @tab Sumi Black
+ @tab (canvas)
+@item
+@code{surface}
+ @tab Scabbard Slate
+ @tab 1.19:1
+@item
+@code{surface-alt}
+ @tab Ink Well
+ @tab 1.06:1
+@item
+@code{foreground}
+ @tab Bone White
+ @tab 18.49:1
+@item
+@code{accent}
+ @tab Hanzo Gold
+ @tab 14.77:1
+@item
+@code{structure}
+ @tab Tempered Gold
+ @tab 11.79:1
+@item
+@code{success}
+ @tab Mint Signal
+ @tab 13.02:1
+@item
+@code{error}
+ @tab Crimson Edge
+ @tab 5.77:1
+@item
+@code{warning}
+ @tab Gold Leaf
+ @tab 14.01:1
+@item
+@code{focus}
+ @tab Hanzo Gold
+ @tab 14.77:1
+@item
+@code{border}
+ @tab Tempered Gold
+ @tab 11.79:1
+@end multitable
+
+Every foreground token clears 4.5:1 on all three backgrounds --- no
+restricted pairings. The weakest pairing in the palette is @code{error} on
+@code{surface} at 4.85:1.
+
+@strong{Crimson Edge is a deepened hue, and the section says so rather than
+leaving a reader to wonder why the source red is not the shipped one.} The
+poster's red measures 4.03:1 on Sumi Black and 3.39:1 on Scabbard Slate ---
+below the 4.5:1 text floor on the canvas, and on the surface below it by
+enough that error prose would have been unreadable at normal size. It is
+deepened here for the same reason §11.3.4 deepens NavyWhite's status hues:
+this is a conforming alternate, not a §11.5 fidelity palette, so nothing
+obliges it to reproduce a source value that does not reach the floor. A
+palette that shipped the verbatim red would have bought fidelity to a film
+poster with a @code{error} token no application could set in body text.
+
+Three golds carry three distinct roles --- @code{accent}, @code{warning},
+and @code{structure} --- and they are separated by luminance rather than by
+hue. That is legible, but it is not sufficient on its own: §18.2.1 already
+forbids color as the sole carrier of meaning, and a warning distinguished
+from an accent only by being one gold rather than another is exactly the
+case that rule exists for. Every colored status in this palette carries its
+@code{[WARN]} or @code{[ERROR]} tag.
+
+@code{steelbore-hanzosteel-high-contrast} lifts @code{error} alone, to
+Ember Lift (9.58:1); every other token already clears 7:1 on the canvas and
+carries over verbatim.
+
 @node Palette Selection
 @section §11.4 — Palette Selection
 
@@ -2580,6 +2672,9 @@ Slug (machine identifier)
 @item
 @code{tokyonight}
  @tab @code{tokyonight-color-palette}
+@item
+@code{steelbore-hanzosteel}
+ @tab @code{hanzosteel-color-palette}
 @item
 @code{solarized-dark}
  @tab @code{solarizeddark-color-palette}
@@ -2796,21 +2891,22 @@ A project @strong{authors} against one palette and @strong{registers}
 several. These are different obligations, and §11.4's one-palette rule
 governs only the first.
 
-The @strong{registered set} is the thirteen themes that bind the §11.1
+The @strong{registered set} is the fifteen themes that bind the §11.1
 eleven-role contract:
 
-@multitable {@strong{MUST NOT register}} {The six conforming palettes --- @code{steelbore}, @code{steelbore-blue}} {The smallest set that answers every §11.6.3 outcome without falling back}
+@multitable {@strong{MUST NOT register}} {The seven conforming palettes --- @code{steelbore}, @code{steelbore-blue}} {The smallest set that answers every §11.6.3 outcome without falling back}
 @headitem
 Obligation
  @tab Themes
  @tab Why
 @item
 @strong{MUST register}
- @tab The six conforming palettes --- @code{steelbore},
+ @tab The seven conforming palettes --- @code{steelbore},
 @code{steelbore-blue}, @code{steelbore-blackpinkpanther},
 @code{steelbore-matrixgreen}, @code{steelbore-navywhite},
-@code{tokyonight} --- each with its @code{-high-contrast} sibling, plus
-@code{steelbore-mono}. Thirteen themes
+@code{tokyonight}, @code{steelbore-hanzosteel} --- each with its
+@code{-high-contrast} sibling, plus
+@code{steelbore-mono}. Fifteen themes
  @tab Every one binds the same eleven role tokens, so a theme layer that
 reads @code{steelbore.toml} registers them in a loop. A declaration can
 then always be answered
@@ -2828,9 +2924,9 @@ user-selectable extra
  @tab §11.5 bars adoption, and this section is not a route around it
 @end multitable
 
-Three of the thirteen were already required --- the project's own palette
+Three of the fifteen were already required --- the project's own palette
 by §11.4, its @code{-high-contrast} sibling by §11.1.1, and
-@code{steelbore-mono} by §11.1.1 --- so this section adds ten themes, all
+@code{steelbore-mono} by §11.1.1 --- so this section adds twelve themes, all
 of them already written out in @code{steelbore.toml}.
 
 @strong{Registering is not defaulting.} The default remains the project's
@@ -6131,7 +6227,7 @@ palette (in-app selection, then @code{SPACECRAFT_THEME}, then the §11.6.4
 system declaration, then the platform color scheme, then the project's
 §11.4 default), then variant overlay (a pinned variant, then
 @code{NO_COLOR} ⇒ @code{steelbore-mono}, then §18.1 accessible mode, then
-platform high contrast); the registered set covers §11.6.1's thirteen
+platform high contrast); the registered set covers §11.6.1's fifteen
 eleven-role themes; an unknown or unregistered slug falls through rather
 than failing; palette switches are atomic and whole-surface and carry the
 new canvas; resolved theme and deciding source reported under
