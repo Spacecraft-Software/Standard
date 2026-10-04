@@ -29,7 +29,7 @@ repository](https://github.com/Spacecraft-Software/Standard), newest
 entry first. It is kept out of this document so the standard reads as
 the rules *in force* rather than the record of how they got there.
 
-This document is **version 2.10**, updated 2026-10-04 (§14: UTC, ISO
+This document is **version 2.11**, updated 2026-10-05 (§14: UTC, ISO
 8601). The skill encoding of the standard keeps a parallel history in
 `spacecraft-steelbore-standard/references/CHANGELOG.md` in the
 [Construct
@@ -2614,7 +2614,7 @@ what each bar measures.
 
     Project: Operator
 
-    M0:   [████████████████████] 100%   Foundation and build
+    M0:   [████████████████████] 100%   Foundation: not needed
     M1:   [████████████████░░░░]  80%   Daily-driver shell
     M2:   [████░░░░░░░░░░░░░░░░]  20%   Plugin system
     MVP:  [██████████████░░░░░░]  70%   Operator v0.1
@@ -2650,12 +2650,17 @@ description holds depends on the row:
 - **`PLAN` and `PRD`** name the artifact and the part of it the figure
   covers: `PRD.md, M0–M2`.
 
-A milestone the plan still defines but that the work no longer needs
-stays in the block at its true figure, and its description says so —
-`Foundation: not needed`, `Sync: dropped` — so a reader does not mistake
-a deliberate skip for work not yet started. A description never stands
-in for a missing row or justifies a fabricated one: the rule below on
-applicable rows is unchanged.
+**A milestone the work no longer needs reports 100%.** The block exists
+so a reader can see at a glance how much is done and how much remains,
+and nothing remains of a milestone nobody has to build — shown at 0%, it
+would read as the largest piece of outstanding work in the block, which
+is the opposite of the truth. Its description says why it is complete —
+`Foundation: not needed`, `Sync: dropped` — and that description is what
+keeps the 100% honest: without it the row would claim the milestone was
+built. The row stays in the block rather than being removed, so the
+milestone numbering the plan defines is still visible. A description
+never stands in for a missing row or justifies a fabricated one: the
+rule below on applicable rows is unchanged.
 
 **Row order** is fixed: milestone rows `M0`…`Mn` in ascending order,
 then `MVP`, then `TODO`, then `PLAN`, then `PRD`.
@@ -2665,13 +2670,15 @@ requirement set (§20), each figure is the fraction of that milestone’s
 baselined requirements whose status is `verified` (§20.3), read from the
 traceability matrix (§21.3) rather than estimated. Where no requirement
 set exists — Category D work, or a project below the §19.3 threshold —
-the figure is the maintainer’s estimate and is understood as one. A
-percentage that cannot name what it is a fraction of is an impression,
-and impressions are what §17 exists to replace.
+the figure is the maintainer’s estimate and is understood as one.
+Withdrawn requirements leave the denominator, so a milestone whose
+requirements have all been withdrawn has nothing left open and reports
+100%, as above. A percentage that cannot name what it is a fraction of
+is an impression, and impressions are what §17 exists to replace.
 
 **Only applicable rows are emitted.** The milestone rows match the
 milestones the plan actually defines — there is no fixed count, and
-`M0`–`M4` in the template above is an illustration, not a required set.
+`M0`–`M2` in the template above is an illustration, not a required set.
 `TODO`, `PLAN`, and `PRD` each appear only when the task is driven by
 such an artifact. `MVP` is always present. A row is never padded in at
 0% to fill out the block: a fabricated track reports progress against
@@ -3150,7 +3157,7 @@ A project claims conformance in `README.md`, in one line, naming the
 standard version, the category, and whether the claim is full or
 tailored:
 
-    Conforms to The Steelbore Standard v2.10 --- Category B, tailored
+    Conforms to The Steelbore Standard v2.11 --- Category B, tailored
     (§22, §23; see COMPLIANCE.md).
 
 **Full conformance** means every applicable clause is applied and the

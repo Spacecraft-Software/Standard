@@ -5,11 +5,11 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 2.10
+@settitle The Steelbore Standard 2.11
 @c %**end of header
 
-@set VERSION 2.10
-@set UPDATED 2026-10-04
+@set VERSION 2.11
+@set UPDATED 2026-10-05
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
 @copying
@@ -4543,7 +4543,7 @@ A progress report is a title line followed by a block of labelled rows, one row 
 @example
 Project: Operator
 
-M0:   [████████████████████] 100%   Foundation and build
+M0:   [████████████████████] 100%   Foundation: not needed
 M1:   [████████████████░░░░]  80%   Daily-driver shell
 M2:   [████░░░░░░░░░░░░░░░░]  20%   Plugin system
 MVP:  [██████████████░░░░░░]  70%   Operator v0.1
@@ -4567,7 +4567,7 @@ PRD:  [██████████░░░░░░░░░░]  50%   PRD.
 @strong{@code{PLAN} and @code{PRD}} name the artifact and the part of it the figure covers: @code{PRD.md, M0–M2}.
 @end itemize
 
-A milestone the plan still defines but that the work no longer needs stays in the block at its true figure, and its description says so — @code{Foundation: not needed}, @code{Sync: dropped} — so a reader does not mistake a deliberate skip for work not yet started. A description never stands in for a missing row or justifies a fabricated one: the rule below on applicable rows is unchanged.
+@strong{A milestone the work no longer needs reports 100%.} The block exists so a reader can see at a glance how much is done and how much remains, and nothing remains of a milestone nobody has to build — shown at 0%, it would read as the largest piece of outstanding work in the block, which is the opposite of the truth. Its description says why it is complete — @code{Foundation: not needed}, @code{Sync: dropped} — and that description is what keeps the 100% honest: without it the row would claim the milestone was built. The row stays in the block rather than being removed, so the milestone numbering the plan defines is still visible. A description never stands in for a missing row or justifies a fabricated one: the rule below on applicable rows is unchanged.
 
 @strong{Row order} is fixed: milestone rows @code{M0}…@code{Mn} in ascending order, then @code{MVP}, then @code{TODO}, then @code{PLAN}, then @code{PRD}.
 
@@ -4576,11 +4576,11 @@ requirement set (§20), each figure is the fraction of that milestone's
 baselined requirements whose status is @code{verified} (§20.3), read from the
 traceability matrix (§21.3) rather than estimated. Where no requirement set
 exists --- Category D work, or a project below the §19.3 threshold --- the
-figure is the maintainer's estimate and is understood as one. A percentage
+figure is the maintainer's estimate and is understood as one. Withdrawn requirements leave the denominator, so a milestone whose requirements have all been withdrawn has nothing left open and reports 100%, as above. A percentage
 that cannot name what it is a fraction of is an impression, and impressions
 are what §17 exists to replace.
 
-@strong{Only applicable rows are emitted.} The milestone rows match the milestones the plan actually defines — there is no fixed count, and @code{M0}–@code{M4} in the template above is an illustration, not a required set. @code{TODO}, @code{PLAN}, and @code{PRD} each appear only when the task is driven by such an artifact. @code{MVP} is always present. A row is never padded in at 0% to fill out the block: a fabricated track reports progress against nothing and misrepresents the work.
+@strong{Only applicable rows are emitted.} The milestone rows match the milestones the plan actually defines — there is no fixed count, and @code{M0}–@code{M2} in the template above is an illustration, not a required set. @code{TODO}, @code{PLAN}, and @code{PRD} each appear only when the task is driven by such an artifact. @code{MVP} is always present. A row is never padded in at 0% to fill out the block: a fabricated track reports progress against nothing and misrepresents the work.
 
 @section §17.2 — Progress Bar Style
 
