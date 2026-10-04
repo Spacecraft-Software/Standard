@@ -2667,14 +2667,24 @@ then `MVP`, then `TODO`, then `PLAN`, then `PRD`.
 
 **Percentages have a denominator.** Where the project maintains a
 requirement set (§20), each figure is the fraction of that milestone’s
-baselined requirements whose status is `verified` (§20.3), read from the
-traceability matrix (§21.3) rather than estimated. Where no requirement
-set exists — Category D work, or a project below the §19.3 threshold —
-the figure is the maintainer’s estimate and is understood as one.
-Withdrawn requirements leave the denominator, so a milestone whose
-requirements have all been withdrawn has nothing left open and reports
-100%, as above. A percentage that cannot name what it is a fraction of
-is an impression, and impressions are what §17 exists to replace.
+baselined `mandatory` and `expected` requirements whose status is
+`verified` (§20.3), read from the traceability matrix (§21.3) rather
+than estimated. Where no requirement set exists — Category D work, or a
+project below the §19.3 threshold — the figure is the maintainer’s
+estimate and is understood as one. Withdrawn requirements leave the
+denominator, so a milestone whose requirements have all been withdrawn
+has nothing left open and reports 100%, as above. A percentage that
+cannot name what it is a fraction of is an impression, and impressions
+are what §17 exists to replace.
+
+**100% means everything required is done — and only that.** A figure
+counts required work alone: requirements whose priority is `mandatory`
+or `expected` (§20.3), and tracking-document items not marked optional
+(§17.5). Optional work never enters the denominator, so finishing it
+cannot raise a bar and leaving it undone cannot hold one below 100%. A
+milestone whose required work is done reports 100% with optional items
+still open; its description MAY note them
+(`Plugin system, +2 optional`).
 
 **Only applicable rows are emitted.** The milestone rows match the
 milestones the plan actually defines — there is no fixed count, and
@@ -2781,6 +2791,96 @@ the part the reader trusts.
 turn, never substituted for the detail, the file list, the caveats, or
 the §17.1 progress block. Two lines cannot carry a hand-off, and a turn
 that answers with a TL;DR alone has reported nothing.
+
+## §17.5 — Tracking Documents (PRD, PLAN, TODO)
+
+§17.1 asks every figure to name its denominator. This section fixes the
+shape of the documents that supply it, so a §17.1 block can be read
+straight off them — by a person counting ticks or by a script — rather
+than reconstructed from memory. It governs `PRD.md`, `PLAN.md`, and
+`TODO.md` wherever a project keeps them. Where a §20 requirement set
+exists it remains the obligation; these documents sequence the work
+against it (§20.1) and never restate it.
+
+**Title.** The file opens with a level-1 heading naming the project and
+the document: `# Operator — Plan`. It supplies the §17.1 title line.
+
+**MVP scope.** A `PLAN.md` or `PRD.md` that defines milestones states
+once, directly under the title, which milestones make up the MVP and
+what it delivers: `MVP: M0–M2 — Operator v0.1`. The §17.1 `MVP` row
+counts the required items in those milestones, and its description is
+the text after the dash.
+
+**Milestones.** Each milestone is a level-2 heading,
+`## M1 — Daily-driver shell`, numbered as the plan defines it. The text
+after the em dash is that milestone’s §17.1 description, verbatim, so it
+obeys the same 40-character limit. A `TODO.md` with no milestones is a
+flat list and feeds only the `TODO` row.
+
+**Items.** Every item is a GitHub task-list item carrying a permanent
+identifier, unique within the file and never reused — `R-` in a PRD (or
+the §20.3 identifier where a requirement set exists), `P-` in a plan,
+`T-` in a TODO:
+
+| Item | Meaning | Counted |
+|----|----|----|
+| `- [ ] P-003 History search` | Required, not done | In the total |
+| `- [x] P-001 Prompt renders` | Required, done | In the total and in the done count |
+| `- [ ] P-004 Themes (optional)` | Optional | Never |
+| `- [ ] ~~P-005 Mouse support~~ (dropped)` | Removed from scope; keeps its identifier | Never |
+
+An item is **required** unless it ends in `(optional)`. Required means
+`mandatory` or `expected` in the §20.3 sense; `optional` is the only
+priority left out. An item is ticked when the work is complete and
+checked — for a requirement-backed item, when its status is `verified` —
+never when it is merely started.
+
+**Counting.** A milestone’s figure is its ticked required items over its
+required items, rounded per §17.2. `PLAN` and `PRD` count every required
+item in their file, and `TODO` does the same, its description reading
+`<done>/<total> tasks`. Optional and dropped items never enter a count:
+finishing them cannot raise a bar, and leaving them undone cannot hold
+one below 100%. A description MAY note them — `34/50 tasks, +3 optional`
+— within its 40 characters.
+
+**A milestone with nothing required reports 100%** (§17.1) only when its
+heading says why: `## M0 — Foundation: not needed`. A milestone with no
+items whose heading does not say so is an unwritten part of the plan,
+not a finished one, and is reported as an error rather than as 100%.
+
+**Worked example:**
+
+    # Operator — Plan
+
+    MVP: M0–M2 — Operator v0.1
+
+    ## M0 — Foundation: not needed
+
+    ## M1 — Daily-driver shell
+
+    - [x] P-001 Prompt renders
+    - [x] P-002 Line editing
+    - [ ] P-003 History search
+    - [ ] P-004 Themes (optional)
+    - [ ] ~~P-005 Mouse support~~ (dropped)
+
+    ## M2 — Plugin system
+
+    - [ ] P-006 Plugin loader
+
+reads off as:
+
+    Project: Operator
+
+    M0:   [████████████████████] 100%   Foundation: not needed
+    M1:   [█████████████░░░░░░░]  67%   Daily-driver shell
+    M2:   [░░░░░░░░░░░░░░░░░░░░]   0%   Plugin system
+    MVP:  [██████████░░░░░░░░░░]  50%   Operator v0.1
+    PLAN: [██████████░░░░░░░░░░]  50%   PLAN.md, M0–M2
+
+`M1` is two of three required items: `P-004` is optional and `P-005` was
+dropped, so neither counts. `MVP` and `PLAN` are two of four required
+items across `M0`–`M2`.
 
 ————————————————————————
 
@@ -3239,7 +3339,7 @@ missing any of them does not pass G1:
 |----|----|
 | Rationale | Why this is required. One sentence. A requirement whose rationale cannot be written is a design decision in disguise and belongs in the design record. |
 | Source | The need it satisfies, an upstream standard, a platform constraint, or a clause of this standard. |
-| Priority | `mandatory` / `expected` / `optional`. Drives what MVP means in §17. |
+| Priority | `mandatory` / `expected` / `optional`. Drives what MVP means in §17. Only `mandatory` and `expected` count toward the §17 figures; `optional` never does. |
 | Verification method | One of the four methods in §21.1, chosen when the requirement is written, not after the code exists and the cheapest evidence is obvious. |
 | Status | `draft` / `baselined` / `implemented` / `verified` / `withdrawn`. The denominator of the §17 progress figures. |
 
@@ -3952,8 +4052,14 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
   naming the registered project, one 20-cell bar per track, milestone
   rows then MVP then TODO/PLAN/PRD, only the rows that apply, each row
   ending in a short description of its track (TODO as a done/total
-  count); every row set in `█`/`░` with tight brackets, columns aligned,
-  no ASCII bars
+  count); figures count required work only, never optional; every row
+  set in `█`/`░` with tight brackets, columns aligned, no ASCII bars
+
+- [ ] **§17.5** `PRD.md`, `PLAN.md`, and `TODO.md`, where kept, open
+  with a project title, state the MVP scope, use one level-2 heading per
+  milestone, and list items as task-list entries with permanent
+  identifiers, marking `(optional)` and `(dropped)` items; a milestone
+  with no required items says why in its heading
 
 - [ ] **§17.4** Every turn that hands control back to the user ends with
   a two-line `TL;DR:` block in simplified English, placed last: a plain
