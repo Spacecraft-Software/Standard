@@ -5,11 +5,11 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 2.08
+@settitle The Steelbore Standard 2.10
 @c %**end of header
 
-@set VERSION 2.08
-@set UPDATED 2026-09-15
+@set VERSION 2.10
+@set UPDATED 2026-10-04
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
 @copying
@@ -4537,20 +4537,37 @@ When implementing features or writing code based on a Product Requirements Docum
 
 @section §17.1 — Progress Reporting Format
 
-A progress report is a block of labelled rows, one row per tracked track. Every row carries its own 20-cell bar and its own percentage, so each figure is legible on its own line rather than compressed into a shared summary line.
+A progress report is a title line followed by a block of labelled rows, one row per tracked track. Every row carries its own 20-cell bar, its own percentage, and a short description of what the track is, so each figure is legible on its own line rather than compressed into a shared summary line, and a reader who does not know the plan can still tell what each bar measures.
 
 @strong{Format template:}
 @example
-M0:   [████████████░░░░░░░░]  60%
-M1:   [████████████░░░░░░░░]  60%
-M2:   [████████████░░░░░░░░]  60%
-M3:   [████████████░░░░░░░░]  60%
-M4:   [████████████░░░░░░░░]  60%
-MVP:  [██████████████░░░░░░]  70%
-TODO: [████████████░░░░░░░░]  60%
-PLAN: [████████████░░░░░░░░]  60%
-PRD:  [████████████░░░░░░░░]  60%
+Project: Operator
+
+M0:   [████████████████████] 100%   Foundation and build
+M1:   [████████████████░░░░]  80%   Daily-driver shell
+M2:   [████░░░░░░░░░░░░░░░░]  20%   Plugin system
+MVP:  [██████████████░░░░░░]  70%   Operator v0.1
+TODO: [██████████████░░░░░░]  68%   34/50 tasks
+PLAN: [████████████░░░░░░░░]  60%   PLAN.md, phases 1–3
+PRD:  [██████████░░░░░░░░░░]  50%   PRD.md, M0–M2
 @end example
+
+@strong{The title line names the project.} The block opens with @code{Project:}, one space, and the project's registered name (§2.1) — the name a reader would look up in @code{PROJECTS.md}, not a repository path or an internal nickname. Where the plan covers only part of a project, the scope follows the name after an em dash: @code{Project: Construct — gemini build target}. One blank line separates the title from the rows. A turn that reports on more than one project emits one titled block per project, never one block mixing their rows.
+
+@strong{Every row carries a description.} After the percentage, each row names its track in a few words: one line, at most 40 characters, sentence case, no trailing full stop. It says what the track @emph{is}, not how it is going — the bar and the percentage already say that. What the description holds depends on the row:
+
+@itemize
+@item
+@strong{Milestone rows} (@code{M0}…@code{Mn}) carry the milestone's name or goal as the plan states it: @code{Daily-driver shell}, @code{Plugin system}.
+@item
+@strong{@code{MVP}} carries the deliverable the minimum viable product is: the release or artifact a user would receive, such as @code{Operator v0.1}.
+@item
+@strong{@code{TODO}} carries its count as @code{<done>/<total> tasks}, which is the denominator its percentage is a fraction of, stated rather than implied.
+@item
+@strong{@code{PLAN} and @code{PRD}} name the artifact and the part of it the figure covers: @code{PRD.md, M0–M2}.
+@end itemize
+
+A milestone the plan still defines but that the work no longer needs stays in the block at its true figure, and its description says so — @code{Foundation: not needed}, @code{Sync: dropped} — so a reader does not mistake a deliberate skip for work not yet started. A description never stands in for a missing row or justifies a fabricated one: the rule below on applicable rows is unchanged.
 
 @strong{Row order} is fixed: milestone rows @code{M0}…@code{Mn} in ascending order, then @code{MVP}, then @code{TODO}, then @code{PLAN}, then @code{PRD}.
 
@@ -4571,7 +4588,7 @@ Every bar is a static, 20-cell, high-visibility Unicode bar. Legacy ASCII charac
 
 A single cell style applies to every row — milestones, @code{MVP}, @code{TODO}, @code{PLAN}, and @code{PRD} alike: filled cells are @code{█} (U+2588), empty cells are @code{░} (U+2591), and the brackets are tight, with no space inside either bracket.
 
-@strong{Column alignment is normative.} With one style shared by every row, alignment follows from three rules:
+@strong{Column alignment is normative.} With one style shared by every row, alignment follows from four rules:
 
 @itemize
 @item
@@ -4580,7 +4597,11 @@ On every row, the label and its colon are left-aligned in a six-character field,
 That places the first bar cell in column 8, so every bar occupies columns 8 through 27 and the closing bracket lands in column 28.
 @item
 The percentage is right-aligned in a five-character field immediately after the closing bracket, so its @code{%} sign lands in column 33 whether the value is one, two, or three digits. The separator never drops below one space — at exactly 100% the number consumes one of the two separator spaces — and the block stays aligned at every value.
+@item
+Three spaces follow the @code{%} sign, so every description begins in column 37 and the descriptions form their own aligned column. A description never wraps; one that does not fit in 40 characters is shortened, not continued on a second line.
 @end itemize
+
+The title line and the blank line after it sit outside this geometry; the rows below them start in column 1, unindented.
 
 @strong{Cell count.} The number of filled cells is the percentage scaled to twenty cells and rounded to the nearest cell. Two saturation rules override the rounding: a bar shows twenty filled cells @strong{only} at exactly 100%, and zero filled cells @strong{only} at exactly 0%. Rounding 99% up to a visually complete bar reports work as finished that is not, which is the drift this chapter exists to catch.
 
@@ -6665,8 +6686,10 @@ repository root, harness-written, with @code{.gitignore} covering it.
 @emph{N/A} for a hand-written artifact
 @item
 ☐ @strong{§17} Development progress tracked and reported continuously as
-the §17.1 labelled-row block — one 20-cell bar per track, milestone rows
-then MVP then TODO/PLAN/PRD, only the rows that apply; every row set in
+the §17.1 labelled-row block — opened by a @code{Project:} title line naming
+the registered project, one 20-cell bar per track, milestone rows then MVP
+then TODO/PLAN/PRD, only the rows that apply, each row ending in a short
+description of its track (TODO as a done/total count); every row set in
 @code{█}/@code{░} with tight brackets, columns aligned, no ASCII bars
 @item
 ☐ @strong{§17.4} Every turn that hands control back to the user ends with a
