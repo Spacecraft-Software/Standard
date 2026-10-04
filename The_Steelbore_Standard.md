@@ -29,7 +29,7 @@ repository](https://github.com/Spacecraft-Software/Standard), newest
 entry first. It is kept out of this document so the standard reads as
 the rules *in force* rather than the record of how they got there.
 
-This document is **version 2.08**, updated 2026-09-15 (§14: UTC, ISO
+This document is **version 2.10**, updated 2026-10-04 (§14: UTC, ISO
 8601). The skill encoding of the standard keeps a parallel history in
 `spacecraft-steelbore-standard/references/CHANGELOG.md` in the
 [Construct
@@ -2603,22 +2603,59 @@ implementation status of key milestones.
 
 ## §17.1 — Progress Reporting Format
 
-A progress report is a block of labelled rows, one row per tracked
-track. Every row carries its own 20-cell bar and its own percentage, so
-each figure is legible on its own line rather than compressed into a
-shared summary line.
+A progress report is a title line followed by a block of labelled rows,
+one row per tracked track. Every row carries its own 20-cell bar, its
+own percentage, and a short description of what the track is, so each
+figure is legible on its own line rather than compressed into a shared
+summary line, and a reader who does not know the plan can still tell
+what each bar measures.
 
 **Format template:**
 
-    M0:   [████████████░░░░░░░░]  60%
-    M1:   [████████████░░░░░░░░]  60%
-    M2:   [████████████░░░░░░░░]  60%
-    M3:   [████████████░░░░░░░░]  60%
-    M4:   [████████████░░░░░░░░]  60%
-    MVP:  [██████████████░░░░░░]  70%
-    TODO: [████████████░░░░░░░░]  60%
-    PLAN: [████████████░░░░░░░░]  60%
-    PRD:  [████████████░░░░░░░░]  60%
+    Project: Operator
+
+    M0:   [████████████████████] 100%   Foundation and build
+    M1:   [████████████████░░░░]  80%   Daily-driver shell
+    M2:   [████░░░░░░░░░░░░░░░░]  20%   Plugin system
+    MVP:  [██████████████░░░░░░]  70%   Operator v0.1
+    TODO: [██████████████░░░░░░]  68%   34/50 tasks
+    PLAN: [████████████░░░░░░░░]  60%   PLAN.md, phases 1–3
+    PRD:  [██████████░░░░░░░░░░]  50%   PRD.md, M0–M2
+
+**The title line names the project.** The block opens with `Project:`,
+one space, and the project’s registered name (§2.1) — the name a reader
+would look up in `PROJECTS.md`, not a repository path or an internal
+nickname. Where the plan covers only part of a project, the scope
+follows the name after an em dash:
+`Project: Construct — gemini build target`. One blank line separates the
+title from the rows. A turn that reports on more than one project emits
+one titled block per project, never one block mixing their rows.
+
+**Every row carries a description.** After the percentage, each row
+names its track in a few words: one line, at most 40 characters,
+sentence case, no trailing full stop. It says what the track *is*, not
+how it is going — the bar and the percentage already say that. What the
+description holds depends on the row:
+
+- **Milestone rows** (`M0`…`Mn`) carry the milestone’s name or goal as
+  the plan states it: `Daily-driver shell`, `Plugin system`.
+
+- **`MVP`** carries the deliverable the minimum viable product is: the
+  release or artifact a user would receive, such as `Operator v0.1`.
+
+- **`TODO`** carries its count as `<done>/<total> tasks`, which is the
+  denominator its percentage is a fraction of, stated rather than
+  implied.
+
+- **`PLAN` and `PRD`** name the artifact and the part of it the figure
+  covers: `PRD.md, M0–M2`.
+
+A milestone the plan still defines but that the work no longer needs
+stays in the block at its true figure, and its description says so —
+`Foundation: not needed`, `Sync: dropped` — so a reader does not mistake
+a deliberate skip for work not yet started. A description never stands
+in for a missing row or justifies a fabricated one: the rule below on
+applicable rows is unchanged.
 
 **Row order** is fixed: milestone rows `M0`…`Mn` in ascending order,
 then `MVP`, then `TODO`, then `PLAN`, then `PRD`.
@@ -2651,7 +2688,7 @@ A single cell style applies to every row — milestones, `MVP`, `TODO`,
 bracket.
 
 **Column alignment is normative.** With one style shared by every row,
-alignment follows from three rules:
+alignment follows from four rules:
 
 - On every row, the label and its colon are left-aligned in a
   six-character field, followed immediately by `[`.
@@ -2664,6 +2701,14 @@ alignment follows from three rules:
   the value is one, two, or three digits. The separator never drops
   below one space — at exactly 100% the number consumes one of the two
   separator spaces — and the block stays aligned at every value.
+
+- Three spaces follow the `%` sign, so every description begins in
+  column 37 and the descriptions form their own aligned column. A
+  description never wraps; one that does not fit in 40 characters is
+  shortened, not continued on a second line.
+
+The title line and the blank line after it sit outside this geometry;
+the rows below them start in column 1, unindented.
 
 **Cell count.** The number of filled cells is the percentage scaled to
 twenty cells and rounded to the nearest cell. Two saturation rules
@@ -3105,7 +3150,7 @@ A project claims conformance in `README.md`, in one line, naming the
 standard version, the category, and whether the claim is full or
 tailored:
 
-    Conforms to The Steelbore Standard v2.08 --- Category B, tailored
+    Conforms to The Steelbore Standard v2.10 --- Category B, tailored
     (§22, §23; see COMPLIANCE.md).
 
 **Full conformance** means every applicable clause is applied and the
@@ -3896,9 +3941,12 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
   for a hand-written artifact
 
 - [ ] **§17** Development progress tracked and reported continuously as
-  the §17.1 labelled-row block — one 20-cell bar per track, milestone
-  rows then MVP then TODO/PLAN/PRD, only the rows that apply; every row
-  set in `█`/`░` with tight brackets, columns aligned, no ASCII bars
+  the §17.1 labelled-row block — opened by a `Project:` title line
+  naming the registered project, one 20-cell bar per track, milestone
+  rows then MVP then TODO/PLAN/PRD, only the rows that apply, each row
+  ending in a short description of its track (TODO as a done/total
+  count); every row set in `█`/`░` with tight brackets, columns aligned,
+  no ASCII bars
 
 - [ ] **§17.4** Every turn that hands control back to the user ends with
   a two-line `TL;DR:` block in simplified English, placed last: a plain
