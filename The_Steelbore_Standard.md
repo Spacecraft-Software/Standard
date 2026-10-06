@@ -29,7 +29,7 @@ repository](https://github.com/Spacecraft-Software/Standard), newest
 entry first. It is kept out of this document so the standard reads as
 the rules *in force* rather than the record of how they got there.
 
-This document is **version 2.11**, updated 2026-10-05 (§14: UTC, ISO
+This document is **version 2.12**, updated 2026-10-06 (§14: UTC, ISO
 8601). The skill encoding of the standard keeps a parallel history in
 `spacecraft-steelbore-standard/references/CHANGELOG.md` in the
 [Construct
@@ -706,7 +706,8 @@ Software host inherits the same rule).
 | All commits signed | `commit.gpgsign=true` configured globally. SSH signing (`gpg.format=ssh`) is the current default; GPG is acceptable. The signing key MUST be registered as a **Signing** key on the hosting platform — Authentication-only keys do not validate signatures. |
 | Authorized signing identity | All commits from v1.12 onwards must be signed with the `Mohamed.Hammad@SpacecraftSoftware.org` key. The committer email and the signing key identity must both resolve to `Mohamed.Hammad@SpacecraftSoftware.org`. Commits predating v1.12 are exempt from this requirement. |
 | Hosting-platform "Verified" required | Every commit on a Spacecraft Software remote must show "Verified" on the platform’s commit/PR view. Unsigned or "Unverified" commits MUST be remediated (re-signed via rebase or amend by the original author) before merge to a default branch. |
-| Programmatic commits signed too | Bots, CI pipelines, scripted commits, and assistant-driven commits inherit the same rule — no `--no-gpg-sign`, no signing-disabled subshells. The signing pipeline runs unattended. |
+| Programmatic commits signed too | Bots, CI pipelines, scripted commits, and assistant-driven commits inherit the same rule — no `--no-gpg-sign`, no signing-disabled subshells. The signing pipeline runs unattended, through the signing setup already present where the commit is made (next row). |
+| Agents never handle key material | An agent — an AI assistant, a bot, a script, or a CI job — signs only through the signing setup already configured where it runs: git with an SSH agent or a hardware key on a maintainer’s host, or the CI system’s own secret store. It never creates, reads, copies, exports, or asks for a private key, passphrase, password, or access token, and never writes one into a log, a chat, a commit, or a file. When signing is not configured or fails, the agent stops and reports the failure to the maintainer; it does not request a key, switch to another identity, or disable signing to get past it. |
 | Rewrites preserve signatures | Rebase, amend, cherry-pick, and squash MUST re-sign each resulting commit. Don’t push history that lost signatures through rewriting. |
 | Local verification is best-effort | `git log --show-signature` may report "No signature" on a given host when `~/.ssh/allowed_signers` is not populated — this is a local-verifier gap, not a signing failure. The hosting platform’s "Verified" badge is authoritative. |
 
@@ -3257,7 +3258,7 @@ A project claims conformance in `README.md`, in one line, naming the
 standard version, the category, and whether the claim is full or
 tailored:
 
-    Conforms to The Steelbore Standard v2.11 --- Category B, tailored
+    Conforms to The Steelbore Standard v2.12 --- Category B, tailored
     (§22, §23; see COMPLIANCE.md).
 
 **Full conformance** means every applicable clause is applied and the
@@ -4081,7 +4082,10 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
   cryptographically signed with the
   `Mohamed.Hammad@SpacecraftSoftware.org` key and showing "Verified" on
   the hosting platform; rewrites preserve signatures; programmatic and
-  assistant-driven commits signed too
+  assistant-driven commits signed too, only through the signing setup
+  already configured on the host — no agent creates, reads, requests, or
+  exposes a private key, passphrase, password, or token, and a signing
+  failure is reported, never worked around
 
 - [ ] **§6.4** No commit, pull request, patch, issue, or package
   publication sent to a namespace outside `Spacecraft-Software` /

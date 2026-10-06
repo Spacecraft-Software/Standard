@@ -5,11 +5,11 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 2.11
+@settitle The Steelbore Standard 2.12
 @c %**end of header
 
-@set VERSION 2.11
-@set UPDATED 2026-10-05
+@set VERSION 2.12
+@set UPDATED 2026-10-06
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
 @copying
@@ -1194,7 +1194,11 @@ before merge to a default branch.
 Programmatic commits signed too
  @tab Bots, CI pipelines, scripted commits, and assistant-driven commits
 inherit the same rule --- no @code{--no-gpg-sign}, no signing-disabled
-subshells. The signing pipeline runs unattended.
+subshells. The signing pipeline runs unattended, through the signing
+setup already present where the commit is made (next row).
+@item
+Agents never handle key material
+ @tab An agent --- an AI assistant, a bot, a script, or a CI job --- signs only through the signing setup already configured where it runs: git with an SSH agent or a hardware key on a maintainer's host, or the CI system's own secret store. It never creates, reads, copies, exports, or asks for a private key, passphrase, password, or access token, and never writes one into a log, a chat, a commit, or a file. When signing is not configured or fails, the agent stops and reports the failure to the maintainer; it does not request a key, switch to another identity, or disable signing to get past it.
 @item
 Rewrites preserve signatures
  @tab Rebase, amend, cherry-pick, and squash MUST re-sign each resulting
@@ -6799,7 +6803,10 @@ in full
 cryptographically signed with the
 @code{Mohamed.Hammad@@SpacecraftSoftware.org} key and showing "Verified"
 on the hosting platform; rewrites preserve signatures; programmatic and
-assistant-driven commits signed too
+assistant-driven commits signed too, only through the signing setup already
+configured on the host --- no agent creates, reads, requests, or exposes a
+private key, passphrase, password, or token, and a signing failure is
+reported, never worked around
 @item
 ☐ @strong{§6.4} No commit, pull request, patch, issue, or package
 publication sent to a namespace outside @code{Spacecraft-Software} /
