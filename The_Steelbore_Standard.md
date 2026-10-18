@@ -29,7 +29,7 @@ repository](https://github.com/Spacecraft-Software/Standard), newest
 entry first. It is kept out of this document so the standard reads as
 the rules *in force* rather than the record of how they got there.
 
-This document is **version 2.12**, updated 2026-10-06 (§14: UTC, ISO
+This document is **version 2.13**, updated 2026-10-18 (§14: UTC, ISO
 8601). The skill encoding of the standard keeps a parallel history in
 `spacecraft-steelbore-standard/references/CHANGELOG.md` in the
 [Construct
@@ -730,8 +730,8 @@ Software-controlled host — Gitway, or any successor — inherits the same
 standing. Every other destination is **outbound** and gated.
 
 §6.3 says how a commit must be signed on a Spacecraft Software remote;
-this section says which remotes those are, and what it takes to send
-anything anywhere else.
+this section says which remotes those are, how a push reaches them, and
+what it takes to send anything anywhere else.
 
 **Mandatory rules — violation blocks shipping:**
 
@@ -744,6 +744,7 @@ anything anywhere else.
 | Forks are inbound-only | A fork under an authorized namespace may be created and pushed to freely — that is our namespace. Turning a fork branch into an upstream pull request is the gated act, not the fork itself. |
 | Prefer carrying the patch | When an upstream change is needed, carry the patch in-tree (§4.2 preserves upstream copyright, license texts, and notices) rather than upstreaming it, unless the maintainer authorizes upstreaming. |
 | GNU posture does not exempt | An artifact under the free-software/GNU posture (§1) still requires explicit maintainer authorization before anything is sent to GNU, the FSF, or Savannah. That posture yields this standard’s identity clauses (§2, §11–§12, §15); it does not yield this one. |
+| HTTPS push transport | Every `git push` to GitHub goes over **HTTPS** (`https://github.com/<owner>/<repo>.git`), never SSH (`git@github.com:<owner>/<repo>.git` or `ssh://git@github.com/<owner>/<repo>.git`). Set the push URL to HTTPS (`git remote set-url --push origin https://github.com/<owner>/<repo>.git`), or rewrite both SSH forms for every repository with `git config --global --add url.https://github.com/.pushInsteadOf git@github.com:` and `git config --global --add url.https://github.com/.pushInsteadOf ssh://git@github.com/`. A remote with an explicit `pushurl` bypasses `pushInsteadOf`, so that `pushurl` is itself set to HTTPS. Tooling that pushes — `construct skill ship`, CI, scripts, assistant-driven sessions — names the HTTPS URL or relies on that rewrite. Authentication goes through the credential helper already configured on the host (for example `gh auth git-credential`); under §6.3 no agent creates, reads, or asks for the token. Transport is independent of signing: commits are still signed under §6.3 and keep “Verified”. Clone and fetch may use either transport. |
 | Withdraw mistakes promptly | An outbound submission made without authorization MUST be closed or withdrawn as soon as it is discovered, and the incident recorded. |
 
 ## §6.5 — Text File Format (LF, UTF-8, final newline)
@@ -3258,7 +3259,7 @@ A project claims conformance in `README.md`, in one line, naming the
 standard version, the category, and whether the claim is full or
 tailored:
 
-    Conforms to The Steelbore Standard v2.12 --- Category B, tailored
+    Conforms to The Steelbore Standard v2.13 --- Category B, tailored
     (§22, §23; see COMPLIANCE.md).
 
 **Full conformance** means every applicable clause is applied and the
@@ -4091,7 +4092,8 @@ Before finalising **any** Spacecraft Software artifact, mentally verify:
   publication sent to a namespace outside `Spacecraft-Software` /
   `UnbreakableMJ` without explicit per-contribution maintainer
   authorization; automation, CI, and assistant-driven work never
-  initiate an outbound contribution
+  initiate an outbound contribution; every push to GitHub goes over
+  HTTPS, never SSH
 
 - [ ] **§19** Assurance category (A/B/C/D) declared in `README.md`,
   `AGENTS.md`, and `PROJECTS.md`, with any raised subsystem named; every
