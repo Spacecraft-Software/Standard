@@ -5,11 +5,11 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 2.12
+@settitle The Steelbore Standard 2.13
 @c %**end of header
 
-@set VERSION 2.12
-@set UPDATED 2026-10-06
+@set VERSION 2.13
+@set UPDATED 2026-10-18
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
 @copying
@@ -1230,8 +1230,8 @@ host --- Gitway, or any successor --- inherits the same standing. Every
 other destination is @strong{outbound} and gated.
 
 §6.3 says how a commit must be signed on a Spacecraft Software remote;
-this section says which remotes those are, and what it takes to send
-anything anywhere else.
+this section says which remotes those are, how a push reaches them, and
+what it takes to send anything anywhere else.
 
 @strong{Mandatory rules --- violation blocks shipping:}
 
@@ -1278,6 +1278,22 @@ GNU posture does not exempt
 requires explicit maintainer authorization before anything is sent to
 GNU, the FSF, or Savannah. That posture yields this standard's identity
 clauses (§2, §11--§12, §15); it does not yield this one.
+@item
+HTTPS push transport
+ @tab Every @code{git push} to GitHub goes over @strong{HTTPS}
+(@code{https://github.com/<owner>/<repo>.git}), never SSH
+(@code{git@@github.com:<owner>/<repo>.git} or
+@code{ssh://git@@github.com/<owner>/<repo>.git}). Set the push URL to
+HTTPS (@code{git remote set-url --push origin
+https://github.com/<owner>/<repo>.git}) or rewrite it for every
+repository with @code{git config --global url.https://github.com/.pushInsteadOf
+git@@github.com:}. Tooling that pushes --- @code{construct skill ship}, CI,
+scripts, assistant-driven sessions --- names the HTTPS URL or relies on
+that rewrite. Authentication goes through the credential helper already
+configured on the host (for example @code{gh auth git-credential}); under
+§6.3 no agent creates, reads, or asks for the token. Transport is
+independent of signing: commits are still signed under §6.3 and keep
+``Verified''. Clone and fetch may use either transport.
 @item
 Withdraw mistakes promptly
  @tab An outbound submission made without authorization MUST be closed
@@ -6812,7 +6828,7 @@ reported, never worked around
 publication sent to a namespace outside @code{Spacecraft-Software} /
 @code{UnbreakableMJ} without explicit per-contribution maintainer
 authorization; automation, CI, and assistant-driven work never initiate an
-outbound contribution
+outbound contribution; every push to GitHub goes over HTTPS, never SSH
 @item
 ☐ @strong{§19} Assurance category (A/B/C/D) declared in @file{README.md},
 @file{AGENTS.md}, and @file{PROJECTS.md}, with any raised subsystem named;
