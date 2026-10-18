@@ -1285,9 +1285,12 @@ HTTPS push transport
 (@code{git@@github.com:<owner>/<repo>.git} or
 @code{ssh://git@@github.com/<owner>/<repo>.git}). Set the push URL to
 HTTPS (@code{git remote set-url --push origin
-https://github.com/<owner>/<repo>.git}) or rewrite it for every
-repository with @code{git config --global url.https://github.com/.pushInsteadOf
-git@@github.com:}. Tooling that pushes --- @code{construct skill ship}, CI,
+https://github.com/<owner>/<repo>.git}), or rewrite both SSH forms for
+every repository with @code{git config --global --add
+url.https://github.com/.pushInsteadOf git@@github.com:} and @code{git
+config --global --add url.https://github.com/.pushInsteadOf
+ssh://git@@github.com/}. A remote with an explicit @code{pushurl} bypasses
+@code{pushInsteadOf}, so that @code{pushurl} is itself set to HTTPS. Tooling that pushes --- @code{construct skill ship}, CI,
 scripts, assistant-driven sessions --- names the HTTPS URL or relies on
 that rewrite. Authentication goes through the credential helper already
 configured on the host (for example @code{gh auth git-credential}); under
