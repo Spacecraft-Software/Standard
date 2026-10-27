@@ -5,11 +5,11 @@
 @setfilename The_Steelbore_Standard.info
 @documentencoding UTF-8
 @documentlanguage en
-@settitle The Steelbore Standard 2.14
+@settitle The Steelbore Standard 2.15
 @c %**end of header
 
-@set VERSION 2.14
-@set UPDATED 2026-10-20
+@set VERSION 2.15
+@set UPDATED 2026-10-27
 @set SUBDOMAIN https://Standard.SpacecraftSoftware.org/
 
 @copying
@@ -4144,6 +4144,9 @@ Nebuchadnezzar
 Pathfinder
  @tab @url{https://Pathfinder.SpacecraftSoftware.org/}
 @item
+Phobos
+ @tab @url{https://Phobos.SpacecraftSoftware.org/}
+@item
 Achernar
  @tab @url{https://Achernar.SpacecraftSoftware.org/}
 @item
@@ -5190,6 +5193,9 @@ Project
  @tab Class
 @item
 Ironway
+ @tab @strong{Game} --- exempt from §18 and §10
+@item
+Phobos
  @tab @strong{Game} --- exempt from §18 and §10
 @item
 (all other projects)

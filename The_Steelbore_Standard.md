@@ -29,7 +29,7 @@ repository](https://github.com/Spacecraft-Software/Standard), newest
 entry first. It is kept out of this document so the standard reads as
 the rules *in force* rather than the record of how they got there.
 
-This document is **version 2.14**, updated 2026-10-20 (§14: UTC, ISO
+This document is **version 2.15**, updated 2026-10-27 (§14: UTC, ISO
 8601). The skill encoding of the standard keeps a parallel history in
 `spacecraft-steelbore-standard/references/CHANGELOG.md` in the
 [Construct
@@ -811,14 +811,14 @@ a state that does not exist, often with worse results than the failure
 itself. A plain `;` gives that guarantee in some shells and not in
 others, so the joiner is chosen for the shell that will run the line.
 
-| Rule                              | Detail                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-|-----------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| When it applies                   | Two or more commands the reader is meant to run together, one after the other, in one shell. A single command needs no combined line. Commands meant for different hosts, different shells, or different points in a procedure (“run this, then check the output before going on”) are separate hand-offs and are not combined.                                                                                                                                                                                                                                                                                                         |
-| Placement and content             | The combined line comes last, in its own code block. It carries exactly the commands listed above it, in the same order, with nothing added, dropped, or rewritten except what joining them requires. Comments are left out of it.                                                                                                                                                                                                                                                                                                                                                                                                      |
-| Joiner per shell                  | Join with the shell’s fail-fast operator, not a plain separator. POSIX sh, Bash, Brush, dash, ash, and zsh use `&&`. Ion, fish 3 or later, and PowerShell 7 or later also use `&&`. **Nushell uses `;`**, because a failed command — an external command exiting non-zero included — raises an error that ends the line, and Nushell does not accept `&&` between commands. Windows PowerShell 5.1, which has no `&&`, uses `cmd1; if ($?) { cmd2 }`. A shell not named here uses its own fail-fast operator; when that is not known, the plain separator is used and the hand-off says, in one line, that it does not stop on failure. |
-| Which shell                       | The combined line is written for the same shell as the commands above it — the login shell of the person who will run it, not the shell the project’s scripts target. A POSIX line handed to a Nushell user is wrong even when each command is in the common subset, because the joiner differs.                                                                                                                                                                                                                                                                                                                                        |
-| Commands with their own operators | In a POSIX shell, a listed command that itself contains `||`, `;`, or `&` is wrapped in a brace group, `{ cmd || alt; }`, before it is joined, so the operators bind as the separate command did. A pipeline needs no wrapping; its status is its last command’s.                                                                                                                                                                                                                                                                                                                                                                       |
-| What never goes in                | A command that opens an interactive session, runs in the foreground until stopped (a server, a watcher, an editor), or is destructive and meant to be run only after reading the output of the steps before it. A long-running command may end the line if the steps before it only prepare for it; otherwise the line stops short of it and the hand-off says so.                                                                                                                                                                                                                                                                      |
+| Rule | Detail |
+|----|----|
+| When it applies | Two or more commands the reader is meant to run together, one after the other, in one shell. A single command needs no combined line. Commands meant for different hosts, different shells, or different points in a procedure (“run this, then check the output before going on”) are separate hand-offs and are not combined. |
+| Placement and content | The combined line comes last, in its own code block. It carries exactly the commands listed above it, in the same order, with nothing added, dropped, or rewritten except what joining them requires. Comments are left out of it. |
+| Joiner per shell | Join with the shell’s fail-fast operator, not a plain separator. POSIX sh, Bash, Brush, dash, ash, and zsh use `&&`. Ion, fish 3 or later, and PowerShell 7 or later also use `&&`. **Nushell uses `;`**, because a failed command — an external command exiting non-zero included — raises an error that ends the line, and Nushell does not accept `&&` between commands. Windows PowerShell 5.1, which has no `&&`, uses `cmd1; if ($?) { cmd2 }`. A shell not named here uses its own fail-fast operator; when that is not known, the plain separator is used and the hand-off says, in one line, that it does not stop on failure. |
+| Which shell | The combined line is written for the same shell as the commands above it — the login shell of the person who will run it, not the shell the project’s scripts target. A POSIX line handed to a Nushell user is wrong even when each command is in the common subset, because the joiner differs. |
+| Commands with their own operators | In a POSIX shell, a listed command that itself contains `||`, `;`, or `&` is wrapped in a brace group, `{ cmd || alt; }`, before it is joined, so the operators bind as the separate command did. A pipeline needs no wrapping; its status is its last command’s. |
+| What never goes in | A command that opens an interactive session, runs in the foreground until stopped (a server, a watcher, an editor), or is destructive and meant to be run only after reading the output of the steps before it. A long-running command may end the line if the steps before it only prepare for it; otherwise the line stops short of it and the hand-off says so. |
 
 For example, three commands for a Bash user:
 
@@ -2308,6 +2308,7 @@ rows behind rather than as describing a different set.
 | Loran Pages | <https://Loran-Pages.SpacecraftSoftware.org/> |
 | Nebuchadnezzar | <https://Nebuchadnezzar.SpacecraftSoftware.org/> |
 | Pathfinder | <https://Pathfinder.SpacecraftSoftware.org/> |
+| Phobos | <https://Phobos.SpacecraftSoftware.org/> |
 | Achernar | <https://Achernar.SpacecraftSoftware.org/> |
 | Adit | <https://Adit.SpacecraftSoftware.org/> |
 | Antigravity 2 | <https://Antigravity2.SpacecraftSoftware.org/> |
@@ -3155,6 +3156,7 @@ registry):
 | Project              | Class                                |
 |----------------------|--------------------------------------|
 | Ironway              | **Game** — exempt from §18 and §10   |
+| Phobos               | **Game** — exempt from §18 and §10   |
 | (all other projects) | Standard — §18 and §10 apply in full |
 
 ### §18.5.2 — Recommended for Games (never required)
@@ -3298,7 +3300,7 @@ A project claims conformance in `README.md`, in one line, naming the
 standard version, the category, and whether the claim is full or
 tailored:
 
-    Conforms to The Steelbore Standard v2.14 --- Category B, tailored
+    Conforms to The Steelbore Standard v2.15 --- Category B, tailored
     (§22, §23; see COMPLIANCE.md).
 
 **Full conformance** means every applicable clause is applied and the
